@@ -35,7 +35,7 @@ class NumberFormat extends Object {
     private $zeroClear = FALSE;
 
     /** @var number */
-    private $number = 0;
+    private $number;
 
     /** @var string */
     private $mask = '1 S';
@@ -129,8 +129,8 @@ class NumberFormat extends Object {
     }
 
     public function render($number = NULL, $decimal = NULL) {
-        if ($number) {
-            $this->setNumber($number);
+        if (is_numeric($number)) {
+            $this->number = $number;
         } elseif (!is_numeric($this->number)) {
             return NULL;
         }
@@ -139,9 +139,14 @@ class NumberFormat extends Object {
             $decimal = $this->decimal;
         }
 
+        if ($decimal < 0) {
+            $this->number = round($this->number, $decimal);
+            $decimal = 0;
+        }
+
         $num = number_format($this->number, $decimal, $this->point, $this->thousand);
 
-        if ($this->decimal > 0 && $this->zeroClear) {
+        if ($decimal > 0 && $this->zeroClear) {
             $num = rtrim(rtrim($num, '0'), $this->point);
         }
 
