@@ -128,10 +128,12 @@ class NumberFormat extends Object {
         return $this->setZeroClear(!$this->zeroClear);
     }
 
-    public function render($number = NULL, $decimal = NULL) {
-        if (is_numeric($number)) {
-            $this->number = $number;
-        } elseif (!is_numeric($this->number)) {
+    public function render($number = FALSE, $decimal = NULL) {
+        if ($number === FALSE) {
+            $number = $this->number;
+        }
+
+        if (!is_numeric($number)) {
             return NULL;
         }
 
@@ -139,14 +141,9 @@ class NumberFormat extends Object {
             $decimal = $this->decimal;
         }
 
-        if ($decimal < 0) {
-            $this->number = round($this->number, $decimal);
-            $decimal = 0;
-        }
+        $num = number_format($number, $decimal, $this->point, $this->thousand);
 
-        $num = number_format($this->number, $decimal, $this->point, $this->thousand);
-
-        if ($decimal > 0 && $this->zeroClear) {
+        if ($this->decimal > 0 && $this->zeroClear) {
             $num = rtrim(rtrim($num, '0'), $this->point);
         }
 
