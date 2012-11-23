@@ -120,14 +120,6 @@ class NumberFormat extends Object {
         return $this;
     }
 
-    public function toggleNbsp() {
-        return $this->setNbsp(!$this->nbsp);
-    }
-
-    public function toggleZeroClear() {
-        return $this->setZeroClear(!$this->zeroClear);
-    }
-
     public function render($number = FALSE, $decimal = NULL) {
         if ($number === FALSE) {
             $number = $this->number;
@@ -141,9 +133,14 @@ class NumberFormat extends Object {
             $decimal = $this->decimal;
         }
 
+        if ($decimal < 0) {
+            $number = count($number, $decimal);
+            $decimal = 0;
+        }
+
         $num = number_format($number, $decimal, $this->point, $this->thousand);
 
-        if ($this->decimal > 0 && $this->zeroClear) {
+        if ($decimal > 0 && $this->zeroClear) {
             $num = rtrim(rtrim($num, '0'), $this->point);
         }
 

@@ -34,4 +34,7 @@ echo($number->render()); // € 1,234.4560
 
 $number->setZeroClear(TRUE);
 echo($number->render()); // € 1,234.456
+
+$number->setDecimal(-2);
+echo($number->render()); // € 1,200
 ```
