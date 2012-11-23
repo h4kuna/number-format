@@ -16,7 +16,6 @@ use Nette\Object;
  */
 class NumberFormat extends Object {
     /** @var string utf-8 &nbsp; */
-
     const NBSP = "\xc2\xa0";
 
     /** @var string */
@@ -49,6 +48,9 @@ class NumberFormat extends Object {
     /** @var string */
     private $symbol;
 
+    /**
+     * @param string $symbol
+     */
     public function __construct($symbol = NULL) {
         $this->setSymbol($symbol);
     }
@@ -57,6 +59,11 @@ class NumberFormat extends Object {
         return $this->symbol;
     }
 
+    /**
+     * round, can be negative
+     * @param int $val
+     * @return \h4kuna\NumberFormat
+     */
     public function setDecimal($val) {
         $this->decimal = $val;
         return $this;
@@ -64,9 +71,9 @@ class NumberFormat extends Object {
 
     /**
      * @example '1 S', 'S 1'
-     * S = symbol
+     * S = symbol, 1 = number
      * @param string $mask
-     * @return Format
+     * @return \h4kuna\NumberFormat
      */
     public function setMask($mask) {
         if (strpos($mask, '1') === FALSE || strpos($mask, 'S') === FALSE) {
@@ -78,6 +85,10 @@ class NumberFormat extends Object {
         return $this;
     }
 
+    /**
+     * @param int|float|string $number
+     * @return \h4kuna\NumberFormat
+     */
     public function setNumber($number) {
         $this->number = $number;
         return $this;
@@ -85,18 +96,27 @@ class NumberFormat extends Object {
 
     /**
      * @param bool $val
-     * @return Format
+     * @return \h4kuna\NumberFormat
      */
     public function setNbsp($val) {
         $this->nbsp = (bool) $val;
         return $this;
     }
 
+    /**
+     * decimal point
+     * @param string $val
+     * @return \h4kuna\NumberFormat
+     */
     public function setPoint($val) {
         $this->point = $val;
         return $this;
     }
 
+    /**
+     * @param string $symbol
+     * @return \h4kuna\NumberFormat
+     */
     public function setSymbol($symbol) {
         if ($symbol == $this->symbol) {
             return $this;
@@ -110,11 +130,21 @@ class NumberFormat extends Object {
         return $this;
     }
 
+    /**
+     * thousand separator
+     * @param string $val
+     * @return \h4kuna\NumberFormat
+     */
     public function setThousand($val) {
         $this->thousand = $val;
         return $this;
     }
 
+    /**
+     * remove zero of right
+     * @param bool $val
+     * @return \h4kuna\NumberFormat
+     */
     public function setZeroClear($val) {
         $this->zeroClear = (bool) $val;
         return $this;
