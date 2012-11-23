@@ -70,7 +70,7 @@ class NumberFormat extends Object {
      */
     public function setMask($mask) {
         if (strpos($mask, '1') === FALSE || strpos($mask, 'S') === FALSE) {
-            throw new ExchangeException('The mask consists of 1 and S.');
+            throw new \RuntimeException('The mask consists of 1 and S.');
         }
 
         $this->mask = $mask;
