@@ -16,6 +16,7 @@ use Nette\Object;
  */
 class NumberFormat extends Object {
     /** @var string utf-8 &nbsp; */
+
     const NBSP = "\xc2\xa0";
 
     /** @var string */
