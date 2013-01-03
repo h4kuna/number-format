@@ -9,9 +9,9 @@ Vat
 -------
 ```php
 // first instance
-$vat = Vat::create('20');
-$vat = Vat::create('1.2');
-$vat = Vat::create('0.2');
+$vat = Vat::create(20);
+$vat = Vat::create(1.2);
+$vat = Vat::create(0.2);
 
 // second instance
 $vat = Vat::create('21');
