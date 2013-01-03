@@ -5,7 +5,20 @@ Wrapper above number_format, api is very easy.
 
 If you don't use Nette framework you can delete [extends Object](http://doc.nette.org/cs/php-language-enhancements).
 
-Example
+Vat
+-------
+```php
+// first instance
+$vat = Vat::create('20');
+$vat = Vat::create('1.2');
+$vat = Vat::create('0.2');
+
+// second instance
+$vat = Vat::create('21');
+```
+In memory exists only two instance of Vat with 20% and 21%.
+
+NumberFormat
 -------
 ```php
 $number = new \h4kuna\NumberFormat('EUR');
