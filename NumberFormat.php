@@ -60,6 +60,10 @@ class NumberFormat extends Object {
         return $this->symbol;
     }
 
+    public function getNumber() {
+        return $this->number;
+    }
+
     /**
      * round, can be negative
      * @param int $val

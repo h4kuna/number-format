@@ -5,7 +5,7 @@ namespace h4kuna;
 use Nette\Object;
 
 /**
- * Tax minimu is  2%, maximum 99.99%, if you are out of range, this class is work bad
+ * Tax minimu is 2%, maximum 99.99%, if you are out of range, this class is work bad
  */
 class Vat extends Object {
 
