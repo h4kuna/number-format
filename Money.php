@@ -52,8 +52,8 @@ class Money extends NumberFormat {
      * @param \h4kuna\NumberFormat $number
      * @return \h4kuna\NumberFormat
      */
-    public function vat(NumberFormat $number) {
-        return $number->setNumber($this->taxation($number->getNumber(), $this->vat));
+    public function vat(NumberFormat $number, $vat = NULL) {
+        return $number->setNumber($this->taxation($number->getNumber(), $vat));
     }
 
     /**
@@ -62,20 +62,22 @@ class Money extends NumberFormat {
      * @param type $vat
      */
     public function render($number = FALSE, $vat = NULL) {
+        if ($number === FALSE) {
+            $number = $this->getNumber();
+        } elseif ($number instanceof NumberFormat) {
+            return $this->vat($number, $vat);
+        }
+
+        return parent::render($this->taxation($number, $vat));
+    }
+
+    private function taxation($number, $vat) {
         if ($vat === NULL) {
             $vat = $this->vat;
         } else {
             $vat = Vat::create($vat);
         }
 
-        if ($number === FALSE) {
-            $number = $this->getNumber();
-        }
-
-        return parent::render($this->taxation($number, $vat));
-    }
-
-    private function taxation($number, Vat $vat) {
         switch ($this->vatIO) {
             case self::VAT_IN:
                 return $number /= $vat->getUpDecimal();
