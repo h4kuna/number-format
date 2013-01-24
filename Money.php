@@ -15,6 +15,7 @@ class Money extends NumberFormat {
     /** @var Vat */
     private $vat;
     private $vatIO = self::VAT_OUT;
+    private $vatTemp = self::VAT_OUT;
 
     public function __construct($symbol = 'Kč', $vat = 21) {
         parent::__construct($symbol);
@@ -36,7 +37,7 @@ class Money extends NumberFormat {
     }
 
     /**
-     *
+     * in = input number is texed
      * @param bool $in
      * @param bool $out
      * @return \h4kuna\Money
@@ -44,8 +45,22 @@ class Money extends NumberFormat {
     public function setVatIO($in, $out) {
         $in = $in ? self::VAT_IN : 0;
         $out = $out ? self::VAT_OUT : 0;
-        $this->vatIO = $in | $out;
+        $this->vatTemp = $this->vatIO = $in | $out;
         return $this;
+    }
+
+    public function vatOn() {
+        $this->vatTemp = $this->vatIO | self::VAT_OUT;
+        return $this;
+    }
+
+    public function vatOff() {
+        $this->vatTemp = $this->vatIO & ~self::VAT_OUT;
+        return $this;
+    }
+
+    public function isVatOn() {
+        return $this->vatTemp > self::VAT_IN;
     }
 
     /**
@@ -78,7 +93,7 @@ class Money extends NumberFormat {
             $vat = Vat::create($vat);
         }
 
-        switch ($this->vatIO) {
+        switch ($this->vatTemp) {
             case self::VAT_IN:
                 return $number /= $vat->getUpDecimal();
             case self::VAT_OUT:
