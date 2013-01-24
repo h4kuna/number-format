@@ -21,6 +21,11 @@ class Money extends NumberFormat {
         $this->setVat($vat);
     }
 
+    /** @return Vat */
+    public function getVat() {
+        return $this->vat;
+    }
+
     /**
      * @param float|int $v
      * @return \h4kuna\Money
@@ -44,6 +49,14 @@ class Money extends NumberFormat {
     }
 
     /**
+     * @param \h4kuna\NumberFormat $number
+     * @return \h4kuna\NumberFormat
+     */
+    public function vat(NumberFormat $number) {
+        return $number->setNumber($this->taxation($number->getNumber(), $this->vat));
+    }
+
+    /**
      *
      * @param type $number
      * @param type $vat
@@ -59,16 +72,18 @@ class Money extends NumberFormat {
             $number = $this->getNumber();
         }
 
+        return parent::render($this->taxation($number, $vat));
+    }
+
+    private function taxation($number, Vat $vat) {
         switch ($this->vatIO) {
             case self::VAT_IN:
-                $number /= $vat->getUpDecimal();
-                break;
+                return $number /= $vat->getUpDecimal();
             case self::VAT_OUT:
-                $number *= $vat->getUpDecimal();
-                break;
+                return $number *= $vat->getUpDecimal();
         }
 
-        return parent::render($number);
+        return $number;
     }
 
 }
