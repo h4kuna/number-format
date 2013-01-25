@@ -115,7 +115,7 @@ class Money extends NumberFormat {
             $vat = Vat::create($vat);
         }
         $numberFormat = NULL;
-        if ($number === NULL) {
+        if ($number === FALSE) {
             $number = $this->getNumber();
         } elseif ($number instanceof NumberFormat) {
             $numberFormat = $number;
