@@ -49,11 +49,17 @@ class Money extends NumberFormat {
         return $this;
     }
 
+    /**
+     * @return \h4kuna\Money
+     */
     public function vatOn() {
         $this->vatTemp = $this->vatIO | self::VAT_OUT;
         return $this;
     }
 
+    /**
+     * @return \h4kuna\Money
+     */
     public function vatOff() {
         $this->vatTemp = $this->vatIO & ~self::VAT_OUT;
         return $this;
@@ -64,42 +70,74 @@ class Money extends NumberFormat {
     }
 
     /**
-     * @param \h4kuna\NumberFormat $number
-     * @return \h4kuna\NumberFormat
+     * this ignore settings IO
+     * @param float|int|NumberFormat $number
+     * @param float|int|Vat $vat
+     * @return float|int|NumberFormat
      */
-    public function vat(NumberFormat $number, $vat = NULL) {
-        return $number->setNumber($this->taxation($number->getNumber(), $vat));
+    public function withVat($number = FALSE, $vat = NULL) {
+        return $this->taxation($number, $vat, $this->vatTemp | self::VAT_OUT);
+    }
+
+    /**
+     * this ignore settings IO
+     * @param float|int|NumberFormat $number
+     * @param float|int|Vat $vat
+     * @return float|int|NumberFormat
+     */
+    public function withoutVat($number = FALSE, $vat = NULL) {
+        return $this->taxation($number, $vat, $this->vatTemp & ~self::VAT_OUT);
+    }
+
+    /**
+     * @param float|int|NumberFormat $number
+     * @param float|int|Vat $vat
+     * @return string|NumberFormat
+     */
+    public function render($number = FALSE, $vat = NULL) {
+        if ($number instanceof NumberFormat) {
+            return $this->taxation($number, $vat);
+        }
+        return parent::render($this->taxation($number, $vat));
     }
 
     /**
      *
-     * @param type $number
-     * @param type $vat
+     * @param float|int|NumberFormat $number
+     * @param float|int|Vat $vat
+     * @param int $vatSetUp
+     * @return float|int|NumberFormat
      */
-    public function render($number = FALSE, $vat = NULL) {
-        if ($number === FALSE) {
-            $number = $this->getNumber();
-        } elseif ($number instanceof NumberFormat) {
-            return $this->vat($number, $vat);
-        }
-
-        return parent::render($this->taxation($number, $vat));
-    }
-
-    private function taxation($number, $vat) {
+    private function taxation($number, $vat = NULL, $vatSetUp = NULL) {
         if ($vat === NULL) {
             $vat = $this->vat;
-        } else {
+        } elseif (!($vat instanceof Vat)) {
             $vat = Vat::create($vat);
         }
-
-        switch ($this->vatTemp) {
-            case self::VAT_IN:
-                return $number /= $vat->getUpDecimal();
-            case self::VAT_OUT:
-                return $number *= $vat->getUpDecimal();
+        $numberFormat = NULL;
+        if ($number === NULL) {
+            $number = $this->getNumber();
+        } elseif ($number instanceof NumberFormat) {
+            $numberFormat = $number;
+            $number = $number->getNumber();
         }
 
+
+        if ($vatSetUp === NULL) {
+            $vatSetUp = $this->vatTemp;
+        }
+
+        switch ($vatSetUp) {
+            case self::VAT_IN:
+                $number /= $vat->getUpDecimal();
+                break;
+            case self::VAT_OUT:
+                $number *= $vat->getUpDecimal();
+                break;
+        }
+        if ($numberFormat) {
+            return $numberFormat->setNumber($number);
+        }
         return $number;
     }
 
