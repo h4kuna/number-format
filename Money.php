@@ -14,8 +14,8 @@ class Money extends NumberFormat {
 
     /** @var Vat */
     private $vat;
-    private $vatIO = self::VAT_OUT;
-    private $vatTemp = self::VAT_OUT;
+    private $vatIO = 3;
+    private $vatTemp = 3;
 
     public function __construct($symbol = 'Kč', $vat = 21) {
         parent::__construct($symbol);
@@ -96,8 +96,9 @@ class Money extends NumberFormat {
      */
     public function render($number = FALSE, $vat = NULL) {
         if ($number instanceof NumberFormat) {
-            return $this->taxation($number, $vat);
+            return $number->setNumber($this->taxation($number->getNumber(), $vat))->selfToString();
         }
+
         return parent::render($this->taxation($number, $vat));
     }
 
@@ -109,36 +110,30 @@ class Money extends NumberFormat {
      * @return float|int|NumberFormat
      */
     private function taxation($number, $vat = NULL, $vatSetUp = NULL) {
+        if ($vatSetUp === NULL) {
+            $vatSetUp = $this->vatTemp;
+        }
+
+        $both = self::VAT_IN | self::VAT_OUT;
+        if (!$vatSetUp || $vatSetUp == $both) {
+            return $number;
+        }
+
         if ($vat === NULL) {
             $vat = $this->vat;
         } elseif (!($vat instanceof Vat)) {
             $vat = Vat::create($vat);
         }
-        $numberFormat = NULL;
-        if ($number === NULL) {
+
+        if ($number === FALSE) {
             $number = $this->getNumber();
-        } elseif ($number instanceof NumberFormat) {
-            $numberFormat = $number;
-            $number = $number->getNumber();
         }
 
-
-        if ($vatSetUp === NULL) {
-            $vatSetUp = $this->vatTemp;
+        if (self::VAT_IN & $vatSetUp) {
+            return $number /= $vat->getUpDecimal();
         }
 
-        switch ($vatSetUp) {
-            case self::VAT_IN:
-                $number /= $vat->getUpDecimal();
-                break;
-            case self::VAT_OUT:
-                $number *= $vat->getUpDecimal();
-                break;
-        }
-        if ($numberFormat) {
-            return $numberFormat->setNumber($number);
-        }
-        return $number;
+        return $number *= $vat->getUpDecimal();
     }
 
 }

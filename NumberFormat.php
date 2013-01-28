@@ -100,11 +100,11 @@ class NumberFormat extends Object {
     }
 
     /**
-     * @param bool $val
+     * @param bool $bool
      * @return \h4kuna\NumberFormat
      */
-    public function setNbsp($val) {
-        $this->nbsp = (bool) $val;
+    public function setNbsp($bool) {
+        $this->nbsp = (bool) $bool;
         return $this;
     }
 
@@ -150,8 +150,8 @@ class NumberFormat extends Object {
      * @param bool $val
      * @return \h4kuna\NumberFormat
      */
-    public function setZeroClear($val) {
-        $this->zeroClear = (bool) $val;
+    public function setZeroClear($bool) {
+        $this->zeroClear = (bool) $bool;
         return $this;
     }
 
@@ -192,6 +192,10 @@ class NumberFormat extends Object {
 
     public function __toString() {
         return $this->render();
+    }
+
+    public function selfToString() {
+        return self::render();
     }
 
 }

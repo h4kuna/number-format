@@ -42,14 +42,21 @@ class Vat extends Object {
         return $this->upDecimal;
     }
 
+    static private function prepareKey($percent) {
+        return (string) round($percent, 2);
+    }
+
     /**
      * @param type $number
      * @return Vat
      * @throws \InvalidArgumentException
      */
     static function create($number) {
+        $key = self::prepareKey($number);
         if (!is_numeric($number) || $number < 0) {
             throw new \InvalidArgumentException($number . ' $number must be a number and greater or equal then 0.');
+        } elseif (isset(self::$instance[$key])) {
+            return self::$instance[$key];
         }
 
         if (!$number) {
@@ -69,7 +76,7 @@ class Vat extends Object {
             $percent = $number;
         }
 
-        $key = rtrim($downDecimal, '0');
+        $key = self::prepareKey($percent);
 
         if (!isset(self::$instance[$key])) {
             if ($percent != 0 && ($percent < 2 || $percent >= 100)) {
