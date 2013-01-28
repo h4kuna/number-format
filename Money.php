@@ -2,6 +2,8 @@
 
 namespace h4kuna;
 
+require_once 'NumberFormat.php';
+
 /**
  * Description of NumberVat
  *
