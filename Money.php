@@ -98,7 +98,7 @@ class Money extends NumberFormat {
      */
     public function render($number = FALSE, $vat = NULL) {
         if ($number instanceof NumberFormat) {
-            return $number->setNumber($this->taxation($number->getNumber(), $vat))->selfToString();
+            return $number->setNumber($this->taxation($number->getNumber(), $vat))->selfRender();
         }
 
         return parent::render($this->taxation($number, $vat));

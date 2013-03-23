@@ -194,7 +194,11 @@ class NumberFormat extends Object {
         return $this->render();
     }
 
-    public function selfToString() {
+    /**
+     * use render after extends
+     * @return string
+     */
+    public function selfRender() {
         return self::render();
     }
 
