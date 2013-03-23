@@ -169,7 +169,7 @@ class NumberFormat extends Object {
         }
 
         if ($decimal < 0) {
-            $number = count($number, $decimal);
+            $number = round($number, $decimal);
             $decimal = 0;
         }
 
