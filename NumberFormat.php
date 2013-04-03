@@ -194,12 +194,4 @@ class NumberFormat extends Object {
         return $this->render();
     }
 
-    /**
-     * use render after extends
-     * @return string
-     */
-    public function selfRender() {
-        return self::render();
-    }
-
 }
