@@ -7,7 +7,7 @@ use Nette\Object;
 /**
  * Tax minimu is 2%, maximum 99.99%, if you are out of range, this class is work bad
  */
-class Vat extends Object {
+final class Vat extends Object {
 
     /** @var float */
     private $upDecimal;
@@ -52,6 +52,9 @@ class Vat extends Object {
      * @throws \InvalidArgumentException
      */
     static function create($number) {
+        if ($number instanceof self) {
+            return $number;
+        }
         $key = self::prepareKey($number);
         if (!is_numeric($number) || $number < 0) {
             throw new \InvalidArgumentException($number . ' $number must be a number and greater or equal then 0.');
@@ -86,6 +89,14 @@ class Vat extends Object {
         }
 
         return self::$instance[$key];
+    }
+
+    /**
+     * only for tests
+     * @return array
+     */
+    static function getInstances() {
+        return self::$instance;
     }
 
 }
