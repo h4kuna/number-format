@@ -5,14 +5,13 @@ Wrapper above number_format, api is very easy.
 
 If you don't use Nette framework you can delete [extends Object](http://doc.nette.org/cs/php-language-enhancements).
 
-Money
+Tax
 -------
 Default symbol for currency is 'Kč' and VAT is 21%
 ```php
-$money = new Money;
-$money->setVatIO(FALSE, TRUE);
-$money->number = 100;
-echo $money; // 121,00 Kč
+$tax = new Tax;
+$tax->setVatIO(FALSE, TRUE);
+echo $tax->taxation(100); // 121,00 Kč
 
 $money->setVatIO(TRUE, FALSE);
 $money->number = 121;
