@@ -16,6 +16,6 @@
         "nette/nette": "2.0.*"
     },
     "autoload": {
-        "files": ["Vat.php", "Money.php"]
+        "files": ["Vat.php", "Tax.php"]
     }
 }
