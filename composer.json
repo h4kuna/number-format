@@ -15,9 +15,14 @@
         "nette/nette": ">=2.0.0"
     },
     "require-dev": {
-        "nette/nette": "@dev"
+        "nette/nette": "dev-master"
     },
     "autoload": {
         "classmap": ["./"]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3-dev"
+        }
     }
 }
