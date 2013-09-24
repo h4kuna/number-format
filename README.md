@@ -5,32 +5,6 @@ Wrapper above number_format, api is very easy.
 
 If you don't use Nette framework you can delete [extends Object](http://doc.nette.org/cs/php-language-enhancements).
 
-Tax
--------
-Default symbol for currency is 'Kč' and VAT is 21%
-```php
-$tax = new Tax;
-$tax->setVatIO(FALSE, TRUE);
-echo $tax->taxation(100); // 121,00 Kč
-
-$money->setVatIO(TRUE, FALSE);
-$money->number = 121;
-echo $money; // 100,00 Kč
-```
-
-Vat
--------
-```php
-// first instance
-$vat = Vat::create(20);
-$vat = Vat::create(1.2);
-$vat = Vat::create(0.2);
-
-// second instance
-$vat = Vat::create('21');
-```
-In memory exists only two instance of Vat with 20% and 21%.
-
 NumberFormat
 -------
 ```php
@@ -64,3 +38,28 @@ echo($number->render()); // € 1,234.456
 $number->setDecimal(-2);
 echo($number->render()); // € 1,200
 ```
+
+Tax
+-------
+```php
+$tax = new Tax;
+$tax->setVatIO(FALSE, TRUE);
+echo $tax->taxation(100); // 121,00 Kč
+
+$tax->setVatIO(TRUE, FALSE);
+$tax->number = 121;
+echo $tax; // 100,00 Kč
+```
+
+Vat
+-------
+```php
+// first instance
+$vat = Vat::create(20);
+$vat = Vat::create(1.2);
+$vat = Vat::create(0.2);
+
+// second instance
+$vat = Vat::create('21');
+```
+In memory exists only two instance of Vat with 20% and 21%.

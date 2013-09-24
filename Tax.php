@@ -5,9 +5,9 @@ namespace h4kuna;
 use Nette\Object;
 
 /**
- * Description of NumberVat
+ * Work class with money and vat
  *
- * @author h4kuna
+ * @author Milan Matějček
  */
 class Tax extends Object {
 
@@ -16,9 +16,16 @@ class Tax extends Object {
 
     /** @var Vat */
     private $vat;
+
+    /** @var int */
     private $vatIO;
+
+    /** @var int */
     private $vatTemp;
 
+    /**
+     * @param numeric $vat
+     */
     public function __construct($vat = 21) {
         $this->setVat($vat);
         $this->setVatIO(self::VAT_IN & self::VAT_OUT, self::VAT_IN & self::VAT_OUT);
@@ -30,8 +37,10 @@ class Tax extends Object {
     }
 
     /**
-     * @param float|int $v
-     * @return \h4kuna\Money
+     * Setup VAT
+     *
+     * @param numeric $v
+     * @return Tax
      */
     public function setVat($v) {
         $this->vat = Vat::create($v);
@@ -39,7 +48,8 @@ class Tax extends Object {
     }
 
     /**
-     * in = input number is texed
+     * In = input number is texed
+     *
      * @param bool $in
      * @param bool $out
      * @return \h4kuna\Money
@@ -52,7 +62,7 @@ class Tax extends Object {
     }
 
     /**
-     * @return \h4kuna\Money
+     * @return Tax
      */
     public function vatOn() {
         $this->vatTemp = $this->vatIO | self::VAT_OUT;
@@ -60,27 +70,37 @@ class Tax extends Object {
     }
 
     /**
-     * @return \h4kuna\Money
+     * @return Tax
      */
     public function vatOff() {
         $this->vatTemp = $this->vatIO & ~self::VAT_OUT;
         return $this;
     }
 
+    /**
+     * Will number taxed?
+     *
+     * @return bool
+     */
     public function isVatOn() {
         return $this->vatTemp > self::VAT_IN;
     }
 
+    /**
+     *
+     * @return Tax
+     */
     public function reset() {
         $this->vatTemp = $this->vatIO;
         return $this;
     }
 
     /**
-     * this ignore settings IO
-     * @param float|int $number
-     * @param float|int|Vat $vat
-     * @return float|int
+     * This ignore settings IO
+     *
+     * @param numeric $number
+     * @param numeric|Vat $vat
+     * @return numeric
      */
     public function withVat($number, $vat = NULL) {
         $res = $this->vatOn()->taxation($number, $vat);
@@ -89,10 +109,11 @@ class Tax extends Object {
     }
 
     /**
-     * this ignore settings IO
-     * @param float|int $number
-     * @param float|int|Vat $vat
-     * @return float|int
+     * This ignore settings IO
+     *
+     * @param numeric $number
+     * @param numeric|Vat $vat
+     * @return numeric
      */
     public function withoutVat($number, $vat = NULL) {
         $res = $this->vatOff()->taxation($number, $vat);
@@ -101,11 +122,12 @@ class Tax extends Object {
     }
 
     /**
+     * Tax numer how setup this class
      *
-     * @param float|int $number
-     * @param float|int|Vat $vat
+     * @param numerix $number
+     * @param numeric|Vat $vat
      * @param int $vatSetUp
-     * @return float|int
+     * @return numeric0
      */
     public function taxation($number, $vat = NULL) {
         $both = self::VAT_IN | self::VAT_OUT;

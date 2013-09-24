@@ -22,7 +22,10 @@ final class Vat extends Object {
     private static $instance = array();
 
     /**
-     * @param float $number
+     *
+     * @param float|int $percent
+     * @param float $downDecimal
+     * @param float $upDecimal
      */
     private function __construct($percent, $downDecimal, $upDecimal) {
         $this->downDecimal = $downDecimal;
@@ -30,24 +33,44 @@ final class Vat extends Object {
         $this->percent = $percent;
     }
 
+    /**
+     * @example 19.5% = float 19.5
+     * @return float|int
+     */
     public function getPercent() {
         return $this->percent;
     }
 
+    /**
+     * @example 19.5% = float 0.195
+     * @return float
+     */
     public function getDownDecimal() {
         return $this->downDecimal;
     }
 
+    /**
+     * @example 19.5% = float 1.195
+     * @return float
+     */
     public function getUpDecimal() {
         return $this->upDecimal;
     }
 
+    /**
+     * Prepare key for instance cache
+     *
+     * @param flaot|int $percent
+     * @return float
+     */
     static private function prepareKey($percent) {
         return (string) round($percent, 2);
     }
 
     /**
-     * @param type $number
+     * Build method for Vat instance
+     *
+     * @param numeric $number
      * @return Vat
      * @throws \InvalidArgumentException
      */
