@@ -14,9 +14,9 @@ use Nette\Object;
  * @property-write $mask
  * @property-write $symbol
  */
-class NumberFormat extends Object {
-    /** @var string utf-8 &nbsp; */
+class NumberFormat extends Object implements INumberFormat {
 
+    /** @var string utf-8 &nbsp; */
     const NBSP = "\xc2\xa0";
 
     /** @var string */
