@@ -70,9 +70,10 @@ final class Vat extends Object {
     /**
      * Build method for Vat instance
      *
-     * @param numeric $number
+     * @param float|int|string $number
      * @return Vat
      * @throws \InvalidArgumentException
+     * @throws \OutOfRangeException
      */
     static function create($number) {
         if ($number instanceof self) {
@@ -112,14 +113,6 @@ final class Vat extends Object {
         }
 
         return self::$instance[$key];
-    }
-
-    /**
-     * only for tests
-     * @return array
-     */
-    static function getInstances() {
-        return self::$instance;
     }
 
 }

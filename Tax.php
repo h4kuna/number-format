@@ -5,7 +5,7 @@ namespace h4kuna;
 use Nette\Object;
 
 /**
- * Work class with money and vat
+ * Work class with price and vat
  *
  * @author Milan Matějček
  */
@@ -24,7 +24,7 @@ class Tax extends Object {
     private $vatTemp;
 
     /**
-     * @param numeric $vat
+     * @param int|float|string $vat
      */
     public function __construct($vat = 21) {
         $this->setVat($vat);
@@ -39,7 +39,7 @@ class Tax extends Object {
     /**
      * Setup VAT
      *
-     * @param numeric $v
+     * @param int|float|string $v
      * @return Tax
      */
     public function setVat($v) {
@@ -52,7 +52,7 @@ class Tax extends Object {
      *
      * @param bool $in
      * @param bool $out
-     * @return \h4kuna\Money
+     * @return Tax
      */
     public function setVatIO($in, $out) {
         $in = $in ? self::VAT_IN : 0;
@@ -98,9 +98,9 @@ class Tax extends Object {
     /**
      * This ignore settings IO
      *
-     * @param numeric $number
-     * @param numeric|Vat $vat
-     * @return numeric
+     * @param int|float|string $number
+     * @param int|float|string|Vat $vat
+     * @return float
      */
     public function withVat($number, $vat = NULL) {
         $res = $this->vatOn()->taxation($number, $vat);
@@ -111,8 +111,8 @@ class Tax extends Object {
     /**
      * This ignore settings IO
      *
-     * @param numeric $number
-     * @param numeric|Vat $vat
+     * @param int|float|string $number
+     * @param int|float|string|Vat $vat
      * @return numeric
      */
     public function withoutVat($number, $vat = NULL) {
@@ -122,12 +122,11 @@ class Tax extends Object {
     }
 
     /**
-     * Tax numer how setup this class
+     * Tax number how setup this class
      *
-     * @param numerix $number
-     * @param numeric|Vat $vat
-     * @param int $vatSetUp
-     * @return numeric0
+     * @param int|float|string $number
+     * @param int|float|string|Vat $vat
+     * @return int|float
      */
     public function taxation($number, $vat = NULL) {
         $both = self::VAT_IN | self::VAT_OUT;
@@ -137,7 +136,7 @@ class Tax extends Object {
 
         if ($vat === NULL) {
             $vat = $this->vat;
-        } elseif (!($vat instanceof Vat)) {
+        } else {
             $vat = Vat::create($vat);
         }
 
