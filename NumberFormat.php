@@ -16,9 +16,6 @@ use Nette\Object;
  */
 class NumberFormat extends Object implements INumberFormat {
 
-    /** @var string utf-8 &nbsp; */
-    const NBSP = "\xc2\xa0";
-
     /** @var string */
     private $thousand = ' ';
 
@@ -99,6 +96,9 @@ class NumberFormat extends Object implements INumberFormat {
      * @return NumberFormat
      */
     public function setNumber($number) {
+        if (!is_numeric($number)) {
+            throw new NumberException('This is not number: ' . $number);
+        }
         $this->number = $number;
         return $this;
     }
@@ -173,12 +173,10 @@ class NumberFormat extends Object implements INumberFormat {
      * @param int $decimal
      * @return NULL|string
      */
-    public function render($number = FALSE, $decimal = NULL) {
-        if ($number === FALSE) {
-            $number = $this->number;
-        }
-
-        if (!is_numeric($number)) {
+    public function render($number = NULL, $decimal = NULL) {
+        try {
+            $this->setNumber($number);
+        } catch (NumberException $e) {
             return NULL;
         }
 
