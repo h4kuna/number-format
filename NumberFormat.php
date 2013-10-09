@@ -83,11 +83,12 @@ class NumberFormat extends Object implements INumberFormat {
      */
     public function setMask($mask) {
         if (strpos($mask, '1') === FALSE || strpos($mask, 'S') === FALSE) {
-            throw new \RuntimeException('The mask consists of 1 and S.');
+            throw new NumberException('The mask consists of 1 and S.');
         }
 
         $this->mask = $mask;
-        $this->workMask = explode('1', str_replace('S', $this->symbol, $mask));
+        $workMask = str_replace('S', $this->symbol, $mask);
+        $this->workMask = explode('1', $this->replaceNbsp($workMask));
         return $this;
     }
 
@@ -97,6 +98,7 @@ class NumberFormat extends Object implements INumberFormat {
      */
     public function setNumber($number) {
         if (!is_numeric($number)) {
+            $this->number = NULL;
             throw new NumberException('This is not number: ' . $number);
         }
         $this->number = $number;
@@ -111,6 +113,7 @@ class NumberFormat extends Object implements INumberFormat {
      */
     public function setNbsp($bool) {
         $this->nbsp = (bool) $bool;
+        $this->setMask($this->mask);
         return $this;
     }
 
@@ -169,13 +172,13 @@ class NumberFormat extends Object implements INumberFormat {
     /**
      * Render number
      *
-     * @param numeric $number
+     * @param int|float|string $number
      * @param int $decimal
      * @return NULL|string
      */
     public function render($number = NULL, $decimal = NULL) {
         try {
-            $this->setNumber($number);
+            $number = $this->setNumber($number)->number;
         } catch (NumberException $e) {
             return NULL;
         }
@@ -189,21 +192,17 @@ class NumberFormat extends Object implements INumberFormat {
             $decimal = 0;
         }
 
-        $num = number_format($number, $decimal, $this->point, $this->thousand);
+        $number = number_format($number, $decimal, $this->point, $this->thousand);
 
         if ($decimal > 0 && $this->zeroClear) {
-            $num = rtrim(rtrim($num, '0'), $this->point);
+            $number = rtrim(rtrim($number, '0'), $this->point);
         }
 
         if ($this->symbol) {
-            $num = implode($num, $this->workMask);
+            $number = implode($number, $this->workMask);
         }
 
-        if ($this->nbsp) {
-            $num = str_replace(' ', self::NBSP, $num);
-        }
-
-        return $num;
+        return $this->replaceNbsp($number);
     }
 
     /**
@@ -212,7 +211,20 @@ class NumberFormat extends Object implements INumberFormat {
      * @return string
      */
     public function __toString() {
-        return $this->render();
+        return (string) $this->render($this->number);
+    }
+
+    /**
+     * Replace space to &nbsp; in utf-8
+     *
+     * @param string $val
+     * @return string
+     */
+    private function replaceNbsp($val) {
+        if ($this->nbsp) {
+            $val = str_replace(' ', self::NBSP, $val);
+        }
+        return $val;
     }
 
 }
