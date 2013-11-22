@@ -3,6 +3,7 @@
 namespace h4kuna;
 
 use Nette\Object;
+use Nette\Utils\Html;
 
 /**
  * @property-write $number
@@ -46,6 +47,9 @@ class NumberFormat extends Object implements INumberFormat {
     /** @var string */
     private $symbol;
 
+    /** @var bool */
+    private $isHtml = FALSE;
+
     /**
      * @param string $symbol
      */
@@ -88,6 +92,7 @@ class NumberFormat extends Object implements INumberFormat {
 
         $this->mask = $mask;
         $workMask = str_replace('S', $this->symbol, $mask);
+        $this->isHtml = preg_match('~\<.*?\>(.*)\<\/.*?\>~', $workMask);
         $this->workMask = explode('1', $this->replaceNbsp($workMask));
         return $this;
     }
@@ -202,6 +207,9 @@ class NumberFormat extends Object implements INumberFormat {
             $number = implode($number, $this->workMask);
         }
 
+        if ($this->isHtml) {
+            return Html::el()->setHtml($this->replaceNbsp($number));
+        }
         return $this->replaceNbsp($number);
     }
 
