@@ -92,7 +92,7 @@ class NumberFormat extends Object implements INumberFormat {
 
         $this->mask = $mask;
         $workMask = str_replace('S', $this->symbol, $mask);
-        $this->isHtml = preg_match('~\<.*?\>(.*)\<\/.*?\>~', $workMask);
+        $this->isHtml = strip_tags($workMask) !== $workMask;
         $this->workMask = explode('1', $this->replaceNbsp($workMask));
         return $this;
     }
@@ -210,6 +210,7 @@ class NumberFormat extends Object implements INumberFormat {
         if ($this->isHtml) {
             return Html::el()->setHtml($this->replaceNbsp($number));
         }
+
         return $this->replaceNbsp($number);
     }
 
