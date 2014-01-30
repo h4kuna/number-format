@@ -60,6 +60,9 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
     public function testRender() {
         $number = $this->createNumberFormat();
         $this->assertEquals(NULL, $number->render());
+
+        $this->assertEquals('1 234,12 CZK', $number->render(1234.123, 2));
+        $this->assertEquals('1 230 CZK', $number->render(1234.123, -1));
     }
 
     public function testNbsp() {
