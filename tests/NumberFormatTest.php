@@ -4,6 +4,7 @@ namespace Tests;
 
 use h4kuna\INumberFormat;
 use h4kuna\NumberFormat;
+use Nette\Utils\Html;
 use PHPUnit_Framework_TestCase;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -43,6 +44,11 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
         $number = $this->createNumberFormat();
         $number->setMask('S 1');
         $this->assertEquals('CZK 1 234,57', (string) $number);
+
+        $number->setMask('<span>S</span> 1');
+        $this->assertEquals('<span>CZK</span> 1 234,57', (string) $number);
+
+        $this->assertSame(TRUE, $number->render($number->getNumber()) instanceof Html);
     }
 
     public function testPoint() {
