@@ -1,6 +1,8 @@
 Number Format
 =============
 
+[![Build Status](https://travis-ci.org/h4kuna/number-format.png)](https://travis-ci.org/h4kuna/number-format)
+
 Wrapper above number_format, api is very easy.
 
 If you don't use Nette framework you can delete [extends Object](http://doc.nette.org/cs/php-language-enhancements).
