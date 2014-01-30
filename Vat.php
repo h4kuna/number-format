@@ -115,4 +115,13 @@ final class Vat extends Object {
         return self::$instance[$key];
     }
 
+    /**
+     * Only for tests
+     *
+     * @return array
+     */
+    static function getInstances() {
+        return self::$instance;
+    }
+
 }
