@@ -20,19 +20,18 @@ interface INumberFormat {
     public function render($num);
 
     /**
+     * Not formated number
+     *
+     * @return float|int|string
+     */
+    public function getNumber();
+
+    /**
      * Get symbol
      *
      * @return string
      */
     public function getSymbol();
-
-    /**
-     * Set symbol - unit, currency
-     *
-     * @param string
-     * @return INumberFormat
-     */
-    public function setSymbol($str);
 
     /**
      * Count of decimal number
@@ -43,19 +42,13 @@ interface INumberFormat {
     public function setDecimal($int);
 
     /**
-     * Integers delimiter
+     * S = symbol, 1 = number
      *
-     * @param string
-     * @return INumberFormat
+     * @example '1 S', 'S 1'
+     * @param string $mask
+     * @return NumberFormat
      */
-    public function setPoint($str);
-
-    /**
-     * Thousand separator
-     *
-     * @param string
-     */
-    public function setThousand($str);
+    public function setMask($mask);
 
     /**
      * Set number
@@ -66,9 +59,41 @@ interface INumberFormat {
     public function setNumber($number);
 
     /**
-     * Not formated number
+     * Replace non-break space
      *
-     * @return float|int|string
+     * @param bool $bool
+     * @return NumberFormat
      */
-    public function getNumber();
+    public function setNbsp($bool);
+
+    /**
+     * Integers delimiter
+     *
+     * @param string
+     * @return INumberFormat
+     */
+    public function setPoint($str);
+
+    /**
+     * Set symbol - unit, currency
+     *
+     * @param string
+     * @return INumberFormat
+     */
+    public function setSymbol($str);
+
+    /**
+     * Thousand separator
+     *
+     * @param string
+     */
+    public function setThousand($str);
+
+    /**
+     * Remove zero of right
+     *
+     * @param bool $val
+     * @return NumberFormat
+     */
+    public function setZeroClear($bool);
 }
