@@ -21,7 +21,7 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
     private function createNumberFormat() {
         $number = new NumberFormat('CZK');
         $number->setNumber(1234.567899);
-        $number->setNbsp(FALSE);
+        $number->offNbsp();
         return $number;
     }
 
@@ -73,15 +73,32 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
 
     public function testNbsp() {
         $number = $this->createNumberFormat();
-        $number->setNbsp(TRUE);
+        $number->onNbsp();
         $this->assertEquals('1' . INumberFormat::NBSP . '234,57' . INumberFormat::NBSP . 'CZK', (string) $number);
     }
 
     public function testZeroClear() {
         $number = $this->createNumberFormat();
-        $number->setZeroClear(TRUE);
+        $number->onZeroClear();
         $number->setDecimal(5);
         $this->assertEquals('1 234,5679 CZK', (string) $number);
+    }
+
+    public function testEmptyValue() {
+        $number = $this->createNumberFormat();
+        $number->setEmptyValue('-');
+        $this->assertEquals('-', (string) $number->render(NULL));
+        $this->assertEquals('-', (string) $number->render(''));
+    }
+
+    public function testRenderSymbol() {
+        $number = $this->createNumberFormat();
+        $this->assertEquals('50,00 CZK', (string) $number->render(50));
+        $number->offSymbol();
+        $number->onZeroClear();
+        $this->assertEquals('50', (string) $number->render(50));
+        $number->onSymbol();
+        $this->assertEquals('50 CZK', (string) $number->render(50));
     }
 
 }

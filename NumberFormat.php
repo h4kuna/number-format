@@ -17,6 +17,11 @@ use Nette\Utils\Html;
  */
 class NumberFormat extends Object implements INumberFormat {
 
+    const FLAG_NBSP = 1;
+    const ZERO_CLEAR = 2;
+    const IS_HTML = 4;
+    const RENDER_SYNBOL = 8;
+
     /** @var string */
     private $thousand = ' ';
 
@@ -26,12 +31,6 @@ class NumberFormat extends Object implements INumberFormat {
     /** @var string */
     private $point = ',';
 
-    /** @var bool */
-    private $nbsp = TRUE;
-
-    /** @var bool */
-    private $zeroClear = FALSE;
-
     /** @var number */
     private $number;
 
@@ -39,7 +38,8 @@ class NumberFormat extends Object implements INumberFormat {
     private $mask = '1 S';
 
     /**
-     * internal helper
+     * Internal helper
+     *
      * @var array
      */
     private $workMask = array('', '');
@@ -47,8 +47,11 @@ class NumberFormat extends Object implements INumberFormat {
     /** @var string */
     private $symbol;
 
-    /** @var bool */
-    private $isHtml = FALSE;
+    /** @var string */
+    private $emptyValue = NULL;
+
+    /** @var int */
+    private $flag = self::FLAG_NBSP;
 
     /**
      * @param string $symbol
@@ -79,6 +82,17 @@ class NumberFormat extends Object implements INumberFormat {
     }
 
     /**
+     * If input value is not number
+     *
+     * @param string $str
+     * @return NumberFormat
+     */
+    public function setEmptyValue($str) {
+        $this->emptyValue = $str;
+        return $this;
+    }
+
+    /**
      * S = symbol, 1 = number
      *
      * @example '1 S', 'S 1'
@@ -92,7 +106,11 @@ class NumberFormat extends Object implements INumberFormat {
 
         $this->mask = $mask;
         $workMask = str_replace('S', $this->symbol, $mask);
-        $this->isHtml = strip_tags($workMask) !== $workMask;
+        if (strip_tags($workMask) !== $workMask) {
+            $this->flag |= self::IS_HTML;
+        } else {
+            $this->flag &= ~self::IS_HTML;
+        }
         $this->workMask = explode('1', $this->replaceNbsp($workMask));
         return $this;
     }
@@ -117,9 +135,10 @@ class NumberFormat extends Object implements INumberFormat {
      * @return NumberFormat
      */
     public function setNbsp($bool) {
-        $this->nbsp = (bool) $bool;
-        $this->setMask($this->mask);
-        return $this;
+        if ($bool) {
+            return $this->onNbsp();
+        }
+        return $this->offNbsp();
     }
 
     /**
@@ -140,6 +159,7 @@ class NumberFormat extends Object implements INumberFormat {
      * @return NumberFormat
      */
     public function setSymbol($symbol) {
+        $this->onSymbol();
         if ($symbol == $this->symbol) {
             return $this;
         }
@@ -170,8 +190,58 @@ class NumberFormat extends Object implements INumberFormat {
      * @return NumberFormat
      */
     public function setZeroClear($bool) {
-        $this->zeroClear = (bool) $bool;
+        if ($bool) {
+            return $this->onZeroClear();
+        }
+        return $this->offZeroClear();
+    }
+
+    /**
+     *
+     * @param bool $bool
+     * @return \h4kuna\NumberFormat
+     */
+    public function setRenderSymbol($bool) {
+        if ($bool) {
+            return $this->onSymbol();
+        }
+        return $this->offSymbol();
+    }
+
+    /** @return NumberFormat */
+    public function onSymbol() {
+        $this->flag |= self::RENDER_SYNBOL;
         return $this;
+    }
+
+    /** @return NumberFormat */
+    public function offSymbol() {
+        $this->flag &= ~self::RENDER_SYNBOL;
+        return $this;
+    }
+
+    /** @return NumberFormat */
+    public function onZeroClear() {
+        $this->flag |= self::ZERO_CLEAR;
+        return $this;
+    }
+
+    /** @return NumberFormat */
+    public function offZeroClear() {
+        $this->flag &= ~ self::ZERO_CLEAR;
+        return $this;
+    }
+
+    /** @return NumberFormat */
+    public function onNbsp() {
+        $this->flag |= self::FLAG_NBSP;
+        return $this->setMask($this->mask);
+    }
+
+    /** @return NumberFormat */
+    public function offNbsp() {
+        $this->flag &= ~self::FLAG_NBSP;
+        return $this->setMask($this->mask);
     }
 
     /**
@@ -185,7 +255,7 @@ class NumberFormat extends Object implements INumberFormat {
         try {
             $number = $this->setNumber($number)->number;
         } catch (NumberException $e) {
-            return NULL;
+            return $this->emptyValue;
         }
 
         if ($decimal === NULL) {
@@ -199,15 +269,15 @@ class NumberFormat extends Object implements INumberFormat {
 
         $number = number_format($number, $decimal, $this->point, $this->thousand);
 
-        if ($decimal > 0 && $this->zeroClear) {
+        if ($decimal > 0 && $this->flag & self::ZERO_CLEAR) {
             $number = rtrim(rtrim($number, '0'), $this->point);
         }
 
-        if ($this->symbol) {
+        if ($this->symbol && $this->flag & self::RENDER_SYNBOL) {
             $number = implode($number, $this->workMask);
         }
 
-        if ($this->isHtml) {
+        if ($this->flag & self::IS_HTML) {
             return Html::el()->setHtml($this->replaceNbsp($number));
         }
 
@@ -230,7 +300,7 @@ class NumberFormat extends Object implements INumberFormat {
      * @return string
      */
     private function replaceNbsp($val) {
-        if ($this->nbsp) {
+        if ($this->flag & self::FLAG_NBSP) {
             $val = str_replace(' ', self::NBSP, $val);
         }
         return $val;
