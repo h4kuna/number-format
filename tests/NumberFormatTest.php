@@ -91,6 +91,16 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('-', (string) $number->render(''));
     }
 
+    public function testZeroIsEmpty() {
+        $number = $this->createNumberFormat();
+        $number->setEmptyValue('-');
+        $number->onZeroIsEmpty();
+        $this->assertEquals('-', (string) $number->render(0.0));
+        $this->assertEquals('-', (string) $number->render('0'));
+        $number->offZeroIsEmpty();
+        $this->assertEquals('0,00 CZK', (string) $number->render('0'));
+    }
+
     public function testRenderSymbol() {
         $number = $this->createNumberFormat();
         $this->assertEquals('50,00 CZK', (string) $number->render(50));

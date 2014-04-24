@@ -21,6 +21,7 @@ class NumberFormat extends Object implements INumberFormat {
     const ZERO_CLEAR = 2;
     const IS_HTML = 4;
     const RENDER_SYNBOL = 8;
+    const ZERO_IS_EMPTY = 16;
 
     /** @var string */
     private $thousand = ' ';
@@ -186,7 +187,7 @@ class NumberFormat extends Object implements INumberFormat {
     /**
      * Remove zero of right
      *
-     * @param bool $val
+     * @param bool $bool
      * @return NumberFormat
      */
     public function setZeroClear($bool) {
@@ -199,13 +200,20 @@ class NumberFormat extends Object implements INumberFormat {
     /**
      *
      * @param bool $bool
-     * @return \h4kuna\NumberFormat
+     * @return NumberFormat
      */
     public function setRenderSymbol($bool) {
         if ($bool) {
             return $this->onSymbol();
         }
         return $this->offSymbol();
+    }
+
+    public function setZeroIsEmpty($bool) {
+        if ($bool) {
+            return $this->onZeroIsEmpty();
+        }
+        return $this->offZeroIsEmpty();
     }
 
     /** @return NumberFormat */
@@ -244,6 +252,18 @@ class NumberFormat extends Object implements INumberFormat {
         return $this->setMask($this->mask);
     }
 
+    /** @return NumberFormat */
+    public function offZeroIsEmpty() {
+        $this->flag &= ~self::ZERO_IS_EMPTY;
+        return $this;
+    }
+
+    /** @return NumberFormat */
+    public function onZeroIsEmpty() {
+        $this->flag |= self::ZERO_IS_EMPTY;
+        return $this;
+    }
+
     /**
      * Render number
      *
@@ -265,6 +285,10 @@ class NumberFormat extends Object implements INumberFormat {
         if ($decimal < 0) {
             $number = round($number, $decimal);
             $decimal = 0;
+        }
+
+        if (!$number && $this->flag & self::ZERO_IS_EMPTY) {
+            return $this->emptyValue;
         }
 
         $number = number_format($number, $decimal, $this->point, $this->thousand);
