@@ -79,7 +79,7 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
 
     public function testZeroClear() {
         $number = $this->createNumberFormat();
-        $number->onZeroClear();
+        $number->addFlag(NumberFormat::ZERO_CLEAR);
         $number->setDecimal(5);
         $this->assertEquals('1 234,5679 CZK', (string) $number);
     }
@@ -97,7 +97,7 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
         $number->onZeroIsEmpty();
         $this->assertEquals('-', (string) $number->render(0.0));
         $this->assertEquals('-', (string) $number->render('0'));
-        $number->offZeroIsEmpty();
+        $number->removeFlag(NumberFormat::ZERO_IS_EMPTY);
         $this->assertEquals('0,00 CZK', (string) $number->render('0'));
     }
 

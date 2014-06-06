@@ -185,83 +185,47 @@ class NumberFormat extends Object implements INumberFormat {
     }
 
     /**
-     * Remove zero of right
-     *
-     * @param bool $bool
+     * 
+     * @param int $flag
      * @return NumberFormat
+     * @throws NumberException
      */
-    public function setZeroClear($bool) {
-        if ($bool) {
-            return $this->onZeroClear();
-        }
-        return $this->offZeroClear();
+    public function setFlag($flag) {
+        $this->flag = $this->checkInt($flag);
+        return $this;
     }
 
     /**
-     *
-     * @param bool $bool
+     * 
+     * @param int $flag
      * @return NumberFormat
      */
-    public function setRenderSymbol($bool) {
-        if ($bool) {
-            return $this->onSymbol();
+    public function addFlag($flag) {
+        $this->flag |= $this->checkInt($flag);
+        return $this;
+    }
+
+    /**
+     * 
+     * @param int $flag
+     * @return NumberFormat
+     */
+    public function removeFlag($flag) {
+        $this->flag &= ~$this->checkInt($flag);
+        return $this;
+    }
+
+    /**
+     * 
+     * @param int $flag
+     * @return int
+     * @throws NumberException
+     */
+    private function checkInt($flag) {
+        if (!is_int($flag)) {
+            throw new NumberException('Flag must be int.');
         }
-        return $this->offSymbol();
-    }
-
-    public function setZeroIsEmpty($bool) {
-        if ($bool) {
-            return $this->onZeroIsEmpty();
-        }
-        return $this->offZeroIsEmpty();
-    }
-
-    /** @return NumberFormat */
-    public function onSymbol() {
-        $this->flag |= self::RENDER_SYNBOL;
-        return $this;
-    }
-
-    /** @return NumberFormat */
-    public function offSymbol() {
-        $this->flag &= ~self::RENDER_SYNBOL;
-        return $this;
-    }
-
-    /** @return NumberFormat */
-    public function onZeroClear() {
-        $this->flag |= self::ZERO_CLEAR;
-        return $this;
-    }
-
-    /** @return NumberFormat */
-    public function offZeroClear() {
-        $this->flag &= ~ self::ZERO_CLEAR;
-        return $this;
-    }
-
-    /** @return NumberFormat */
-    public function onNbsp() {
-        $this->flag |= self::FLAG_NBSP;
-        return $this->setMask($this->mask);
-    }
-
-    /** @return NumberFormat */
-    public function offNbsp() {
-        $this->flag &= ~self::FLAG_NBSP;
-        return $this->setMask($this->mask);
-    }
-
-    /** @return NumberFormat */
-    public function offZeroIsEmpty() {
-        $this->flag &= ~self::ZERO_IS_EMPTY;
-        return $this;
-    }
-
-    /** @return NumberFormat */
-    public function onZeroIsEmpty() {
-        $this->flag |= self::ZERO_IS_EMPTY;
-        return $this;
+        return $flag;
     }
 
     /**
@@ -331,3 +295,4 @@ class NumberFormat extends Object implements INumberFormat {
     }
 
 }
+
