@@ -16,7 +16,7 @@ echo $number->render(); // NULL
 $number->setNumber(1234.4560);
 echo $number->render(); // 1&nbsp;234,46&nbsp;EUR
 
-$number->setNbsp(FALSE);
+$number->off(INumberFormat::NBSP_FLAG);
 echo $number->render(); // 1 234,46 EUR
 
 $number->setDecimal(4);
@@ -34,12 +34,19 @@ echo $number->render(); // € 1 234.4560
 $number->setThousand(',');
 echo $number->render(); // € 1,234.4560
 
-$number->setZeroClear(TRUE);
+$number->on(INumberFormat::ZERO_CLEAR);
 echo $number->render(); // € 1,234.456
 
 $number->setDecimal(-2);
 echo $number->render(); // € 1,200
 echo $number; // € 1,200
+
+$number->setEmptyValue('-');
+echo $number->render(''); // -
+echo $number->render(0); // € 0
+
+$number->on(INumberFormat::ZERO_IS_EMPTY);
+echo $number->render(0); // -
 
 $number->setNumber('1,5'); // throw exception
 $number->render('1,5'); // NULL
