@@ -21,7 +21,7 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
     private function createNumberFormat() {
         $number = new NumberFormat('CZK');
         $number->setNumber(1234.567899);
-        $number->offNbsp();
+        $number->off(INumberFormat::FLAG_NBSP);
         return $number;
     }
 
@@ -73,13 +73,13 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
 
     public function testNbsp() {
         $number = $this->createNumberFormat();
-        $number->onNbsp();
+        $number->on(INumberFormat::FLAG_NBSP);
         $this->assertEquals('1' . INumberFormat::NBSP . '234,57' . INumberFormat::NBSP . 'CZK', (string) $number);
     }
 
     public function testZeroClear() {
         $number = $this->createNumberFormat();
-        $number->addFlag(NumberFormat::ZERO_CLEAR);
+        $number->on(NumberFormat::ZERO_CLEAR);
         $number->setDecimal(5);
         $this->assertEquals('1 234,5679 CZK', (string) $number);
     }
@@ -94,20 +94,20 @@ class NumberFormatTest extends PHPUnit_Framework_TestCase {
     public function testZeroIsEmpty() {
         $number = $this->createNumberFormat();
         $number->setEmptyValue('-');
-        $number->onZeroIsEmpty();
+        $number->on(INumberFormat::ZERO_IS_EMPTY);
         $this->assertEquals('-', (string) $number->render(0.0));
         $this->assertEquals('-', (string) $number->render('0'));
-        $number->removeFlag(NumberFormat::ZERO_IS_EMPTY);
+        $number->off(NumberFormat::ZERO_IS_EMPTY);
         $this->assertEquals('0,00 CZK', (string) $number->render('0'));
     }
 
     public function testRenderSymbol() {
         $number = $this->createNumberFormat();
         $this->assertEquals('50,00 CZK', (string) $number->render(50));
-        $number->offSymbol();
-        $number->onZeroClear();
+        $number->off(INumberFormat::RENDER_SYMBOL);
+        $number->on(INumberFormat::ZERO_CLEAR);
         $this->assertEquals('50', (string) $number->render(50));
-        $number->onSymbol();
+        $number->on(INumberFormat::RENDER_SYMBOL);
         $this->assertEquals('50 CZK', (string) $number->render(50));
     }
 

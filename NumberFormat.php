@@ -6,22 +6,16 @@ use Nette\Object;
 use Nette\Utils\Html;
 
 /**
- * @property-write $number
- * @property-write $thousand
- * @property-write $decimal
- * @property-write $point
- * @property-write $nbsp
- * @property-write $zeroClear
- * @property-write $mask
- * @property-write $symbol
+ * @property float|int $number
+ * @property-write string $thousand
+ * @property-write string $decimal
+ * @property-write string $point
+ * @property-write string $mask
+ * @property string $symbol
+ * @property-write string $emptyValue
+ * @property $int $flag
  */
 class NumberFormat extends Object implements INumberFormat {
-
-    const FLAG_NBSP = 1;
-    const ZERO_CLEAR = 2;
-    const IS_HTML = 4;
-    const RENDER_SYNBOL = 8;
-    const ZERO_IS_EMPTY = 16;
 
     /** @var string */
     private $thousand = ' ';
@@ -61,14 +55,38 @@ class NumberFormat extends Object implements INumberFormat {
         $this->setSymbol($symbol);
     }
 
-    /** @return string */
-    public function getSymbol() {
-        return $this->symbol;
+    /**
+     * 
+     * @param int $flag
+     * @return NumberFormat
+     */
+    public function on($flag) {
+        $this->flag |= $this->checkInt($flag);
+        return $this->onChangeFlag($flag);
+    }
+
+    /**
+     * 
+     * @param int $flag
+     * @return NumberFormat
+     */
+    public function off($flag) {
+        $this->flag &= ~$this->checkInt($flag);
+        return $this->onChangeFlag($flag);
+    }
+
+    public function getFlag() {
+        return $this->flag;
     }
 
     /** @return int|float */
     public function getNumber() {
         return $this->number;
+    }
+
+    /** @return string */
+    public function getSymbol() {
+        return $this->symbol;
     }
 
     /**
@@ -94,6 +112,17 @@ class NumberFormat extends Object implements INumberFormat {
     }
 
     /**
+     * 
+     * @param int $flag
+     * @return NumberFormat
+     * @throws NumberException
+     */
+    public function setFlag($flag) {
+        $this->flag = $this->checkInt($flag);
+        return $this->onChangeFlag($flag);
+    }
+
+    /**
      * S = symbol, 1 = number
      *
      * @example '1 S', 'S 1'
@@ -106,13 +135,7 @@ class NumberFormat extends Object implements INumberFormat {
         }
 
         $this->mask = $mask;
-        $workMask = str_replace('S', $this->symbol, $mask);
-        if (strip_tags($workMask) !== $workMask) {
-            $this->flag |= self::IS_HTML;
-        } else {
-            $this->flag &= ~self::IS_HTML;
-        }
-        $this->workMask = explode('1', $this->replaceNbsp($workMask));
+        $this->setWorkingMask($mask);
         return $this;
     }
 
@@ -127,19 +150,6 @@ class NumberFormat extends Object implements INumberFormat {
         }
         $this->number = $number;
         return $this;
-    }
-
-    /**
-     * Replace non-break space
-     *
-     * @param bool $bool
-     * @return NumberFormat
-     */
-    public function setNbsp($bool) {
-        if ($bool) {
-            return $this->onNbsp();
-        }
-        return $this->offNbsp();
     }
 
     /**
@@ -160,7 +170,6 @@ class NumberFormat extends Object implements INumberFormat {
      * @return NumberFormat
      */
     public function setSymbol($symbol) {
-        $this->onSymbol();
         if ($symbol == $this->symbol) {
             return $this;
         }
@@ -168,6 +177,7 @@ class NumberFormat extends Object implements INumberFormat {
         $this->symbol = $symbol;
 
         if ($symbol !== NULL) {
+            $this->on(self::RENDER_SYMBOL);
             $this->setMask($this->mask);
         }
         return $this;
@@ -181,37 +191,6 @@ class NumberFormat extends Object implements INumberFormat {
      */
     public function setThousand($val) {
         $this->thousand = $val;
-        return $this;
-    }
-
-    /**
-     * 
-     * @param int $flag
-     * @return NumberFormat
-     * @throws NumberException
-     */
-    public function setFlag($flag) {
-        $this->flag = $this->checkInt($flag);
-        return $this;
-    }
-
-    /**
-     * 
-     * @param int $flag
-     * @return NumberFormat
-     */
-    public function addFlag($flag) {
-        $this->flag |= $this->checkInt($flag);
-        return $this;
-    }
-
-    /**
-     * 
-     * @param int $flag
-     * @return NumberFormat
-     */
-    public function removeFlag($flag) {
-        $this->flag &= ~$this->checkInt($flag);
         return $this;
     }
 
@@ -261,7 +240,7 @@ class NumberFormat extends Object implements INumberFormat {
             $number = rtrim(rtrim($number, '0'), $this->point);
         }
 
-        if ($this->symbol && $this->flag & self::RENDER_SYNBOL) {
+        if ($this->symbol && $this->flag & self::RENDER_SYMBOL) {
             $number = implode($number, $this->workMask);
         }
 
@@ -289,10 +268,175 @@ class NumberFormat extends Object implements INumberFormat {
      */
     private function replaceNbsp($val) {
         if ($this->flag & self::FLAG_NBSP) {
-            $val = str_replace(' ', self::NBSP, $val);
+            return str_replace(' ', self::NBSP, $val);
         }
         return $val;
     }
 
-}
+    /** @param string $mask */
+    private function setWorkingMask($mask) {
+        $workMask = str_replace('S', $this->symbol, $mask);
+        if (strip_tags($workMask) !== $workMask) {
+            $this->on(self::IS_HTML);
+        } else {
+            $this->off(self::IS_HTML);
+        }
+        $this->workMask = explode('1', $this->replaceNbsp($workMask));
+    }
 
+    /**
+     * 
+     * @param int $flag
+     * @return NumberFormat
+     */
+    private function onChangeFlag($flag) {
+        if ($flag & self::FLAG_NBSP) {
+            $this->setWorkingMask($this->mask);
+        }
+        return $this;
+    }
+
+    /**
+     * DEPRECATED **************************************************************
+     * *************************************************************************
+     */
+
+    /**
+     * Replace non-break space
+     *
+     * @deprecated
+     * @param bool $bool
+     * @return NumberFormat
+     */
+    public function setNbsp($bool) {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        if ($bool) {
+            return $this->onNbsp();
+        }
+        return $this->offNbsp();
+    }
+
+    /**
+     * Remove zero of right
+     *
+     * @deprecated
+     * @param bool $bool
+     * @return NumberFormat
+     */
+    public function setZeroClear($bool) {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        if ($bool) {
+            return $this->onZeroClear();
+        }
+        return $this->offZeroClear();
+    }
+
+    /**
+     *
+     * @deprecated
+     * @param bool $bool
+     * @return NumberFormat
+     */
+    public function setRenderSymbol($bool) {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        if ($bool) {
+            return $this->onSymbol();
+        }
+        return $this->offSymbol();
+    }
+
+    /**
+     * 
+     * @deprecated
+     * @param bool $bool
+     * @return self
+     */
+    public function setZeroIsEmpty($bool) {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        if ($bool) {
+            return $this->onZeroIsEmpty();
+        }
+        return $this->offZeroIsEmpty();
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function onSymbol() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        $this->flag |= self::RENDER_SYNBOL;
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function offSymbol() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->off() instead.', E_USER_DEPRECATED);
+        $this->flag &= ~self::RENDER_SYNBOL;
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function onZeroClear() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        $this->flag |= self::ZERO_CLEAR;
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function offZeroClear() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->off() instead.', E_USER_DEPRECATED);
+        $this->flag &= ~ self::ZERO_CLEAR;
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function onNbsp() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        $this->flag |= self::FLAG_NBSP;
+        return $this->setMask($this->mask);
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function offNbsp() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->off() instead.', E_USER_DEPRECATED);
+        $this->flag &= ~self::FLAG_NBSP;
+        return $this->setMask($this->mask);
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function offZeroIsEmpty() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->off() instead.', E_USER_DEPRECATED);
+        $this->flag &= ~self::ZERO_IS_EMPTY;
+        return $this;
+    }
+
+    /**
+     * @deprecated
+     * @return NumberFormat 
+     */
+    public function onZeroIsEmpty() {
+        trigger_error(__METHOD__ . '() is deprecated; use $number->on() instead.', E_USER_DEPRECATED);
+        $this->flag |= self::ZERO_IS_EMPTY;
+        return $this;
+    }
+
+}

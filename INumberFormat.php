@@ -8,11 +8,17 @@ namespace h4kuna;
  */
 interface INumberFormat {
 
+    const FLAG_NBSP = 1;
+    const ZERO_CLEAR = 2;
+    const IS_HTML = 4;
+    const RENDER_SYMBOL = 8;
+    const ZERO_IS_EMPTY = 16;
+
     /** @var string utf-8 &nbsp; */
     const NBSP = "\xc2\xa0";
 
     /**
-     * How render number
+     * How render number.
      *
      * @param $num
      * @return string
@@ -20,21 +26,21 @@ interface INumberFormat {
     public function render($num);
 
     /**
-     * Not formated number
+     * Not formated number.
      *
      * @return float|int|string
      */
     public function getNumber();
 
     /**
-     * Get symbol
+     * Get symbol.
      *
      * @return string
      */
     public function getSymbol();
 
     /**
-     * Count of decimal number
+     * Count of decimal number.
      *
      * @param int $int
      * @return INumberFormat
@@ -51,7 +57,7 @@ interface INumberFormat {
     public function setMask($mask);
 
     /**
-     * Set number
+     * Set number.
      *
      * @param string
      * @return INumberFormat
@@ -59,15 +65,7 @@ interface INumberFormat {
     public function setNumber($number);
 
     /**
-     * Replace non-break space
-     *
-     * @param bool $bool
-     * @return NumberFormat
-     */
-    public function setNbsp($bool);
-
-    /**
-     * Integers delimiter
+     * Integers delimiter.
      *
      * @param string
      * @return INumberFormat
@@ -75,7 +73,7 @@ interface INumberFormat {
     public function setPoint($str);
 
     /**
-     * Set symbol - unit, currency
+     * Set symbol - unit, currency.
      *
      * @param string
      * @return INumberFormat
@@ -83,17 +81,21 @@ interface INumberFormat {
     public function setSymbol($str);
 
     /**
-     * Thousand separator
+     * Thousand separator.
      *
      * @param string
+     * @return INumberFormat
      */
     public function setThousand($str);
 
     /**
-     * Remove zero of right
-     *
-     * @param bool $val
-     * @return NumberFormat
+     * Setter of property.
+     * 
+     * @param int $int
+     * @return INumberFormat
      */
-    public function setZeroClear($bool);
+    public function setFlag($int);
+
+    /** @return int */
+    public function getFlag();
 }
