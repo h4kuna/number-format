@@ -12,9 +12,15 @@
         }
     ],
     "require": {
-        "nette/nette": ">=2.0.0"
+        "nette/utils": "~2.0"
+    },
+    "require-dev": {
+        "nette/tester": "~1.0",
+        "tracy/tracy": "~2.0"
     },
     "autoload": {
-        "classmap": ["./"]
+        "psr-4": {
+            "h4kuna\\Number\\": "src\\"
+        }
     }
 }

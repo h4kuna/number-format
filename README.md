@@ -1,15 +1,22 @@
 Number Format
 =============
 
-[![Build Status](https://travis-ci.org/h4kuna/number-format.png)](https://travis-ci.org/h4kuna/number-format)
+[![Build Status](https://travis-ci.org/h4kuna/number-format.svg?branch=master)](https://travis-ci.org/h4kuna/number-format)
+[![Latest stable](https://img.shields.io/packagist/v/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
 
 Wrapper above number_format, api is very easy.
 
-If you don't use Nette framework you can delete [extends Object](http://doc.nette.org/cs/php-language-enhancements).
+Install via composer
+-------------------
+```sh
+composer require h4kuna/number-format
+```
 
 NumberFormat
--------
+------------
 ```php
+use h4kuna\Number\NumberFormat;
+
 $number = new NumberFormat('EUR');
 echo $number->render(); // NULL
 

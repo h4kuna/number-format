@@ -1,6 +1,6 @@
 <?php
 
-namespace h4kuna;
+namespace h4kuna\Number;
 
 /**
  *
@@ -90,7 +90,7 @@ interface INumberFormat {
 
     /**
      * Setter of property.
-     * 
+     *
      * @param int $int
      * @return INumberFormat
      */
