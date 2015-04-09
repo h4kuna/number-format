@@ -1,10 +1,8 @@
 <?php
 
-namespace h4kuna;
+namespace h4kuna\Number;
 
 /**
- * Description of NumberException
- *
  * @author Milan Matějček
  */
 class NumberException extends \RuntimeException {

@@ -1,13 +1,14 @@
 <?php
 
-namespace h4kuna;
+namespace h4kuna\Number;
 
 use Nette\Object;
 
 /**
- * Tax minimu is 2%, maximum 99.99%, if you are out of range, this class is work bad
+ * Tax minimum is 2%, maximum 99.99%, if you are out of range, this class is work bad
  */
-final class Vat extends Object {
+final class Vat extends Object
+{
 
     /** @var float */
     private $upDecimal;
@@ -27,7 +28,8 @@ final class Vat extends Object {
      * @param float $downDecimal
      * @param float $upDecimal
      */
-    private function __construct($percent, $downDecimal, $upDecimal) {
+    private function __construct($percent, $downDecimal, $upDecimal)
+    {
         $this->downDecimal = $downDecimal;
         $this->upDecimal = $upDecimal;
         $this->percent = $percent;
@@ -37,7 +39,8 @@ final class Vat extends Object {
      * @example 19.5% = float 19.5
      * @return float|int
      */
-    public function getPercent() {
+    public function getPercent()
+    {
         return $this->percent;
     }
 
@@ -45,7 +48,8 @@ final class Vat extends Object {
      * @example 19.5% = float 0.195
      * @return float
      */
-    public function getDownDecimal() {
+    public function getDownDecimal()
+    {
         return $this->downDecimal;
     }
 
@@ -53,7 +57,8 @@ final class Vat extends Object {
      * @example 19.5% = float 1.195
      * @return float
      */
-    public function getUpDecimal() {
+    public function getUpDecimal()
+    {
         return $this->upDecimal;
     }
 
@@ -63,7 +68,8 @@ final class Vat extends Object {
      * @param flaot|int $percent
      * @return float
      */
-    static private function prepareKey($percent) {
+    static private function prepareKey($percent)
+    {
         return (string) round($percent, 2);
     }
 
@@ -75,7 +81,8 @@ final class Vat extends Object {
      * @throws \InvalidArgumentException
      * @throws \OutOfRangeException
      */
-    static function create($number) {
+    static function create($number)
+    {
         if ($number instanceof self) {
             return $number;
         }
@@ -120,7 +127,8 @@ final class Vat extends Object {
      *
      * @return array
      */
-    static function getInstances() {
+    static function getInstances()
+    {
         return self::$instance;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace h4kuna;
+namespace h4kuna\Number;
 
 use Nette\Object;
 
@@ -9,10 +9,12 @@ use Nette\Object;
  *
  * @author Milan Matějček
  */
-class Tax extends Object {
+class Tax extends Object
+{
 
-    const VAT_IN = 1;
-    const VAT_OUT = 2;
+    const
+            VAT_IN = 1,
+            VAT_OUT = 2;
 
     /** @var Vat */
     private $vat;
@@ -26,13 +28,15 @@ class Tax extends Object {
     /**
      * @param int|float|string $vat
      */
-    public function __construct($vat = 21) {
+    public function __construct($vat)
+    {
         $this->setVat($vat);
         $this->setVatIO(self::VAT_IN & self::VAT_OUT, self::VAT_IN & self::VAT_OUT);
     }
 
     /** @return Vat */
-    public function getVat() {
+    public function getVat()
+    {
         return $this->vat;
     }
 
@@ -42,7 +46,8 @@ class Tax extends Object {
      * @param int|float|string $v
      * @return Tax
      */
-    public function setVat($v) {
+    public function setVat($v)
+    {
         $this->vat = Vat::create($v);
         return $this;
     }
@@ -54,7 +59,8 @@ class Tax extends Object {
      * @param bool $out
      * @return Tax
      */
-    public function setVatIO($in, $out) {
+    public function setVatIO($in, $out)
+    {
         $in = $in ? self::VAT_IN : 0;
         $out = $out ? self::VAT_OUT : 0;
         $this->vatTemp = $this->vatIO = $in | $out;
@@ -64,7 +70,8 @@ class Tax extends Object {
     /**
      * @return Tax
      */
-    public function vatOn() {
+    public function vatOn()
+    {
         $this->vatTemp = $this->vatIO | self::VAT_OUT;
         return $this;
     }
@@ -72,7 +79,8 @@ class Tax extends Object {
     /**
      * @return Tax
      */
-    public function vatOff() {
+    public function vatOff()
+    {
         $this->vatTemp = $this->vatIO & ~self::VAT_OUT;
         return $this;
     }
@@ -82,7 +90,8 @@ class Tax extends Object {
      *
      * @return bool
      */
-    public function isVatOn() {
+    public function isVatOn()
+    {
         return $this->vatTemp > self::VAT_IN;
     }
 
@@ -90,7 +99,8 @@ class Tax extends Object {
      *
      * @return Tax
      */
-    public function reset() {
+    public function reset()
+    {
         $this->vatTemp = $this->vatIO;
         return $this;
     }
@@ -102,7 +112,8 @@ class Tax extends Object {
      * @param int|float|string|Vat $vat
      * @return float
      */
-    public function withVat($number, $vat = NULL) {
+    public function withVat($number, $vat = NULL)
+    {
         $res = $this->vatOn()->taxation($number, $vat);
         $this->reset();
         return $res;
@@ -115,7 +126,8 @@ class Tax extends Object {
      * @param int|float|string|Vat $vat
      * @return numeric
      */
-    public function withoutVat($number, $vat = NULL) {
+    public function withoutVat($number, $vat = NULL)
+    {
         $res = $this->vatOff()->taxation($number, $vat);
         $this->reset();
         return $res;
@@ -128,7 +140,8 @@ class Tax extends Object {
      * @param int|float|string|Vat $vat
      * @return int|float
      */
-    public function taxation($number, $vat = NULL) {
+    public function taxation($number, $vat = NULL)
+    {
         $both = self::VAT_IN | self::VAT_OUT;
         if (!$this->vatTemp || $this->vatTemp == $both) {
             return $number;
