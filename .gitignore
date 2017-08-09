@@ -1,4 +1,5 @@
 composer.lock
-tmp/
-vendor/
+/vendor/
 /nbproject/
+/.idea/
+/**/output/

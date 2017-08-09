@@ -3,8 +3,18 @@ Number Format
 
 [![Build Status](https://travis-ci.org/h4kuna/number-format.svg?branch=master)](https://travis-ci.org/h4kuna/number-format)
 [![Latest stable](https://img.shields.io/packagist/v/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
+[![Downloads this Month](https://img.shields.io/packagist/dm/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
+[![Coverage Status](https://coveralls.io/repos/github/h4kuna/number-format/badge.svg?branch=master)](https://coveralls.io/github/h4kuna/number-format?branch=master)
 
 Wrapper above number_format, api is very easy.
+
+# Changelog
+
+## v2.0
+
+New behavior is representing by one class is one type of format. Onetime create class and you can'nt change by life of object. Added new classes for number, unit and currency. Working with percent and taxes are better too.
+
+Here is [manual](//github.com/h4kuna/number-format/tree/v1.3.0) for older version 1.3.0.
 
 Install via composer
 -------------------
@@ -12,75 +22,61 @@ Install via composer
 composer require h4kuna/number-format
 ```
 
-NumberFormat
-------------
+### NumberFormatState
+
+Class has many parameters and all paremetes has default value. You can add parameters normaly by position or name of keys in array like first parameter.
+
 ```php
-use h4kuna\Number\NumberFormat;
+use h4kuna\Number;
 
-$number = new NumberFormat('EUR');
-echo $number->render(); // NULL
+// set decimals as 3
+$numberFormat = new Number\NumberFormatState(3);
+// or
+$numberFormat = new Number\NumberFormatState(['decimals' => 3]);
 
-$number->setNumber(1234.4560);
-echo $number->render(); // 1&nbsp;234,46&nbsp;EUR
-
-$number->off(INumberFormat::NBSP_FLAG);
-echo $number->render(); // 1 234,46 EUR
-
-$number->setDecimal(4);
-echo $number->render(); // 1 234,4560 EUR
-
-$number->setMask('S 1');
-echo $number->render(); // EUR 1 234,4560
-
-$number->setPoint('.');
-echo $number->render(); // EUR 1 234.4560
-
-$number->setSymbol('€');
-echo $number->render(); // € 1 234.4560
-
-$number->setThousand(',');
-echo $number->render(); // € 1,234.4560
-
-$number->on(INumberFormat::ZERO_CLEAR);
-echo $number->render(); // € 1,234.456
-
-$number->setDecimal(-2);
-echo $number->render(); // € 1,200
-echo $number; // € 1,200
-
-$number->setEmptyValue('-');
-echo $number->render(''); // -
-echo $number->render(0); // € 0
-
-$number->on(INumberFormat::ZERO_IS_EMPTY);
-echo $number->render(0); // -
-
-$number->setNumber('1,5'); // throw exception
-$number->render('1,5'); // NULL
 ```
 
-Tax
--------
-```php
-$tax = new Tax;
-$tax->setVatIO(FALSE, TRUE);
-echo $tax->taxation(100); // 121,00 Kč
+#### Parameters
+- decimals: [2]
+- decimalPoint: string [',']
+- thousandsSeparator: string [NULL] mean \&nbsp;
+- zeroIsEmpty: bool [FALSE] - transform 0 to empty value
+- emptyValue: string [NULL] has two options dependecy on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero tranform to emtpy string if is not defined other string
+- zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
+- intOnly: [NULL] if you have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
 
-$tax->setVatIO(TRUE, FALSE);
-$tax->number = 121;
-echo $tax; // 100,00 Kč
+Here is test for [more use cases](tests/src/NumberFormatStateTest.phpt).
+
+### UnitFormatState
+Use this class for number with unit like Kb, Mb, Gb. Unit symbol is second parameter in [method **format**](src/UnitFormatState.php). Visit [tests](tests/src/UnitFormatStateTest.phpt).
+
+#### Parameters
+- mask: ['1 U'] mean 1 pattern for number and U is pattern for unit
+- showUnit: [TRUE] mean show unit if number is empty 
+- nbsp: [TRUE] mean replace white space in mask by \&nbsp
+
+### UnitPersistentFormatState
+This class is same like previous, but unit is persistent like currencies or temperature. 
+
+#### Parameters
+- currency: has'nt default value
+
+### NumberFormatFactory
+For all previous classes is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.phpt)
+
+### Tax
+
+```php
+$tax = new Tax(20);
+echo $tax->addVat(100); // 120
+echo $tax->removeVat(120); // 100.0
+echo $tax->diff(120); // 20.0
 ```
 
-Vat
--------
-```php
-// first instance
-$vat = Vat::create(20);
-$vat = Vat::create(1.2);
-$vat = Vat::create(0.2);
-$vat = Vat::create($vat);
+### Percent
 
-// second instance
-$vat = Vat::create('21');
-```
-In memory exists only two instance of Vat with 20% and 21%.
+```php
+$percent = new Percent(20);
+echo $percent->add(100); // 120.0
+echo $percent->deduct(120); // 96.0
+echo $percent->diff(120); // 24.0

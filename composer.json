@@ -11,16 +11,14 @@
             "role": "Developer"
         }
     ],
-    "require": {
-        "nette/utils": "~2.0"
-    },
     "require-dev": {
-        "nette/tester": "~1.0",
-        "tracy/tracy": "~2.0"
+        "nette/utils": "^2.0",
+        "salamium/testinium": "~0.1"
     },
     "autoload": {
         "psr-4": {
             "h4kuna\\Number\\": "src\\"
-        }
+        },
+        "files": ["src/exceptions.php"]
     }
 }
