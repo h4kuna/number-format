@@ -34,6 +34,8 @@ $numberFormat = new Number\NumberFormatState(3);
 // or
 $numberFormat = new Number\NumberFormatState(['decimals' => 3]);
 
+
+echo $numberFormat->format(1000); // 1 000,000
 ```
 
 #### Parameters
@@ -59,7 +61,7 @@ Use this class for number with unit like Kb, Mb, Gb. Unit symbol is second param
 This class is same like previous, but unit is persistent like currencies or temperature. 
 
 #### Parameters
-- currency: has'nt default value
+- unit: has'nt default value
 
 ### NumberFormatFactory
 For all previous classes is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.phpt)
@@ -80,3 +82,21 @@ $percent = new Percent(20);
 echo $percent->add(100); // 120.0
 echo $percent->deduct(120); // 96.0
 echo $percent->diff(120); // 24.0
+```
+
+## Integration to Nette framework
+
+In your neon file
+```neon
+services:
+	number: h4kuna\Number\NumberFormatState([decimalPoint: '.', intOnly: 1, decimals: 1])
+
+	latte.latteFactory:
+		setup:
+			- addFilter('number', [@number, 'format'])
+```
+
+We added new filter number, in template use like:
+```html
+{=10000|number} // this render "1 000.0" with &nbps; like white space
+```
