@@ -25,7 +25,7 @@ class NumberFormatFactoryTest extends TestCase
 	public function testNumber()
 	{
 		$nff = new NumberFormatFactory();
-		$nf = $nff->createNumber(['decimalPoint' => '.']);
+		$nf = $nff->createNumber(2, '.');
 		Assert::same('1.00', $nf->format(1));
 	}
 

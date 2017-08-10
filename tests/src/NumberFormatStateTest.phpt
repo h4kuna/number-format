@@ -22,16 +22,22 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('1,12', $nf->format(1.115));
 		Assert::same('1' . $nf::NBSP . '000,00', $nf->format(1000));
 		Assert::same('0,00', $nf->format(NULL));
+	}
 
+
+	public function testNamedParameters()
+	{
 		$nf = new NumberFormatState([
-			'decimals' => 3,
+			'emptyValue' => '-',
+			'zeroIsEmpty' => TRUE,
 			'decimalPoint' => '.',
 			'thousandsSeparator' => ',',
-			'zeroIsEmpty' => TRUE,
-			'emptyValue' => '-',
-			'intOnly' => 2
+			'decimals' => 3,
+			'intOnly' => 4,
+			'zeroClear' => TRUE,
 		]);
-		Assert::same('1,000.000', $nf->format(100000));
+		Assert::same('1,000.01', $nf->format(10000100));
+		Assert::same('1,000.001', $nf->format(10000011));
 		Assert::same('-', $nf->format(0));
 	}
 
@@ -67,12 +73,17 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('-', $nf->format(0.0));
 		Assert::same('-', $nf->format('0'));
 		Assert::same('-', $nf->format('0.0'));
+		Assert::same('-', $nf->format(NULL));
 
-		$nf = new NumberFormatState(2, ',', ' ', TRUE);
+		$nf = new NumberFormatState(2, ',', ' ', TRUE, NULL);
+		Assert::same('', $nf->format(NULL));
 		Assert::same('', $nf->format(0));
 		Assert::same('', $nf->format(0.0));
 		Assert::same('', $nf->format('0'));
 		Assert::same('', $nf->format('0.0'));
+
+		$nf = new NumberFormatState(2, ',', ' ', FALSE, NULL);
+		Assert::same('0,00', $nf->format(NULL));
 	}
 
 
