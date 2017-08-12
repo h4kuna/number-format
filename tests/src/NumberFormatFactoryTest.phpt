@@ -1,13 +1,11 @@
 <?php
 
-
 namespace h4kuna\Number;
 
 use Tester\TestCase,
 	Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
-
 
 class NumberFormatFactoryTest extends TestCase
 {
@@ -21,14 +19,12 @@ class NumberFormatFactoryTest extends TestCase
 		Assert::same('1.00kg', $uf->format(1, 'kg'));
 	}
 
-
 	public function testNumber()
 	{
 		$nff = new NumberFormatFactory();
 		$nf = $nff->createNumber(2, '.');
 		Assert::same('1.00', $nf->format(1));
 	}
-
 
 	public function testUnitPersistent()
 	{
@@ -37,6 +33,5 @@ class NumberFormatFactoryTest extends TestCase
 		Assert::same('1.0 CZK', $cf->format(1));
 	}
 }
-
 
 (new NumberFormatFactoryTest())->run();

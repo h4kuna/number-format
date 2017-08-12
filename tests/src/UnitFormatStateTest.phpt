@@ -1,13 +1,11 @@
 <?php
 
-
 namespace h4kuna\Number;
 
 use Tester\TestCase,
 	Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
-
 
 class UnitFormatStateTest extends TestCase
 {
@@ -16,7 +14,6 @@ class UnitFormatStateTest extends TestCase
 		$nf = new UnitFormatState(new NumberFormatState());
 		Assert::same('1,00' . NumberFormatState::NBSP . 'kg', $nf->format(1, 'kg'));
 	}
-
 
 	public function testMask()
 	{
@@ -27,7 +24,6 @@ class UnitFormatStateTest extends TestCase
 		Assert::same('1,00-g', $nf->format(1, 'g'));
 	}
 
-
 	/**
 	 * @throws \h4kuna\Number\InvalidMaskException
 	 */
@@ -36,13 +32,11 @@ class UnitFormatStateTest extends TestCase
 		new UnitFormatState(new NumberFormatState(), '1U-1U');
 	}
 
-
 	public function testNbsp()
 	{
 		$nf = new UnitFormatState(new NumberFormatState(), '1 U', TRUE, FALSE);
 		Assert::same('1,00 kg', $nf->format(1, 'kg'));
 	}
-
 
 	public function testEmptyValue()
 	{
@@ -53,6 +47,5 @@ class UnitFormatStateTest extends TestCase
 		Assert::same('-', $nf->format(NULL, 'kg'));
 	}
 }
-
 
 (new UnitFormatStateTest())->run();

@@ -2,7 +2,6 @@
 
 namespace h4kuna\Number;
 
-
 class NumberFormatState
 {
 	const
@@ -29,7 +28,6 @@ class NumberFormatState
 
 	/** @var int|NULL */
 	private $intOnly;
-
 
 	public function __construct($decimals = 2, $decimalPoint = ',', $thousandsSeparator = NULL, $zeroIsEmpty = FALSE, $emptyValue = NULL, $zeroClear = FALSE, $intOnly = NULL)
 	{
@@ -60,7 +58,6 @@ class NumberFormatState
 		}
 	}
 
-
 	/**
 	 * @return NULL|string
 	 */
@@ -68,7 +65,6 @@ class NumberFormatState
 	{
 		return $this->emptyValue;
 	}
-
 
 	/**
 	 * Render number
@@ -103,6 +99,5 @@ class NumberFormatState
 
 		return $formatted;
 	}
-
 
 }

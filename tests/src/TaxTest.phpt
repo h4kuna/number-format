@@ -7,7 +7,6 @@ use Tester\TestCase,
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
 class TaxTest extends TestCase
 {
 
@@ -23,6 +22,5 @@ class TaxTest extends TestCase
 	}
 
 }
-
 
 (new TaxTest)->run();

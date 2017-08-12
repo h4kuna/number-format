@@ -7,7 +7,6 @@ class Tax
 	/** @var Percent */
 	private $vat;
 
-
 	public function __construct($vat)
 	{
 		if (!$vat instanceof Percent) {
@@ -16,13 +15,11 @@ class Tax
 		$this->vat = $vat;
 	}
 
-
 	/** @return int|float */
 	public function getVat()
 	{
 		return $this->vat->getPercent();
 	}
-
 
 	/**
 	 * @param int|float $number
@@ -33,7 +30,6 @@ class Tax
 		return $this->vat->add($number);
 	}
 
-
 	/**
 	 * @param int|float $number
 	 * @return float
@@ -43,7 +39,6 @@ class Tax
 		return $number / $this->vat->getRatio();
 	}
 
-
 	/**
 	 * @param int|float $number
 	 * @return float
@@ -52,7 +47,6 @@ class Tax
 	{
 		return $number - $this->removeVat($number);
 	}
-
 
 	public function __toString()
 	{

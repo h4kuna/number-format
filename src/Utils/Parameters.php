@@ -1,13 +1,10 @@
 <?php
 
-
 namespace h4kuna\Number\Utils;
-
 
 class Parameters
 {
 	private static $parameters = [];
-
 
 	public static function canExtract(& $data, $method, $index = 0)
 	{
@@ -23,7 +20,6 @@ class Parameters
 
 		return TRUE;
 	}
-
 
 	/**
 	 * @param string $method

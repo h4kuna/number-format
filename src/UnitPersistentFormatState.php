@@ -1,8 +1,6 @@
 <?php
 
-
 namespace h4kuna\Number;
-
 
 class UnitPersistentFormatState
 {
@@ -12,13 +10,11 @@ class UnitPersistentFormatState
 	/** @var string */
 	private $unit;
 
-
 	public function __construct(UnitFormatState $unitFormatState, $unit)
 	{
 		$this->unitFormatState = $unitFormatState;
 		$this->unit = (string) $unit;
 	}
-
 
 	public function format($number)
 	{

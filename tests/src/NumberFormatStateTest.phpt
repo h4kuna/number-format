@@ -7,7 +7,6 @@ use Tester\TestCase,
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
 class NumberFormatStateTest extends TestCase
 {
 
@@ -23,7 +22,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('1' . $nf::NBSP . '000,00', $nf->format(1000));
 		Assert::same('0,00', $nf->format(NULL));
 	}
-
 
 	public function testNamedParameters()
 	{
@@ -41,7 +39,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('-', $nf->format(0));
 	}
 
-
 	public function testDecimal()
 	{
 		$nf = new NumberFormatState(1);
@@ -55,7 +52,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('20', $nf->format(15));
 	}
 
-
 	public function testDecimalPointThousandSep()
 	{
 		$nf = new NumberFormatState(2, '.', ',');
@@ -64,7 +60,6 @@ class NumberFormatStateTest extends TestCase
 		$nf = new NumberFormatState(2, NumberFormatState::NBSP . ',');
 		Assert::same('1' . $nf::NBSP . ',00', $nf->format(1));
 	}
-
 
 	public function testZeroIsEmpty()
 	{
@@ -86,7 +81,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('0,00', $nf->format(NULL));
 	}
 
-
 	public function testEmptyValue()
 	{
 		$nf = new NumberFormatState(2, ',', ' ', FALSE, '-');
@@ -97,7 +91,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('0,00', $nf->format('0'));
 		Assert::same('0,00', $nf->format('0.0'));
 	}
-
 
 	public function testZeroClear()
 	{
@@ -110,7 +103,6 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('1,112', $nf->format(1.11195));
 	}
 
-
 	public function testIntOnly()
 	{
 		$nf = new NumberFormatState(2, ',', ' ', NULL, FALSE, FALSE, 4);
@@ -122,6 +114,5 @@ class NumberFormatStateTest extends TestCase
 	}
 
 }
-
 
 (new NumberFormatStateTest())->run();
