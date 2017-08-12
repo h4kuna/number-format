@@ -70,8 +70,8 @@ For all previous classes is prepared [factory class](src/NumberFormatFactory.php
 
 ```php
 $tax = new Tax(20);
-echo $tax->addVat(100); // 120
-echo $tax->removeVat(120); // 100.0
+echo $tax->add(100); // 120
+echo $tax->deduct(120); // 100.0
 echo $tax->diff(120); // 20.0
 ```
 

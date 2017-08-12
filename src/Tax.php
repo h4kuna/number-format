@@ -25,7 +25,7 @@ class Tax
 	 * @param int|float $number
 	 * @return float
 	 */
-	public function addVat($number)
+	public function add($number)
 	{
 		return $this->vat->add($number);
 	}
@@ -34,7 +34,7 @@ class Tax
 	 * @param int|float $number
 	 * @return float
 	 */
-	public function removeVat($number)
+	public function deduct($number)
 	{
 		return $number / $this->vat->getRatio();
 	}
@@ -45,7 +45,7 @@ class Tax
 	 */
 	public function diff($number)
 	{
-		return $number - $this->removeVat($number);
+		return $number - $this->deduct($number);
 	}
 
 	public function __toString()

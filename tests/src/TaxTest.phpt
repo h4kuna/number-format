@@ -13,8 +13,8 @@ class TaxTest extends TestCase
 	public function testApi()
 	{
 		$tax = new Tax(20);
-		Assert::same(120.0, $tax->addVat(100));
-		Assert::same(100.0, $tax->removeVat(120));
+		Assert::same(120.0, $tax->add(100));
+		Assert::same(100.0, $tax->deduct(120));
 		Assert::same(20.0, $tax->diff(120));
 		Assert::same(20, $tax->getVat());
 
