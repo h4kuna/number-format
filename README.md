@@ -45,7 +45,7 @@ echo $numberFormat->format(1000); // 1 000,000
 - zeroIsEmpty: bool [FALSE] - transform 0 to empty value
 - emptyValue: string [NULL] has two options dependecy on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero tranform to emtpy string if is not defined other string
 - zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
-- intOnly: [NULL] if you have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
+- intOnly: [NULL] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
 
 Here is test for [more use cases](tests/src/NumberFormatStateTest.phpt).
 
@@ -99,4 +99,64 @@ services:
 We added new filter number, in template use like:
 ```html
 {=10000|number} // this render "1 000.0" with &nbps; like white space
+```
+
+# Units
+Help us convert units in general [decimal system](//en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes).
+
+### Units\Unit
+```php
+use h4kuna\Number\Units;
+
+$unit = new Units\Unit(/* [string $from], [array $allowedUnits] */);
+```
+* **$from** select default prefix for your units default is BASE = 0
+* **$allowedUnits** if we need other units if is defined
+
+This example say: I have 50kilo (10<sup>3</sup>) and convert to base 10<sup>0</sup>
+```php
+$unitValue = $unit->convertFrom(50, $unit::KILO, $unit::BASE);
+echo $unitValue->unit; // empty string mean BASE
+echo $unitValue->value; // 50000
+```
+
+If second parameter is NULL then use from unit whose is defined in constructor.
+```php
+$unitValue = $unit->convertFrom(5000, NULL, $unit::KILO);
+// alias for this use case is 
+$unitValue = $unit->convert(5000, $unit::KILO);
+
+echo $unitValue->unit; // k mean KILO
+echo $unitValue->value; // 5
+```
+If third parameter is NULL, class try find best unit.
+```php
+$unitValue = $unit->convertFrom(5000000, $unit::MILI, NULL);
+echo $unitValue->unit; // k mean KILO
+echo $unitValue->value; // 5
+```
+
+Last method, take string and convert how we need. This is good for Byte.
+```php
+$unitValue = $unit->fromString('100k', $unit::BASE);
+echo $unitValue->unit; // BASE
+echo $unitValue->value; // 100000
+```
+
+### Units\Byte
+```php
+$unitValue = $byte = new Units\Byte();
+$byte->fromString('128M');
+echo $unitValue->unit; // BASE
+echo $unitValue->value; // 134217728
+```
+
+### Units\UnitFormat
+If we need format our units.
+```php
+$nff = new Number\NumberFormatFactory();
+$unitfFormat = new Units\UnitFormat('B', new Byte, $nff->createUnit());
+
+$unitfFormat->convert(968884224); // '924,00 MB'
+$unitfFormat->convert(1024); // '1,00 kB'
 ```
