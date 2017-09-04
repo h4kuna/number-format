@@ -89,7 +89,7 @@ echo $percent->diff(120); // 24.0
 In your neon file
 ```neon
 services:
-	number: h4kuna\Number\NumberFormatState([decimalPoint: '.', intOnly: 1, decimals: 1])
+	number: h4kuna\Number\NumberFormatState(decimalPoint: '.', intOnly: 1, decimals: 1) #support named parameters by nette
 
 	latte.latteFactory:
 		setup:
