@@ -11,6 +11,9 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "h4kuna/data-type": "^2.1.0"
+    },
     "require-dev": {
         "nette/utils": "^2.0",
         "salamium/testinium": "~0.1"
