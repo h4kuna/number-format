@@ -7,6 +7,7 @@ use h4kuna\Number,
 
 class UnitFormat
 {
+
 	/** @var string */
 	private $symbol;
 
@@ -16,6 +17,7 @@ class UnitFormat
 	/** @var Number\UnitFormatState */
 	private $unitFormatState;
 
+
 	public function __construct($symbol, Unit $unit, Number\UnitFormatState $unitFormatState)
 	{
 		$this->symbol = $symbol;
@@ -23,27 +25,30 @@ class UnitFormat
 		$this->unitFormatState = $unitFormatState;
 	}
 
+
 	/**
 	 * @param int|float|string $number
-	 * @param string|NULL $unitTo - NULL mean automatic
+	 * @param string|null $unitTo - null mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convert($number, $unitTo = NULL)
+	public function convert($number, $unitTo = null)
 	{
-		return $this->convertFrom($number, NULL, $unitTo);
+		return $this->convertFrom($number, null, $unitTo);
 	}
+
 
 	/**
 	 * @param int|float $number
-	 * @param string $unitFrom - NULL mean defined in constructor
-	 * @param string|null $unitTo - NULL mean automatic
+	 * @param string $unitFrom - null mean defined in constructor
+	 * @param string|null $unitTo - null mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convertFrom($number, $unitFrom, $unitTo = NULL)
+	public function convertFrom($number, $unitFrom, $unitTo = null)
 	{
 		$unitValue = $this->unit->convertFrom($number, $unitFrom, $unitTo);
 		return $this->format($unitValue->value, $unitValue->unit . $this->symbol);
 	}
+
 
 	/**
 	 * @param string $value
@@ -55,6 +60,7 @@ class UnitFormat
 		$unitValue = $this->unit->fromString($value, $unitTo);
 		return $this->format($unitValue->value, $unitValue->unit . $this->unit);
 	}
+
 
 	private function format($value, $unit)
 	{

@@ -31,8 +31,9 @@ class UnitTest extends \Tester\TestCase
 		Assert::same(0, $unit->convert('0.0')->value);
 		Assert::same(0, $unit->convert('0')->value);
 		Assert::same(0, $unit->convert(0.0)->value);
-		Assert::same(0, $unit->convert(NULL)->value);
+		Assert::same(0, $unit->convert(null)->value);
 	}
+
 
 	public function testDiffBase()
 	{
@@ -49,6 +50,7 @@ class UnitTest extends \Tester\TestCase
 		Assert::same(0.001, $unitValue->value);
 		Assert::same($unit::MEGA, $unitValue->unit);
 	}
+
 
 	public function testConvertAuto()
 	{
@@ -69,6 +71,7 @@ class UnitTest extends \Tester\TestCase
 		Assert::equal(0.001, $unitValue->value);
 		Assert::same($unit::PICO, $unitValue->unit);
 	}
+
 
 	public function testFromString()
 	{

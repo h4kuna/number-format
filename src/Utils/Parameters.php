@@ -4,12 +4,14 @@ namespace h4kuna\Number\Utils;
 
 class Parameters
 {
+
 	private static $parameters = [];
+
 
 	public static function canExtract(& $data, $method, $index = 0)
 	{
 		if (!is_array($data)) {
-			return FALSE;
+			return false;
 		}
 
 		$parameter = self::getParameterReflection($method, $index);
@@ -18,8 +20,9 @@ class Parameters
 			$data[$key] = $parameter->getDefaultValue();
 		}
 
-		return TRUE;
+		return true;
 	}
+
 
 	/**
 	 * @param string $method

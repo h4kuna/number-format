@@ -7,6 +7,7 @@ use h4kuna\Number,
 
 class Unit
 {
+
 	const
 		PETA = 'P',
 		TERA = 'T',
@@ -45,13 +46,15 @@ class Unit
 	 */
 	protected $allowedUnits;
 
-	public function __construct($from = self::BASE, array $allowedUnits = NULL)
+
+	public function __construct($from = self::BASE, array $allowedUnits = null)
 	{
 		$this->from = $from;
-		if ($allowedUnits === NULL) {
+		if ($allowedUnits === null) {
 			$this->allowedUnits = static::UNITS;
 		}
 	}
+
 
 	/**
 	 * @return array
@@ -61,6 +64,7 @@ class Unit
 		return $this->allowedUnits;
 	}
 
+
 	/**
 	 * @return string
 	 */
@@ -69,43 +73,46 @@ class Unit
 		return $this->from;
 	}
 
+
 	/**
 	 * @param int|float|string $number
-	 * @param string|NULL $unitTo - NULL mean automatic
+	 * @param string|null $unitTo - null mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convert($number, $unitTo = NULL)
+	public function convert($number, $unitTo = null)
 	{
-		return $this->convertFrom($number, NULL, $unitTo);
+		return $this->convertFrom($number, null, $unitTo);
 	}
+
 
 	/**
 	 * @param int|float $number
-	 * @param string $unitFrom - NULL mean defined in constructor
-	 * @param string|null $unitTo - NULL mean automatic
+	 * @param string $unitFrom - null mean defined in constructor
+	 * @param string|null $unitTo - null mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convertFrom($number, $unitFrom, $unitTo = NULL)
+	public function convertFrom($number, $unitFrom, $unitTo = null)
 	{
-		if ($unitFrom === NULL) {
+		if ($unitFrom === null) {
 			$unitFrom = $this->from;
 		} else {
 			$this->checkUnit($unitFrom);
 		}
 
-		($unitTo !== NULL) && $this->checkUnit($unitTo);
+		($unitTo !== null) && $this->checkUnit($unitTo);
 
 		if (!(float) $number) {
 			$number = 0;
 			$unitTo = $unitFrom;
-		} elseif ($unitFrom !== $unitTo && $unitTo !== NULL) {
+		} elseif ($unitFrom !== $unitTo && $unitTo !== null) {
 			$number = $this->convertUnit($number, $this->allowedUnits[$unitFrom], $this->allowedUnits[$unitTo]);
-		} elseif ($unitTo === NULL) {
+		} elseif ($unitTo === null) {
 			return $this->autoConvert($number, $unitFrom);
 		}
 
 		return self::createUnitValue($number, $unitTo);
 	}
+
 
 	/**
 	 * @param string $value
@@ -120,10 +127,12 @@ class Unit
 		return $this->convertFrom($find['number'], $find['unit'], $unitTo);
 	}
 
+
 	protected function convertUnit($number, $indexFrom, $indexTo)
 	{
 		return $number * pow(10, $indexFrom - $indexTo);
 	}
+
 
 	private function autoConvert($number, $unitFrom)
 	{
@@ -146,12 +155,14 @@ class Unit
 		return self::createUnitValue($result[0], $result[1]);
 	}
 
+
 	private function checkUnit($unit)
 	{
 		if (!isset($this->allowedUnits[$unit])) {
 			throw new Number\InvalidArgumentException('Unit: "' . $unit . ' let\'s set own.');
 		}
 	}
+
 
 	/**
 	 * @param float $value
@@ -165,6 +176,7 @@ class Unit
 			'unit' => $unit
 		]);
 	}
+
 
 	private static function prepareNumber($value)
 	{

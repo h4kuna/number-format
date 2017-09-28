@@ -4,6 +4,7 @@ namespace h4kuna\Number;
 
 class NumberFormatState
 {
+
 	const
 		ZERO_CLEAR = 1,
 		ZERO_IS_EMPTY = 2;
@@ -20,25 +21,26 @@ class NumberFormatState
 	/** @var string */
 	private $decimalPoint;
 
-	/** @var string|NULL */
+	/** @var string|null */
 	private $emptyValue;
 
 	/** @var int */
 	private $flag = 0;
 
-	/** @var int|NULL */
+	/** @var int|null */
 	private $intOnly;
 
-	public function __construct($decimals = 2, $decimalPoint = ',', $thousandsSeparator = NULL, $zeroIsEmpty = FALSE, $emptyValue = NULL, $zeroClear = FALSE, $intOnly = NULL)
+
+	public function __construct($decimals = 2, $decimalPoint = ',', $thousandsSeparator = null, $zeroIsEmpty = false, $emptyValue = null, $zeroClear = false, $intOnly = null)
 	{
 		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
 			extract($decimals);
 		}
 		$this->decimals = (int) $decimals;
 		$this->decimalPoint = (string) $decimalPoint;
-		$this->thousandsSeparator = $thousandsSeparator === NULL ? self::NBSP : (string) $thousandsSeparator;
+		$this->thousandsSeparator = $thousandsSeparator === null ? self::NBSP : (string) $thousandsSeparator;
 
-		if ($emptyValue !== NULL) {
+		if ($emptyValue !== null) {
 			$this->emptyValue = (string) $emptyValue;
 		}
 
@@ -48,40 +50,42 @@ class NumberFormatState
 
 		if ($zeroIsEmpty) {
 			$this->flag |= self::ZERO_IS_EMPTY;
-			if ($this->emptyValue === NULL) {
+			if ($this->emptyValue === null) {
 				$this->emptyValue = '';
 			}
 		}
 
-		if ($intOnly !== NULL && $intOnly > 0) {
+		if ($intOnly !== null && $intOnly > 0) {
 			$this->intOnly = pow(10, (int) $intOnly);
 		}
 	}
 
+
 	/**
-	 * @return NULL|string
+	 * @return null|string
 	 */
 	public function getEmptyValue()
 	{
 		return $this->emptyValue;
 	}
 
+
 	/**
 	 * Render number
-	 * @param int|float|string|NULL $number
+	 * @param int|float|string|null $number
 	 * @return string
 	 */
 	public function format($number)
 	{
 		if (((float) $number) === 0.0) {
-			if ($this->emptyValue === NULL) {
+			if ($this->emptyValue === null) {
 				$number = 0;
 			} elseif ($this->flag & self::ZERO_IS_EMPTY || !is_numeric($number)) {
 				return $this->emptyValue;
 			}
 		}
 
-		if ($number != 0 && $this->intOnly !== NULL) {
+		if ($number != 0 && $this->intOnly !== null) {
 			$number = ((int) $number) / $this->intOnly;
 		}
 

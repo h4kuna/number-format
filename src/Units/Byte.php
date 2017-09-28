@@ -4,6 +4,7 @@ namespace h4kuna\Number\Units;
 
 class Byte extends Unit
 {
+
 	const UNITS = [
 		Unit::BASE => 0,
 		Unit::KILO => 3,
@@ -12,6 +13,7 @@ class Byte extends Unit
 		Unit::TERA => 12,
 		Unit::PETA => 15
 	];
+
 
 	protected function convertUnit($number, $indexFrom, $indexTo)
 	{

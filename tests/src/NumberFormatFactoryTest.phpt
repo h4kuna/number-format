@@ -9,6 +9,7 @@ require_once __DIR__ . '/../bootstrap.php';
 
 class NumberFormatFactoryTest extends TestCase
 {
+
 	public function testUnit()
 	{
 		$nff = new NumberFormatFactory();
@@ -19,6 +20,7 @@ class NumberFormatFactoryTest extends TestCase
 		Assert::same('1.00kg', $uf->format(1, 'kg'));
 	}
 
+
 	public function testNumber()
 	{
 		$nff = new NumberFormatFactory();
@@ -26,10 +28,11 @@ class NumberFormatFactoryTest extends TestCase
 		Assert::same('1.00', $nf->format(1));
 	}
 
+
 	public function testUnitPersistent()
 	{
 		$nff = new NumberFormatFactory();
-		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => FALSE, 'decimals' => 1]);
+		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => false, 'decimals' => 1]);
 		Assert::same('1.0 CZK', $cf->format(1));
 	}
 }

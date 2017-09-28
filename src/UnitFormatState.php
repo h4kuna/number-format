@@ -4,6 +4,7 @@ namespace h4kuna\Number;
 
 class UnitFormatState
 {
+
 	/** @var NumberFormatState */
 	private $numberFormatState;
 
@@ -13,7 +14,8 @@ class UnitFormatState
 	/** @var bool */
 	private $showUnit;
 
-	public function __construct(NumberFormatState $numberFormatState, $mask = '1 U', $showUnit = TRUE, $nbsp = TRUE)
+
+	public function __construct(NumberFormatState $numberFormatState, $mask = '1 U', $showUnit = true, $nbsp = true)
 	{
 		self::validMask($mask);
 		$this->numberFormatState = $numberFormatState;
@@ -21,14 +23,16 @@ class UnitFormatState
 		$this->mask = $nbsp ? str_replace(' ', $numberFormatState::NBSP, $mask) : $mask;
 	}
 
+
 	public function format($number, $unit)
 	{
 		$formatted = $this->numberFormatState->format($number);
-		if ($this->showUnit === FALSE && $this->numberFormatState->getEmptyValue() === $formatted) {
+		if ($this->showUnit === false && $this->numberFormatState->getEmptyValue() === $formatted) {
 			return $formatted;
 		}
 		return str_replace(['1', 'U'], [$formatted, (string) $unit], $this->mask);
 	}
+
 
 	private static function validMask($mask)
 	{

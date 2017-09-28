@@ -7,9 +7,9 @@ use Tester\TestCase,
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
 class PercentTest extends TestCase
 {
+
 	public function testAdd()
 	{
 		$percent = new Percent(20);
@@ -31,8 +31,6 @@ class PercentTest extends TestCase
 		Assert::same(20, $percent->getPercent());
 	}
 
-
 }
-
 
 (new PercentTest)->run();
