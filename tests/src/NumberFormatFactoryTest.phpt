@@ -2,13 +2,14 @@
 
 namespace h4kuna\Number;
 
-use Tester\TestCase,
-	Tester\Assert;
+use Tester\TestCase;
+use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 class NumberFormatFactoryTest extends TestCase
 {
+
 	public function testUnit()
 	{
 		$nff = new NumberFormatFactory();
@@ -29,7 +30,7 @@ class NumberFormatFactoryTest extends TestCase
 	public function testUnitPersistent()
 	{
 		$nff = new NumberFormatFactory();
-		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => FALSE, 'decimals' => 1]);
+		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => false, 'decimals' => 1]);
 		Assert::same('1.0 CZK', $cf->format(1));
 	}
 }

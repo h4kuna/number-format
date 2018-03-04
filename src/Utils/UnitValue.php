@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number\Utils;
 
@@ -8,6 +8,7 @@ namespace h4kuna\Number\Utils;
  */
 final class UnitValue extends \h4kuna\DataType\Immutable\Messenger
 {
+
 	public function __toString()
 	{
 		return $this['value'] . ' ' . $this['unit'];

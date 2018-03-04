@@ -1,15 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number\Utils;
 
 class Parameters
 {
+
 	private static $parameters = [];
 
-	public static function canExtract(& $data, $method, $index = 0)
+	public static function canExtract(& $data, string $method, int $index = 0): bool
 	{
 		if (!is_array($data)) {
-			return FALSE;
+			return false;
 		}
 
 		$parameter = self::getParameterReflection($method, $index);
@@ -18,14 +19,10 @@ class Parameters
 			$data[$key] = $parameter->getDefaultValue();
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	/**
-	 * @param string $method
-	 * @return \ReflectionParameter
-	 */
-	private static function getParameterReflection($method, $index)
+	private static function getParameterReflection(string $method, int $index): \ReflectionParameter
 	{
 		$key = $method . '.' . $index;
 		if (!isset(self::$parameters[$key])) {

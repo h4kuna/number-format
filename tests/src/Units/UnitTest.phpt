@@ -2,8 +2,8 @@
 
 namespace h4kuna\Number\Units;
 
-use h4kuna\Number,
-	Tester\Assert;
+use h4kuna\Number;
+use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -22,27 +22,26 @@ class UnitTest extends \Tester\TestCase
 		Assert::same($unit::KILO, $unitValue->unit);
 
 		$unitValue = $unit->convert(1, $unit::MILI);
-		Assert::same(1000, $unitValue->value);
+		Assert::same(1000.0, $unitValue->value);
 		Assert::same($unit::MILI, $unitValue->unit);
 
 		$unitValue = $unit->convert(0);
-		Assert::same(0, $unitValue->value);
+		Assert::same(0.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
-		Assert::same(0, $unit->convert('0.0')->value);
-		Assert::same(0, $unit->convert('0')->value);
-		Assert::same(0, $unit->convert(0.0)->value);
-		Assert::same(0, $unit->convert(NULL)->value);
+		Assert::same(0.0, $unit->convert('0.0')->value);
+		Assert::same(0.0, $unit->convert('0')->value);
+		Assert::same(0.0, $unit->convert(0.0)->value);
 	}
 
 	public function testDiffBase()
 	{
 		$unit = new Unit(Unit::KILO);
 		$unitValue = $unit->convert(1, $unit::KILO);
-		Assert::same(1, $unitValue->value);
+		Assert::same(1.0, $unitValue->value);
 		Assert::same($unit::KILO, $unitValue->unit);
 
 		$unitValue = $unit->convert(1, $unit::BASE);
-		Assert::same(1000, $unitValue->value);
+		Assert::same(1000.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
 
 		$unitValue = $unit->convert(1, $unit::MEGA);
@@ -74,14 +73,14 @@ class UnitTest extends \Tester\TestCase
 	{
 		$unit = new Unit;
 		$unitValue = $unit->fromString('128M');
-		Assert::same(128000000, $unitValue->value);
+		Assert::same(128000000.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
 
 		$unitValue = $unit->fromString('+128M');
-		Assert::same(128000000, $unitValue->value);
+		Assert::same(128000000.0, $unitValue->value);
 
 		$unitValue = $unit->fromString('-128M');
-		Assert::same(-128000000, $unitValue->value);
+		Assert::same(-128000000.0, $unitValue->value);
 
 		$unitValue = $unit->fromString('128.M');
 		Assert::same(128000000.0, $unitValue->value);
@@ -102,7 +101,7 @@ class UnitTest extends \Tester\TestCase
 		Assert::same(120000.0, $unitValue->value);
 
 		$unitValue = $unit->fromString('1 000 M');
-		Assert::same(1000000000, $unitValue->value);
+		Assert::same(1000000000.0, $unitValue->value);
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('M');

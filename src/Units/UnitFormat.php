@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number\Units;
 
-use h4kuna\Number,
-	h4kuna\Number\Utils;
+use h4kuna\Number;
 
 class UnitFormat
 {
+
 	/** @var string */
 	private $symbol;
 
@@ -16,47 +16,37 @@ class UnitFormat
 	/** @var Number\UnitFormatState */
 	private $unitFormatState;
 
-	public function __construct($symbol, Unit $unit, Number\UnitFormatState $unitFormatState)
+	public function __construct(string $symbol, Unit $unit, Number\UnitFormatState $unitFormatState)
 	{
 		$this->symbol = $symbol;
 		$this->unit = $unit;
 		$this->unitFormatState = $unitFormatState;
 	}
 
-	/**
-	 * @param int|float|string $number
-	 * @param string|NULL $unitTo - NULL mean automatic
-	 * @return Utils\UnitValue
-	 */
-	public function convert($number, $unitTo = NULL)
+	public function convert(float $number, ?string $unitTo = null): string
 	{
-		return $this->convertFrom($number, NULL, $unitTo);
+		return $this->convertFrom($number, null, $unitTo);
 	}
 
 	/**
-	 * @param int|float $number
-	 * @param string $unitFrom - NULL mean defined in constructor
+	 * @param float $number
+	 * @param string|null $unitFrom - NULL mean defined in constructor
 	 * @param string|null $unitTo - NULL mean automatic
-	 * @return Utils\UnitValue
+	 * @return string
 	 */
-	public function convertFrom($number, $unitFrom, $unitTo = NULL)
+	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): string
 	{
 		$unitValue = $this->unit->convertFrom($number, $unitFrom, $unitTo);
 		return $this->format($unitValue->value, $unitValue->unit . $this->symbol);
 	}
 
-	/**
-	 * @param string $value
-	 * @param string $unitTo
-	 * @return Utils\UnitValue
-	 */
-	public function fromString($value, $unitTo = Unit::BASE)
+	public function fromString(string $value, string $unitTo = Unit::BASE): string
 	{
 		$unitValue = $this->unit->fromString($value, $unitTo);
-		return $this->format($unitValue->value, $unitValue->unit . $this->unit);
+		return $this->format($unitValue->value, $unitValue->unit);
 	}
 
-	private function format($value, $unit)
+	private function format(float $value, string $unit): string
 	{
 		return $this->unitFormatState->format($value, $unit);
 	}
