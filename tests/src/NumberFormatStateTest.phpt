@@ -2,8 +2,8 @@
 
 namespace h4kuna\Number;
 
-use Tester\TestCase,
-	Tester\Assert;
+use Tester\TestCase;
+use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -13,6 +13,7 @@ class NumberFormatStateTest extends TestCase
 	public function testDefault()
 	{
 		$nf = new NumberFormatState();
+		Assert::same('1,00', $nf->format('1'));
 		Assert::same('1,00', $nf->format(1));
 		Assert::same('-1,00', $nf->format(-1));
 		Assert::same('0,00', $nf->format(0));
@@ -52,6 +53,7 @@ class NumberFormatStateTest extends TestCase
 		$nf = new NumberFormatState(-1);
 		Assert::same('10', $nf->format(11));
 		Assert::same('20', $nf->format(15));
+		Assert::same('20', $nf->format('15'));
 	}
 
 
@@ -100,7 +102,7 @@ class NumberFormatStateTest extends TestCase
 
 	public function testZeroClear()
 	{
-		$nf = new NumberFormatState(4, ',', ' ', null, false, true);
+		$nf = new NumberFormatState(4, ',', ' ', false, false, true);
 		Assert::same('0', $nf->format(0));
 		Assert::same('0', $nf->format(0.0));
 		Assert::same('0', $nf->format('0'));
@@ -112,7 +114,7 @@ class NumberFormatStateTest extends TestCase
 
 	public function testIntOnly()
 	{
-		$nf = new NumberFormatState(2, ',', ' ', null, false, false, 4);
+		$nf = new NumberFormatState(2, ',', ' ', false, false, false, 4);
 		Assert::same('0,00', $nf->format(0));
 		Assert::same('1,00', $nf->format(10000));
 		Assert::same('1 000,35', $nf->format(10003500));

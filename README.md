@@ -9,6 +9,8 @@ Number Format
 Wrapper above number_format, api is very easy.
 
 # Changelog
+## v3.0
+This version is same like v2.0 but support php7.1+.
 
 ## v2.0
 

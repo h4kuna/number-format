@@ -2,8 +2,8 @@
 
 namespace h4kuna\Number;
 
-use Tester\TestCase,
-	Tester\Assert;
+use Tester\TestCase;
+use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 

@@ -1,13 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number;
 
 class NumberFormatState
 {
 
-	const
-		ZERO_CLEAR = 1,
-		ZERO_IS_EMPTY = 2;
+	const ZERO_CLEAR = 1;
+	const ZERO_IS_EMPTY = 2;
 
 	/** @var string utf-8 &nbsp; */
 	const NBSP = "\xc2\xa0";
@@ -27,21 +26,20 @@ class NumberFormatState
 	/** @var int */
 	private $flag = 0;
 
-	/** @var int|null */
-	private $intOnly;
+	/** @var int */
+	private $intOnly = 0;
 
-
-	public function __construct($decimals = 2, $decimalPoint = ',', $thousandsSeparator = null, $zeroIsEmpty = false, $emptyValue = null, $zeroClear = false, $intOnly = null)
+	public function __construct($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
 	{
 		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
 			extract($decimals);
 		}
-		$this->decimals = (int) $decimals;
-		$this->decimalPoint = (string) $decimalPoint;
-		$this->thousandsSeparator = $thousandsSeparator === null ? self::NBSP : (string) $thousandsSeparator;
+		$this->decimals = $decimals;
+		$this->decimalPoint = $decimalPoint;
+		$this->thousandsSeparator = $thousandsSeparator === null ? self::NBSP : $thousandsSeparator;
 
 		if ($emptyValue !== null) {
-			$this->emptyValue = (string) $emptyValue;
+			$this->emptyValue = $emptyValue;
 		}
 
 		if ($zeroClear) {
@@ -55,38 +53,33 @@ class NumberFormatState
 			}
 		}
 
-		if ($intOnly !== null && $intOnly > 0) {
-			$this->intOnly = pow(10, (int) $intOnly);
+		if ($intOnly > 0) {
+			$this->intOnly = pow(10, $intOnly);
 		}
 	}
 
-
-	/**
-	 * @return null|string
-	 */
-	public function getEmptyValue()
+	public function getEmptyValue(): ?string
 	{
 		return $this->emptyValue;
 	}
-
 
 	/**
 	 * Render number
 	 * @param int|float|string|null $number
 	 * @return string
 	 */
-	public function format($number)
+	public function format($number): string
 	{
 		if (((float) $number) === 0.0) {
 			if ($this->emptyValue === null) {
-				$number = 0;
+				$number = 0.0;
 			} elseif ($this->flag & self::ZERO_IS_EMPTY || !is_numeric($number)) {
 				return $this->emptyValue;
 			}
 		}
 
-		if ($number != 0 && $this->intOnly !== null) {
-			$number = ((int) $number) / $this->intOnly;
+		if ($number != 0 && $this->intOnly !== 0) {
+			$number = $number / $this->intOnly;
 		}
 
 		$decimals = $this->decimals;
@@ -95,7 +88,7 @@ class NumberFormatState
 			$decimals = 0;
 		}
 
-		$formatted = number_format($number, $decimals, $this->decimalPoint, $this->thousandsSeparator);
+		$formatted = number_format((float) $number, $decimals, $this->decimalPoint, $this->thousandsSeparator);
 
 		if ($this->flag & self::ZERO_CLEAR && $decimals > 0) {
 			return rtrim(rtrim($formatted, '0'), $this->decimalPoint);

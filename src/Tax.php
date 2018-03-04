@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number;
 
@@ -8,7 +8,9 @@ class Tax
 	/** @var Percent */
 	private $vat;
 
-
+	/**
+	 * @var int|float|Percent $vat
+	 */
 	public function __construct($vat)
 	{
 		if (!$vat instanceof Percent) {
@@ -17,39 +19,22 @@ class Tax
 		$this->vat = $vat;
 	}
 
-
-	/** @return int|float */
-	public function getVat()
+	public function getVat(): float
 	{
 		return $this->vat->getPercent();
 	}
 
-
-	/**
-	 * @param int|float $number
-	 * @return float
-	 */
-	public function add($number)
+	public function add(float $number): float
 	{
 		return $this->vat->add($number);
 	}
 
-
-	/**
-	 * @param int|float $number
-	 * @return float
-	 */
-	public function deduct($number)
+	public function deduct(float $number): float
 	{
 		return $number / $this->vat->getRatio();
 	}
 
-
-	/**
-	 * @param int|float $number
-	 * @return float
-	 */
-	public function diff($number)
+	public function diff(float $number): float
 	{
 		return $number - $this->deduct($number);
 	}

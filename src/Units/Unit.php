@@ -1,26 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number\Units;
 
-use h4kuna\Number,
-	h4kuna\Number\Utils;
+use h4kuna\Number;
+use h4kuna\Number\Utils;
 
 class Unit
 {
 
-	const
-		PETA = 'P',
-		TERA = 'T',
-		GIGA = 'G',
-		MEGA = 'M',
-		KILO = 'k',
-		BASE = '',
-		DECI = 'd',
-		CENTI = 'c',
-		MILI = 'm',
-		MICRO = 'µ',
-		NANO = 'n',
-		PICO = 'p';
+	const PETA = 'P';
+	const TERA = 'T';
+	const GIGA = 'G';
+	const MEGA = 'M';
+	const KILO = 'k';
+	const BASE = '';
+	const DECI = 'd';
+	const CENTI = 'c';
+	const MILI = 'm';
+	const MICRO = 'µ';
+	const NANO = 'n';
+	const PICO = 'p';
 
 	const UNITS = [
 		self::PICO => -12,
@@ -34,7 +33,7 @@ class Unit
 		self::MEGA => 6,
 		self::GIGA => 9,
 		self::TERA => 12,
-		self::PETA => 15
+		self::PETA => 15,
 	];
 
 	/** @var string */
@@ -46,7 +45,6 @@ class Unit
 	 */
 	protected $allowedUnits;
 
-
 	public function __construct($from = self::BASE, array $allowedUnits = null)
 	{
 		$this->from = $from;
@@ -55,43 +53,35 @@ class Unit
 		}
 	}
 
-
-	/**
-	 * @return array
-	 */
-	public function getUnits()
+	public function getUnits(): array
 	{
 		return $this->allowedUnits;
 	}
 
-
-	/**
-	 * @return string
-	 */
-	public function getFrom()
+	public function getFrom(): string
 	{
 		return $this->from;
 	}
 
 
 	/**
-	 * @param int|float|string $number
-	 * @param string|null $unitTo - null mean automatic
+	 * @param float $number
+	 * @param string|NULL $unitTo - NULL mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convert($number, $unitTo = null)
+	public function convert(float $number, ?string $unitTo = null): Utils\UnitValue
 	{
 		return $this->convertFrom($number, null, $unitTo);
 	}
 
 
 	/**
-	 * @param int|float $number
-	 * @param string $unitFrom - null mean defined in constructor
-	 * @param string|null $unitTo - null mean automatic
+	 * @param float $number
+	 * @param string|null $unitFrom - NULL mean defined in constructor
+	 * @param string|null $unitTo - NULL mean automatic
 	 * @return Utils\UnitValue
 	 */
-	public function convertFrom($number, $unitFrom, $unitTo = null)
+	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): Utils\UnitValue
 	{
 		if ($unitFrom === null) {
 			$unitFrom = $this->from;
@@ -101,7 +91,7 @@ class Unit
 
 		($unitTo !== null) && $this->checkUnit($unitTo);
 
-		if (!(float) $number) {
+		if ($number === 0.0) {
 			$number = 0;
 			$unitTo = $unitFrom;
 		} elseif ($unitFrom !== $unitTo && $unitTo !== null) {
@@ -113,28 +103,20 @@ class Unit
 		return self::createUnitValue($number, $unitTo);
 	}
 
-
-	/**
-	 * @param string $value
-	 * @param string $unitTo
-	 * @return Utils\UnitValue
-	 */
-	public function fromString($value, $unitTo = self::BASE)
+	public function fromString(string $value, string $unitTo = self::BASE): Utils\UnitValue
 	{
 		if (!preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find) || !$find['number']) {
-			throw new Number\InvalidArgumentException('Bad string, must be numer and unit. Example "128M". Your: ' . $value);
+			throw new Number\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
 		}
-		return $this->convertFrom($find['number'], $find['unit'], $unitTo);
+		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
 	}
 
-
-	protected function convertUnit($number, $indexFrom, $indexTo)
+	protected function convertUnit(float $number, int $indexFrom, int $indexTo): float
 	{
 		return $number * pow(10, $indexFrom - $indexTo);
 	}
 
-
-	private function autoConvert($number, $unitFrom)
+	private function autoConvert(float $number, string $unitFrom): Utils\UnitValue
 	{
 		$result = [];
 		foreach ($this->allowedUnits as $unit => $index) {
@@ -155,30 +137,22 @@ class Unit
 		return self::createUnitValue($result[0], $result[1]);
 	}
 
-
-	private function checkUnit($unit)
+	private function checkUnit(string $unit): void
 	{
 		if (!isset($this->allowedUnits[$unit])) {
 			throw new Number\InvalidArgumentException('Unit: "' . $unit . ' let\'s set own.');
 		}
 	}
 
-
-	/**
-	 * @param float $value
-	 * @param string $unit
-	 * @return Utils\UnitValue
-	 */
-	public static function createUnitValue($value, $unit)
+	public static function createUnitValue(float $value, string $unit): Utils\UnitValue
 	{
 		return new Utils\UnitValue([
 			'value' => $value,
-			'unit' => $unit
+			'unit' => $unit,
 		]);
 	}
 
-
-	private static function prepareNumber($value)
+	private static function prepareNumber(string $value): string
 	{
 		static $replace = [' ' => '', ',' => '.', '+' => ''];
 		return strtr($value, $replace);
