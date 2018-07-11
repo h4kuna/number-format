@@ -2,15 +2,16 @@
 
 namespace h4kuna\Number;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Work class with price and vat
  *
  * @author Milan Matějček
  */
-class Tax extends Object
+class Tax
 {
+	use SmartObject;
 
     const
             VAT_IN = 1,

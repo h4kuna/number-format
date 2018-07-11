@@ -2,7 +2,7 @@
 
 namespace h4kuna\Number;
 
-use Nette\Object,
+use Nette\SmartObject,
     Nette\Utils\Html;
 
 /**
@@ -15,8 +15,9 @@ use Nette\Object,
  * @property-write string $mask
  * @property-write string $emptyValue
  */
-class NumberFormat extends Object implements INumberFormat
+class NumberFormat implements INumberFormat
 {
+	use SmartObject;
 
     /** @var string */
     private $thousand = ' ';

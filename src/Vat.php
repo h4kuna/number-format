@@ -2,13 +2,14 @@
 
 namespace h4kuna\Number;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Tax minimum is 2%, maximum 99.99%, if you are out of range, this class is work bad
  */
-final class Vat extends Object
+final class Vat
 {
+	use SmartObject;
 
     /** @var float */
     private $upDecimal;
