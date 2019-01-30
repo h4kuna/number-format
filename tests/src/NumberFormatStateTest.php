@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number;
 
@@ -102,7 +102,7 @@ class NumberFormatStateTest extends TestCase
 
 	public function testZeroClear()
 	{
-		$nf = new NumberFormatState(4, ',', ' ', false, false, true);
+		$nf = new NumberFormatState(4, ',', ' ', false, null, true);
 		Assert::same('0', $nf->format(0));
 		Assert::same('0', $nf->format(0.0));
 		Assert::same('0', $nf->format('0'));
@@ -114,7 +114,7 @@ class NumberFormatStateTest extends TestCase
 
 	public function testIntOnly()
 	{
-		$nf = new NumberFormatState(2, ',', ' ', false, false, false, 4);
+		$nf = new NumberFormatState(2, ',', ' ', false, null, false, 4);
 		Assert::same('0,00', $nf->format(0));
 		Assert::same('1,00', $nf->format(10000));
 		Assert::same('1 000,35', $nf->format(10003500));

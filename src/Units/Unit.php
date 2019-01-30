@@ -41,7 +41,7 @@ class Unit
 
 	/**
 	 * These values must be sort ascending! See self::UNITS
-	 * @var array
+	 * @var array<string,int>
 	 */
 	protected $allowedUnits;
 
@@ -92,7 +92,9 @@ class Unit
 			$this->checkUnit($unitFrom);
 		}
 
-		($unitTo !== null) && $this->checkUnit($unitTo);
+		if ($unitTo !== null) {
+			$this->checkUnit($unitTo);
+		}
 
 		if ($number === 0.0) {
 			$number = 0;
@@ -125,6 +127,9 @@ class Unit
 	private function autoConvert(float $number, string $unitFrom): Utils\UnitValue
 	{
 		$result = [];
+		if ($this->allowedUnits === []) {
+			throw new Number\Exceptions\InvalidArgument('Allowed units must exists.');
+		}
 		foreach ($this->allowedUnits as $unit => $index) {
 			if ($this->allowedUnits[$unitFrom] === $index) {
 				$temp = $number;
@@ -147,7 +152,7 @@ class Unit
 	private function checkUnit(string $unit): void
 	{
 		if (!isset($this->allowedUnits[$unit])) {
-			throw new Number\InvalidArgumentException('Unit: "' . $unit . ' let\'s set own.');
+			throw new Number\Exceptions\InvalidArgument('Unit: "' . $unit . ' let\'s set own.');
 		}
 	}
 

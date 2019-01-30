@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number\Units;
 
@@ -28,8 +28,6 @@ class UnitTest extends \Tester\TestCase
 		$unitValue = $unit->convert(0);
 		Assert::same(0.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
-		Assert::same(0.0, $unit->convert('0.0')->value);
-		Assert::same(0.0, $unit->convert('0')->value);
 		Assert::same(0.0, $unit->convert(0.0)->value);
 	}
 
@@ -108,11 +106,11 @@ class UnitTest extends \Tester\TestCase
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('M');
-		}, Number\InvalidArgumentException::class);
+		}, Number\Exceptions\InvalidArgument::class);
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('128');
-		}, Number\InvalidArgumentException::class);
+		}, Number\Exceptions\InvalidArgument::class);
 	}
 
 }

@@ -29,6 +29,10 @@ class NumberFormatState
 	/** @var int */
 	private $intOnly = 0;
 
+
+	/**
+	 * @param array|int $decimals
+	 */
 	public function __construct($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
 	{
 		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
@@ -86,7 +90,7 @@ class NumberFormatState
 
 		$decimals = $this->decimals;
 		if ($decimals < 0) {
-			$number = round($number, $decimals);
+			$number = round((float) $number, $decimals);
 			$decimals = 0;
 		}
 

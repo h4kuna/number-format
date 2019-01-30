@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace h4kuna\Number;
 
@@ -28,7 +28,7 @@ class UnitFormatStateTest extends TestCase
 
 
 	/**
-	 * @throws \h4kuna\Number\InvalidMaskException
+	 * @throws \h4kuna\Number\Exceptions\InvalidMask
 	 */
 	public function testInvalidMask()
 	{

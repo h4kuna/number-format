@@ -49,10 +49,10 @@ echo $numberFormat->format(1000); // 1 000,000
 - zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
 - intOnly: [NULL] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
 
-Here is test for [more use cases](tests/src/NumberFormatStateTest.phpt).
+Here is test for [more use cases](tests/src/NumberFormatStateTest.php).
 
 ### UnitFormatState
-Use this class for number with unit like Kb, Mb, Gb. Unit symbol is second parameter in [method **format**](src/UnitFormatState.php). Visit [tests](tests/src/UnitFormatStateTest.phpt).
+Use this class for number with unit like Kb, Mb, Gb. Unit symbol is second parameter in [method **format**](src/UnitFormatState.php). Visit [tests](tests/src/UnitFormatStateTest.php).
 
 #### Parameters
 - mask: ['1 U'] mean 1 pattern for number and U is pattern for unit
@@ -66,7 +66,7 @@ This class is same like previous, but unit is persistent like currencies or temp
 - unit: has'nt default value
 
 ### NumberFormatFactory
-For all previous classes is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.phpt)
+For all previous classes is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.php)
 
 ### Tax
 
