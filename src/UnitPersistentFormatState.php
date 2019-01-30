@@ -11,11 +11,13 @@ class UnitPersistentFormatState
 	/** @var string */
 	private $unit;
 
+
 	public function __construct(UnitFormatState $unitFormatState, string $unit)
 	{
 		$this->unitFormatState = $unitFormatState;
 		$this->unit = $unit;
 	}
+
 
 	public function format($number): string
 	{

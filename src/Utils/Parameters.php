@@ -35,4 +35,5 @@ class Parameters
 		}
 		return self::$parameters[$key];
 	}
+
 }

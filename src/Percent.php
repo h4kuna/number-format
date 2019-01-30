@@ -11,6 +11,7 @@ final class Percent
 	/** @var float */
 	private $percent;
 
+
 	public function __construct(float $percent)
 	{
 		$this->percent = $percent;
@@ -36,15 +37,18 @@ final class Percent
 		return $this->ratio;
 	}
 
+
 	public function add(float $number): float
 	{
 		return $this->getRatio() * $number;
 	}
 
+
 	public function deduct(float $number): float
 	{
 		return $number - $this->diff($number);
 	}
+
 
 	public function diff(float $number): float
 	{
@@ -56,4 +60,5 @@ final class Percent
 	{
 		return (string) $this->percent;
 	}
+
 }

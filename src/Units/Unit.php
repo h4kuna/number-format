@@ -45,6 +45,7 @@ class Unit
 	 */
 	protected $allowedUnits;
 
+
 	public function __construct($from = self::BASE, array $allowedUnits = null)
 	{
 		$this->from = $from;
@@ -53,10 +54,12 @@ class Unit
 		}
 	}
 
+
 	public function getUnits(): array
 	{
 		return $this->allowedUnits;
 	}
+
 
 	public function getFrom(): string
 	{
@@ -103,6 +106,7 @@ class Unit
 		return self::createUnitValue($number, $unitTo);
 	}
 
+
 	public function fromString(string $value, string $unitTo = self::BASE): Utils\UnitValue
 	{
 		if (!preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find) || !$find['number']) {
@@ -111,10 +115,12 @@ class Unit
 		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
 	}
 
+
 	protected function convertUnit(float $number, int $indexFrom, int $indexTo): float
 	{
 		return $number * pow(10, $indexFrom - $indexTo);
 	}
+
 
 	private function autoConvert(float $number, string $unitFrom): Utils\UnitValue
 	{
@@ -137,12 +143,14 @@ class Unit
 		return self::createUnitValue($result[0], $result[1]);
 	}
 
+
 	private function checkUnit(string $unit): void
 	{
 		if (!isset($this->allowedUnits[$unit])) {
 			throw new Number\InvalidArgumentException('Unit: "' . $unit . ' let\'s set own.');
 		}
 	}
+
 
 	public static function createUnitValue(float $value, string $unit): Utils\UnitValue
 	{
@@ -151,6 +159,7 @@ class Unit
 			'unit' => $unit,
 		]);
 	}
+
 
 	private static function prepareNumber(string $value): string
 	{

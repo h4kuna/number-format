@@ -23,6 +23,7 @@ class UnitFormat
 		$this->unitFormatState = $unitFormatState;
 	}
 
+
 	public function convert(float $number, ?string $unitTo = null): string
 	{
 		return $this->convertFrom($number, null, $unitTo);
@@ -41,11 +42,13 @@ class UnitFormat
 		return $this->format($unitValue->value, $unitValue->unit . $this->symbol);
 	}
 
+
 	public function fromString(string $value, string $unitTo = Unit::BASE): string
 	{
 		$unitValue = $this->unit->fromString($value, $unitTo);
 		return $this->format($unitValue->value, $unitValue->unit);
 	}
+
 
 	private function format(float $value, string $unit): string
 	{

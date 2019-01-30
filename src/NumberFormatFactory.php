@@ -20,6 +20,7 @@ class NumberFormatFactory
 		return new NumberFormatState($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly);
 	}
 
+
 	/**
 	 * @param array|string $mask - can be array like named parameters ['decimalPoint' => '.']
 	 * @param bool $showUnit
@@ -41,6 +42,7 @@ class NumberFormatFactory
 		$nf = $this->createNumber($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly);
 		return new UnitFormatState($nf, $mask, $showUnit, $nbsp);
 	}
+
 
 	/**
 	 * @param string $unit

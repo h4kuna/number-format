@@ -58,10 +58,12 @@ class NumberFormatState
 		}
 	}
 
+
 	public function getEmptyValue(): ?string
 	{
 		return $this->emptyValue;
 	}
+
 
 	/**
 	 * Render number

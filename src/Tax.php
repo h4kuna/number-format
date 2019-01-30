@@ -19,20 +19,24 @@ class Tax
 		$this->vat = $vat;
 	}
 
+
 	public function getVat(): float
 	{
 		return $this->vat->getPercent();
 	}
+
 
 	public function add(float $number): float
 	{
 		return $this->vat->add($number);
 	}
 
+
 	public function deduct(float $number): float
 	{
 		return $number / $this->vat->getRatio();
 	}
+
 
 	public function diff(float $number): float
 	{

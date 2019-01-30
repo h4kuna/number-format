@@ -13,4 +13,5 @@ final class UnitValue extends \h4kuna\DataType\Immutable\Messenger
 	{
 		return $this['value'] . ' ' . $this['unit'];
 	}
+
 }
