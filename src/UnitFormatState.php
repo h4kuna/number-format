@@ -2,6 +2,8 @@
 
 namespace h4kuna\Number;
 
+use h4kuna\Number\Exceptions\InvalidMask;
+
 class UnitFormatState
 {
 
@@ -36,7 +38,7 @@ class UnitFormatState
 	private static function validMask(bool $nbsp, string $mask, NumberFormatState $numberFormatState): string
 	{
 		if (substr_count($mask, 'U') !== 1 || substr_count($mask, '1') !== 1) {
-			throw new InvalidMaskException('Mask must containt number 1 and letter upper U both onetime.');
+			throw new InvalidMask('Mask must containt number 1 and letter upper U both onetime.');
 		}
 		return $nbsp ? str_replace(' ', $numberFormatState::NBSP, $mask) : $mask;
 	}
