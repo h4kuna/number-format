@@ -22,7 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "h4kuna\\Number\\": ["src\\", "tests\\src\\"]
+            "h4kuna\\Number\\": "src\\"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "h4kuna\\Number\\": "tests\\src\\"
         }
     }
 }
