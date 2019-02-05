@@ -2,7 +2,7 @@
 
 namespace h4kuna\Number;
 
-class UnitPersistentFormatState
+class UnitPersistentFormatState implements NumberFormat
 {
 
 	/** @var UnitFormatState */
@@ -19,7 +19,7 @@ class UnitPersistentFormatState
 	}
 
 
-	public function format($number): string
+	public function format($number, string $unit = ''): string
 	{
 		return $this->unitFormatState->format($number, $this->unit);
 	}

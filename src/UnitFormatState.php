@@ -4,7 +4,7 @@ namespace h4kuna\Number;
 
 use h4kuna\Number\Exceptions\InvalidMask;
 
-class UnitFormatState
+class UnitFormatState implements NumberFormat
 {
 
 	/** @var NumberFormatState */
@@ -24,7 +24,7 @@ class UnitFormatState
 	}
 
 
-	public function format($number, string $unit): string
+	public function format($number, string $unit = ''): string
 	{
 		$formatted = $this->numberFormatState->format($number);
 		if ($this->showUnit === false && $this->numberFormatState->getEmptyValue() === $formatted || $unit === '') {

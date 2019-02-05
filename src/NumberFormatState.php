@@ -2,7 +2,7 @@
 
 namespace h4kuna\Number;
 
-class NumberFormatState
+class NumberFormatState implements NumberFormat
 {
 
 	public const ZERO_CLEAR = 1;
@@ -72,7 +72,7 @@ class NumberFormatState
 	/**
 	 * @param int|float|string|null $number
 	 */
-	public function format($number): string
+	public function format($number, string $unit = ''): string
 	{
 		if (((float) $number) === 0.0) {
 			if ($this->emptyValue === null) {
