@@ -27,13 +27,10 @@ class UnitFormatState
 	public function format($number, string $unit): string
 	{
 		$formatted = $this->numberFormatState->format($number);
-		if ($this->showUnit === false && $this->numberFormatState->getEmptyValue() === $formatted) {
+		if ($this->showUnit === false && $this->numberFormatState->getEmptyValue() === $formatted || $unit === '') {
 			return $formatted;
 		}
-		if ($unit !== '') {
-			return str_replace(['1', 'U'], [$formatted, $unit], $this->mask);
-		}
-		return $formatted;
+		return str_replace(['1', 'U'], [$formatted, $unit], $this->mask);
 	}
 
 
