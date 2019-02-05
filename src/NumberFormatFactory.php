@@ -13,9 +13,8 @@ class NumberFormatFactory
 	 * @param string|null $emptyValue
 	 * @param bool $zeroClear
 	 * @param int $intOnly
-	 * @return NumberFormatState
 	 */
-	public function createNumber($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
+	public function createNumber($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): NumberFormatState
 	{
 		return new NumberFormatState($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly);
 	}
@@ -32,9 +31,8 @@ class NumberFormatFactory
 	 * @param string|null $emptyValue
 	 * @param bool $zeroClear
 	 * @param int $intOnly
-	 * @return UnitFormatState
 	 */
-	public function createUnit($mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
+	public function createUnit($mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): UnitFormatState
 	{
 		if (Utils\Parameters::canExtract($mask, __METHOD__, 0)) {
 			extract($mask);
@@ -56,9 +54,8 @@ class NumberFormatFactory
 	 * @param string|null $emptyValue
 	 * @param bool $zeroClear
 	 * @param int $intOnly
-	 * @return UnitPersistentFormatState
 	 */
-	public function createUnitPersistent(string $unit, $mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
+	public function createUnitPersistent(string $unit, $mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): UnitPersistentFormatState
 	{
 		if (Utils\Parameters::canExtract($mask, __METHOD__, 1)) {
 			extract($mask);

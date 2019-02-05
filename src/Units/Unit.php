@@ -8,20 +8,20 @@ use h4kuna\Number\Utils;
 class Unit
 {
 
-	const PETA = 'P';
-	const TERA = 'T';
-	const GIGA = 'G';
-	const MEGA = 'M';
-	const KILO = 'k';
-	const BASE = '';
-	const DECI = 'd';
-	const CENTI = 'c';
-	const MILI = 'm';
-	const MICRO = 'µ';
-	const NANO = 'n';
-	const PICO = 'p';
+	public const PETA = 'P';
+	public const TERA = 'T';
+	public const GIGA = 'G';
+	public const MEGA = 'M';
+	public const KILO = 'k';
+	public const BASE = '';
+	public const DECI = 'd';
+	public const CENTI = 'c';
+	public const MILI = 'm';
+	public const MICRO = 'µ';
+	public const NANO = 'n';
+	public const PICO = 'p';
 
-	const UNITS = [
+	public const UNITS = [
 		self::PICO => -12,
 		self::NANO => -9,
 		self::MICRO => -6,
@@ -173,4 +173,3 @@ class Unit
 	}
 
 }
-

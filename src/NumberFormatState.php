@@ -5,11 +5,11 @@ namespace h4kuna\Number;
 class NumberFormatState
 {
 
-	const ZERO_CLEAR = 1;
-	const ZERO_IS_EMPTY = 2;
+	public const ZERO_CLEAR = 1;
+	public const ZERO_IS_EMPTY = 2;
 
 	/** @var string utf-8 &nbsp; */
-	const NBSP = "\xc2\xa0";
+	public const NBSP = "\xc2\xa0";
 
 	/** @var string */
 	private $thousandsSeparator;
@@ -70,9 +70,7 @@ class NumberFormatState
 
 
 	/**
-	 * Render number
 	 * @param int|float|string|null $number
-	 * @return string
 	 */
 	public function format($number): string
 	{

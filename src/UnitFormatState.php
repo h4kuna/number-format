@@ -23,6 +23,7 @@ class UnitFormatState
 		$this->mask = self::validMask($nbsp, $mask, $numberFormatState);
 	}
 
+
 	public function format($number, string $unit): string
 	{
 		$formatted = $this->numberFormatState->format($number);
@@ -35,10 +36,11 @@ class UnitFormatState
 		return $formatted;
 	}
 
+
 	private static function validMask(bool $nbsp, string $mask, NumberFormatState $numberFormatState): string
 	{
 		if (substr_count($mask, 'U') !== 1 || substr_count($mask, '1') !== 1) {
-			throw new InvalidMask('Mask must containt number 1 and letter upper U both onetime.');
+			throw new InvalidMask('Mask must contains number 1 and letter upper U both onetime.');
 		}
 		return $nbsp ? str_replace(' ', $numberFormatState::NBSP, $mask) : $mask;
 	}

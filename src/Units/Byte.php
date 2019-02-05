@@ -5,7 +5,7 @@ namespace h4kuna\Number\Units;
 class Byte extends Unit
 {
 
-	const UNITS = [
+	public const UNITS = [
 		Unit::BASE => 0,
 		Unit::KILO => 3,
 		Unit::MEGA => 6,
@@ -20,6 +20,3 @@ class Byte extends Unit
 	}
 
 }
-
-
-
