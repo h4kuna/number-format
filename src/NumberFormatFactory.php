@@ -14,7 +14,7 @@ class NumberFormatFactory
 	 * @param bool $zeroClear
 	 * @param int $intOnly
 	 */
-	public function createNumber($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): NumberFormatState
+	public function createNumber($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = NumberFormatState::DISABLE_INT_ONLY): NumberFormatState
 	{
 		return new NumberFormatState($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly);
 	}
@@ -32,7 +32,7 @@ class NumberFormatFactory
 	 * @param bool $zeroClear
 	 * @param int $intOnly
 	 */
-	public function createUnit($mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): UnitFormatState
+	public function createUnit($mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = NumberFormatState::DISABLE_INT_ONLY): UnitFormatState
 	{
 		if (Utils\Parameters::canExtract($mask, __METHOD__, 0)) {
 			extract($mask);
@@ -55,7 +55,7 @@ class NumberFormatFactory
 	 * @param bool $zeroClear
 	 * @param int $intOnly
 	 */
-	public function createUnitPersistent(string $unit, $mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0): UnitPersistentFormatState
+	public function createUnitPersistent(string $unit, $mask = '1 U', bool $showUnit = true, bool $nbsp = true, int $decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = NumberFormatState::DISABLE_INT_ONLY): UnitPersistentFormatState
 	{
 		if (Utils\Parameters::canExtract($mask, __METHOD__, 1)) {
 			extract($mask);

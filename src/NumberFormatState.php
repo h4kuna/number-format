@@ -5,6 +5,8 @@ namespace h4kuna\Number;
 class NumberFormatState implements NumberFormat
 {
 
+	public const DISABLE_INT_ONLY = -1;
+
 	public const ZERO_CLEAR = 1;
 	public const ZERO_IS_EMPTY = 2;
 
@@ -33,7 +35,7 @@ class NumberFormatState implements NumberFormat
 	/**
 	 * @param array|int $decimals
 	 */
-	public function __construct($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = 0)
+	public function __construct($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = self::DISABLE_INT_ONLY)
 	{
 		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
 			extract($decimals);
@@ -57,7 +59,7 @@ class NumberFormatState implements NumberFormat
 			}
 		}
 
-		if ($intOnly > 0) {
+		if ($intOnly > self::DISABLE_INT_ONLY) {
 			$this->intOnly = pow(10, $intOnly);
 		}
 	}

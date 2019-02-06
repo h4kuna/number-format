@@ -122,6 +122,15 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('-1,00', $nf->format(-10000));
 	}
 
+
+	public function testIntOnlyZero()
+	{
+		$nf = new NumberFormatState(2, ',', ' ', false, null, false, 0);
+		Assert::same('0,00', $nf->format(0));
+		Assert::same('10 000,00', $nf->format(10000));
+		Assert::same('10 003 500,00', $nf->format(10003500));
+	}
+
 }
 
 (new NumberFormatStateTest())->run();
