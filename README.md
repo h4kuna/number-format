@@ -1,7 +1,7 @@
 Number Format
 =============
 
-[![Build Status](https://travis-ci.org/h4kuna/number-format.svg?branch=master)](https://travis-ci.org/h4kuna/number-format)
+[![Build Status](https://travis-ci.com/h4kuna/number-format.svg?branch=master)](https://travis-ci.com/h4kuna/number-format)
 [![Latest stable](https://img.shields.io/packagist/v/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
 [![Downloads this Month](https://img.shields.io/packagist/dm/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
 [![Coverage Status](https://coveralls.io/repos/github/h4kuna/number-format/badge.svg?branch=master)](https://coveralls.io/github/h4kuna/number-format?branch=master)
