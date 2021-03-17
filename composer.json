@@ -16,9 +16,9 @@
         "h4kuna/data-type": "^2.1.0"
     },
     "require-dev": {
-        "nette/utils": "^2.0",
-        "salamium/testinium": "~0.1",
-        "phpstan/phpstan": "^0.11.1"
+        "nette/utils": "^3.0",
+        "salamium/testinium": "^0.1",
+        "phpstan/phpstan": "^0.12"
     },
     "autoload": {
         "psr-4": {

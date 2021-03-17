@@ -10,19 +10,19 @@ require_once __DIR__ . '/../bootstrap.php';
 class PercentTest extends TestCase
 {
 
-	public function testAdd()
+	public function testAdd(): void
 	{
 		$percent = new Percent(20);
 		Assert::same(120.0, $percent->add(100));
 	}
 
-	public function testDeduct()
+	public function testDeduct(): void
 	{
 		$percent = new Percent(20);
 		Assert::same(96.0, $percent->deduct(120));
 	}
 
-	public function testDiff()
+	public function testDiff(): void
 	{
 		$percent = new Percent(20);
 		Assert::same(24.0, $percent->diff(120));

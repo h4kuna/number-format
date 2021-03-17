@@ -16,7 +16,13 @@ class UnitFormatState implements NumberFormat
 	/** @var bool */
 	private $showUnit;
 
-	public function __construct(NumberFormatState $numberFormatState, string $mask = '1 U', bool $showUnit = true, bool $nbsp = true)
+
+	public function __construct(
+		NumberFormatState $numberFormatState,
+		string $mask = '1 U',
+		bool $showUnit = true,
+		bool $nbsp = true
+	)
 	{
 		$this->numberFormatState = $numberFormatState;
 		$this->showUnit = $showUnit;

@@ -16,6 +16,7 @@ class UnitFormat
 	/** @var Number\UnitFormatState */
 	private $unitFormatState;
 
+
 	public function __construct(string $symbol, Unit $unit, Number\UnitFormatState $unitFormatState)
 	{
 		$this->symbol = $symbol;

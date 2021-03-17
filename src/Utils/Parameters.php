@@ -2,12 +2,21 @@
 
 namespace h4kuna\Number\Utils;
 
+use h4kuna\Number\Exceptions;
+
 class Parameters
 {
-
+	/**
+	 * @var array<string, \ReflectionParameter>
+	 */
 	private static $parameters = [];
 
-	public static function canExtract(& $data, string $method, int $index = 0): bool
+
+	/**
+	 * @param array<string, mixed>|mixed $data
+	 * @throws \ReflectionException
+	 */
+	public static function canExtract(&$data, string $method, int $index = 0): bool
 	{
 		if (!is_array($data)) {
 			return false;
@@ -29,7 +38,7 @@ class Parameters
 		if (!isset(self::$parameters[$key])) {
 			$parameters = (new \ReflectionMethod($method))->getParameters();
 			if (!isset($parameters[$index])) {
-				throw new \InvalidArgumentException('Parameter on this index "' . $index . '" does not exists.');
+				throw new Exceptions\InvalidArgumentException(sprintf('Parameter on this index "%s" does not exists.', $index));
 			}
 			self::$parameters[$key] = $parameters[$index];
 		}

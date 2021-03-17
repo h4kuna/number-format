@@ -14,6 +14,7 @@ class Byte extends Unit
 		Unit::PETA => 15,
 	];
 
+
 	protected function convertUnit(float $number, int $indexFrom, int $indexTo): float
 	{
 		return $number * pow(1024, ($indexFrom - $indexTo) / 3);

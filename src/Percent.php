@@ -20,12 +20,18 @@ final class Percent
 
 
 	/**
-	 * @example 19.5% = float 19.5
 	 * @return float
+	 * @example 19.5% = float 19.5
 	 */
 	public function getPercent(): float
 	{
 		return $this->percent;
+	}
+
+
+	public function add(float $number): float
+	{
+		return $this->getRatio() * $number;
 	}
 
 
@@ -35,12 +41,6 @@ final class Percent
 	public function getRatio(): float
 	{
 		return $this->ratio;
-	}
-
-
-	public function add(float $number): float
-	{
-		return $this->getRatio() * $number;
 	}
 
 

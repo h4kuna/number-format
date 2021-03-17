@@ -36,17 +36,20 @@ class Unit
 		self::PETA => 15,
 	];
 
-	/** @var string */
-	private $from;
-
 	/**
 	 * These values must be sort ascending! See self::UNITS
 	 * @var array<string,int>
 	 */
 	protected $allowedUnits;
 
+	/** @var string */
+	private $from;
 
-	public function __construct($from = self::BASE, array $allowedUnits = null)
+
+	/**
+	 * @param array<string, int> $allowedUnits
+	 */
+	public function __construct(string $from = self::BASE, array $allowedUnits = null)
 	{
 		$this->from = $from;
 		if ($allowedUnits === null) {
@@ -55,6 +58,9 @@ class Unit
 	}
 
 
+	/**
+	 * @return array<string, int>
+	 */
 	public function getUnits(): array
 	{
 		return $this->allowedUnits;
@@ -67,11 +73,6 @@ class Unit
 	}
 
 
-	/**
-	 * @param float $number
-	 * @param string|NULL $unitTo - NULL mean automatic
-	 * @return Utils\UnitValue
-	 */
 	public function convert(float $number, ?string $unitTo = null): Utils\UnitValue
 	{
 		return $this->convertFrom($number, null, $unitTo);
@@ -112,7 +113,7 @@ class Unit
 	public function fromString(string $value, string $unitTo = self::BASE): Utils\UnitValue
 	{
 		if (!preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find) || !$find['number']) {
-			throw new Number\Exceptions\InvalidArgument('Bad string, must be number and unit. Example "128M". Your: ' . $value);
+			throw new Number\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
 		}
 		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
 	}
@@ -128,7 +129,7 @@ class Unit
 	{
 		$result = [];
 		if ($this->allowedUnits === []) {
-			throw new Number\Exceptions\InvalidArgument('Allowed units must exists.');
+			throw new Number\Exceptions\InvalidArgumentException('Allowed units must exists.');
 		}
 		foreach ($this->allowedUnits as $unit => $index) {
 			if ($this->allowedUnits[$unitFrom] === $index) {
@@ -152,7 +153,7 @@ class Unit
 	private function checkUnit(string $unit): void
 	{
 		if (!isset($this->allowedUnits[$unit])) {
-			throw new Number\Exceptions\InvalidArgument('Unit: "' . $unit . ' let\'s set own.');
+			throw new Number\Exceptions\InvalidArgumentException(sprintf('Unit: "%s let\'s set own.', $unit));
 		}
 	}
 

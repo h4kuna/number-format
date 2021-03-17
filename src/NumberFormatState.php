@@ -39,7 +39,7 @@ class NumberFormatState implements NumberFormat
 
 
 	/**
-	 * @param array|int $decimals
+	 * @param array<string, bool|int|string|null>|int $decimals
 	 */
 	public function __construct(
 		$decimals = 2,
@@ -107,9 +107,6 @@ class NumberFormatState implements NumberFormat
 	}
 
 
-	/**
-	 * @param int|float|string|null $number
-	 */
 	public function format($number, string $unit = ''): string
 	{
 		if (((float) $number) === 0.0) {

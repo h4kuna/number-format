@@ -2,7 +2,7 @@
 
 namespace h4kuna\Number\Exceptions;
 
-class InvalidMask extends \RuntimeException
+final class InvalidMask extends \RuntimeException
 {
 
 }

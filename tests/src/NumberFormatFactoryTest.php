@@ -10,7 +10,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class NumberFormatFactoryTest extends TestCase
 {
 
-	public function testUnit()
+	public function testUnit(): void
 	{
 		$nff = new NumberFormatFactory();
 		$uf = $nff->createUnit('1U');
@@ -21,7 +21,7 @@ class NumberFormatFactoryTest extends TestCase
 	}
 
 
-	public function testNumber()
+	public function testNumber(): void
 	{
 		$nff = new NumberFormatFactory();
 		$nf = $nff->createNumber(2, '.');
@@ -29,7 +29,7 @@ class NumberFormatFactoryTest extends TestCase
 	}
 
 
-	public function testUnitPersistent()
+	public function testUnitPersistent(): void
 	{
 		$nff = new NumberFormatFactory();
 		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => false, 'decimals' => 1]);

@@ -10,7 +10,7 @@ require __DIR__ . '/../../bootstrap.php';
 class UnitTest extends \Tester\TestCase
 {
 
-	public function testConvert()
+	public function testConvert(): void
 	{
 		$unit = new Unit;
 		$unitValue = $unit->convert(1.0, $unit::BASE);
@@ -32,7 +32,7 @@ class UnitTest extends \Tester\TestCase
 	}
 
 
-	public function testDiffBase()
+	public function testDiffBase(): void
 	{
 		$unit = new Unit(Unit::KILO);
 		$unitValue = $unit->convert(1, $unit::KILO);
@@ -49,7 +49,7 @@ class UnitTest extends \Tester\TestCase
 	}
 
 
-	public function testConvertAuto()
+	public function testConvertAuto(): void
 	{
 		$unit = new Unit;
 		$unitValue = $unit->convert(10.0);
@@ -70,7 +70,7 @@ class UnitTest extends \Tester\TestCase
 	}
 
 
-	public function testFromString()
+	public function testFromString(): void
 	{
 		$unit = new Unit;
 		$unitValue = $unit->fromString('128M');
@@ -106,11 +106,11 @@ class UnitTest extends \Tester\TestCase
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('M');
-		}, Number\Exceptions\InvalidArgument::class);
+		}, Number\Exceptions\InvalidArgumentException::class);
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('128');
-		}, Number\Exceptions\InvalidArgument::class);
+		}, Number\Exceptions\InvalidArgumentException::class);
 	}
 
 }

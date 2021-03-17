@@ -4,12 +4,12 @@ namespace h4kuna\Number;
 
 class Tax
 {
-
 	/** @var Percent */
 	private $vat;
 
+
 	/**
-	 * @var int|float|Percent $vat
+	 * @param int|float|Percent $vat
 	 */
 	public function __construct($vat)
 	{
@@ -32,15 +32,15 @@ class Tax
 	}
 
 
-	public function deduct(float $number): float
-	{
-		return $number / $this->vat->getRatio();
-	}
-
-
 	public function diff(float $number): float
 	{
 		return $number - $this->deduct($number);
+	}
+
+
+	public function deduct(float $number): float
+	{
+		return $number / $this->vat->getRatio();
 	}
 
 

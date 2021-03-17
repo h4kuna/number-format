@@ -2,7 +2,7 @@
 
 namespace h4kuna\Number\Exceptions;
 
-class InvalidArgument extends \InvalidArgumentException
+final class InvalidArgumentException extends \InvalidArgumentException
 {
 
 }

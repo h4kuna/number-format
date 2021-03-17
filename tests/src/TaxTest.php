@@ -10,7 +10,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class TaxTest extends TestCase
 {
 
-	public function testApi()
+	public function testApi(): void
 	{
 		$tax = new Tax(20);
 		Assert::same(120.0, $tax->add(100));

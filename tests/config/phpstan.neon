@@ -1,0 +1,3 @@
+parameters:
+	ignoreErrors:
+		- "#return type has no value type specified in iterable type h4kuna\\\\Number\\\\Utils\\\\UnitValue\\.$#"
