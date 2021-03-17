@@ -2,8 +2,8 @@
 
 namespace h4kuna\Number;
 
-use Tester\TestCase;
 use Tester\Assert;
+use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -54,6 +54,47 @@ class NumberFormatStateTest extends TestCase
 		Assert::same('10', $nf->format(11));
 		Assert::same('20', $nf->format(15));
 		Assert::same('20', $nf->format('15'));
+	}
+
+
+	public function testFloor()
+	{
+		$nf = new NumberFormatState(['decimals' => 1, 'round' => NumberFormatState::ROUND_BY_FLOOR]);
+		Assert::same('1,1', $nf->format(1.15));
+		Assert::same('1,1', $nf->format(1.14));
+		Assert::same('1,2', $nf->format(1.21));
+
+		$nf = new NumberFormatState(['decimals' => 0, 'round' => NumberFormatState::ROUND_BY_FLOOR]);
+		Assert::same('1', $nf->format(1));
+		Assert::same('1', $nf->format(1.5));
+		Assert::same('1', $nf->format(1.4));
+		Assert::same('0', $nf->format(0.9));
+
+		$nf = new NumberFormatState(['decimals' => -1, 'round' => NumberFormatState::ROUND_BY_FLOOR]);
+		Assert::same('10', $nf->format(11));
+		Assert::same('10', $nf->format(15));
+		Assert::same('20', $nf->format('20'));
+	}
+
+
+	public function testCeil()
+	{
+		$nf = new NumberFormatState(['decimals' => 1, 'round' => NumberFormatState::ROUND_BY_CEIL]);
+		Assert::same('1,1', $nf->format(1.1));
+		Assert::same('1,2', $nf->format(1.15));
+		Assert::same('1,2', $nf->format(1.14));
+		Assert::same('1,3', $nf->format(1.21));
+
+		$nf = new NumberFormatState(['decimals' => 0, 'round' => NumberFormatState::ROUND_BY_CEIL]);
+		Assert::same('1', $nf->format(1));
+		Assert::same('2', $nf->format(1.5));
+		Assert::same('2', $nf->format(1.4));
+		Assert::same('1', $nf->format(0.9));
+
+		$nf = new NumberFormatState(['decimals' => -1, 'round' => NumberFormatState::ROUND_BY_CEIL]);
+		Assert::same('20', $nf->format(11));
+		Assert::same('20', $nf->format(15));
+		Assert::same('20', $nf->format('20'));
 	}
 
 

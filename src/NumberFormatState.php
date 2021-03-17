@@ -4,11 +4,14 @@ namespace h4kuna\Number;
 
 class NumberFormatState implements NumberFormat
 {
-
 	public const DISABLE_INT_ONLY = -1;
 
 	public const ZERO_CLEAR = 1;
 	public const ZERO_IS_EMPTY = 2;
+
+	public const ROUND_DEFAULT = 0;
+	public const ROUND_BY_CEIL = 1;
+	public const ROUND_BY_FLOOR = 2;
 
 	/** @var string utf-8 &nbsp; */
 	public const NBSP = "\xc2\xa0";
@@ -17,7 +20,7 @@ class NumberFormatState implements NumberFormat
 	private $thousandsSeparator;
 
 	/** @var int */
-	private $decimals = 0;
+	private $precision = 0;
 
 	/** @var string */
 	private $decimalPoint;
@@ -31,16 +34,28 @@ class NumberFormatState implements NumberFormat
 	/** @var int */
 	private $intOnly = 0;
 
+	/** @var \Closure */
+	private $roundCallback;
+
 
 	/**
 	 * @param array|int $decimals
 	 */
-	public function __construct($decimals = 2, string $decimalPoint = ',', ?string $thousandsSeparator = null, bool $zeroIsEmpty = false, ?string $emptyValue = null, bool $zeroClear = false, int $intOnly = self::DISABLE_INT_ONLY)
+	public function __construct(
+		$decimals = 2,
+		string $decimalPoint = ',',
+		?string $thousandsSeparator = null,
+		bool $zeroIsEmpty = false,
+		?string $emptyValue = null,
+		bool $zeroClear = false,
+		int $intOnly = self::DISABLE_INT_ONLY,
+		int $round = self::ROUND_DEFAULT
+	)
 	{
 		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
 			extract($decimals);
 		}
-		$this->decimals = $decimals;
+		$this->precision = $decimals;
 		$this->decimalPoint = $decimalPoint;
 		$this->thousandsSeparator = $thousandsSeparator === null ? self::NBSP : $thousandsSeparator;
 
@@ -60,8 +75,29 @@ class NumberFormatState implements NumberFormat
 		}
 
 		if ($intOnly > self::DISABLE_INT_ONLY) {
-			$this->intOnly = pow(10, $intOnly);
+			$this->intOnly = 10 ** $intOnly;
 		}
+
+		$this->roundCallback = self::createRound($round, $decimals);
+	}
+
+
+	private static function createRound(int $round, int $precision): \Closure
+	{
+		if ($round === self::ROUND_BY_FLOOR) {
+			return static function (float $number) use ($precision): float {
+				$move = 10 ** $precision;
+				return floor($number * $move) / $move;
+			};
+		} elseif ($round === self::ROUND_BY_CEIL) {
+			return static function (float $number) use ($precision): float {
+				$move = 10 ** $precision;
+				return ceil($number * $move) / $move;
+			};
+		}
+		return static function (float $number) use ($precision): float {
+			return round($number, $precision);
+		};
 	}
 
 
@@ -88,15 +124,10 @@ class NumberFormatState implements NumberFormat
 			$number = $number / $this->intOnly;
 		}
 
-		$decimals = $this->decimals;
-		if ($decimals < 0) {
-			$number = round((float) $number, $decimals);
-			$decimals = 0;
-		}
+		$cb = $this->roundCallback;
+		$formatted = number_format($cb((float) $number), max(0, $this->precision), $this->decimalPoint, $this->thousandsSeparator);
 
-		$formatted = number_format((float) $number, $decimals, $this->decimalPoint, $this->thousandsSeparator);
-
-		if ($this->flag & self::ZERO_CLEAR && $decimals > 0) {
+		if ($this->flag & self::ZERO_CLEAR && $this->precision > 0) {
 			return rtrim(rtrim($formatted, '0'), $this->decimalPoint);
 		}
 

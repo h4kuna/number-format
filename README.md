@@ -48,6 +48,7 @@ echo $numberFormat->format(1000); // 1 000,000
 - emptyValue: string [NULL] has two options dependecy on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero tranform to emtpy string if is not defined other string
 - zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
 - intOnly: [-1] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
+- round: [0] change round function, let's use `NumberFormatState::ROUND_BY_CEIL` or `NumberFormatState::ROUND_BY_FLOOR` 
 
 Here is test for [more use cases](tests/src/NumberFormatStateTest.php).
 
