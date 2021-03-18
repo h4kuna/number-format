@@ -121,8 +121,7 @@ class NumberFormatState implements NumberFormat
 			$number = $number / $this->intOnly;
 		}
 
-		$cb = $this->roundCallback;
-		$formatted = number_format($cb((float) $number), max(0, $this->precision), $this->decimalPoint, $this->thousandsSeparator);
+		$formatted = number_format(($this->roundCallback)((float) $number), max(0, $this->precision), $this->decimalPoint, $this->thousandsSeparator);
 
 		if ($this->flag & self::ZERO_CLEAR && $this->precision > 0) {
 			return rtrim(rtrim($formatted, '0'), $this->decimalPoint);
