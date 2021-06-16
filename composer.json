@@ -1,33 +1,41 @@
 {
-    "name": "h4kuna/number-format",
-    "type": "library",
-    "description": "Object wrapper above number_format",
-    "homepage": "https://github.com/h4kuna/number-format",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Milan Matějček",
-            "email": "milan.matejcek@gmail.com",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": "^7.1",
-        "h4kuna/data-type": "^2.1.0"
-    },
-    "require-dev": {
-        "nette/utils": "^3.0",
-        "salamium/testinium": "^0.1",
-        "phpstan/phpstan": "^0.12"
-    },
-    "autoload": {
-        "psr-4": {
-            "h4kuna\\Number\\": "src\\"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "h4kuna\\Number\\": "tests\\src\\"
-        }
+  "name": "h4kuna/number-format",
+  "type": "library",
+  "description": "Object wrapper above number_format",
+  "homepage": "https://github.com/h4kuna/number-format",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Milan Matějček",
+      "email": "milan.matejcek@gmail.com",
+      "role": "Developer"
     }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "h4kuna/data-type": "^2.1.0"
+  },
+  "require-dev": {
+    "nette/utils": "^3.0",
+    "salamium/testinium": "^0.1",
+    "phpstan/phpstan": "^0.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "h4kuna\\Number\\": "src\\"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "h4kuna\\Number\\Tests\\": "tests\\"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "scripts": {
+    "phpstan": [
+      "vendor/bin/phpstan analyse -c tests/config/phpstan.neon --level max src tests"
+    ]
+  }
 }

@@ -1,18 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Units;
+namespace h4kuna\Number\Tests\Units;
 
 use h4kuna\Number;
+use h4kuna\Number\Tests\TestCase;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-class UnitTest extends \Tester\TestCase
+/**
+ * @testCase
+ */
+final class UnitTest extends TestCase
 {
 
 	public function testConvert(): void
 	{
-		$unit = new Unit;
+		$unit = new Number\Units\Unit();
 		$unitValue = $unit->convert(1.0, $unit::BASE);
 		Assert::same(1.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
@@ -34,7 +38,7 @@ class UnitTest extends \Tester\TestCase
 
 	public function testDiffBase(): void
 	{
-		$unit = new Unit(Unit::KILO);
+		$unit = new Number\Units\Unit(Number\Units\Unit::KILO);
 		$unitValue = $unit->convert(1, $unit::KILO);
 		Assert::same(1.0, $unitValue->value);
 		Assert::same($unit::KILO, $unitValue->unit);
@@ -51,7 +55,7 @@ class UnitTest extends \Tester\TestCase
 
 	public function testConvertAuto(): void
 	{
-		$unit = new Unit;
+		$unit = new Number\Units\Unit();
 		$unitValue = $unit->convert(10.0);
 		Assert::same(10.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
@@ -72,7 +76,7 @@ class UnitTest extends \Tester\TestCase
 
 	public function testFromString(): void
 	{
-		$unit = new Unit;
+		$unit = new Number\Units\Unit();
 		$unitValue = $unit->fromString('128M');
 		Assert::same(128000000.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);

@@ -1,13 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Number\Tests;
 
-use Tester\TestCase;
+use h4kuna\Number\Percent;
+use h4kuna\Number\Tests\TestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-class PercentTest extends TestCase
+/**
+ * @testCase
+ */
+final class PercentTest extends TestCase
 {
 
 	public function testAdd(): void
@@ -16,11 +20,13 @@ class PercentTest extends TestCase
 		Assert::same(120.0, $percent->add(100));
 	}
 
+
 	public function testDeduct(): void
 	{
 		$percent = new Percent(20);
 		Assert::same(96.0, $percent->deduct(120));
 	}
+
 
 	public function testDiff(): void
 	{

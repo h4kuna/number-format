@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Units;
+namespace h4kuna\Number\Tests\Units;
 
+use h4kuna\Number\Units\Byte;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

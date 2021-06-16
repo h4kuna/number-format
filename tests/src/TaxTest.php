@@ -1,13 +1,18 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Number\Tests;
 
-use Tester\TestCase;
+use h4kuna\Number\Percent;
+use h4kuna\Number\Tax;
+use h4kuna\Number\Tests\TestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-class TaxTest extends TestCase
+/**
+ * @testCase
+ */
+final class TaxTest extends TestCase
 {
 
 	public function testApi(): void

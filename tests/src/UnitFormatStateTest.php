@@ -1,13 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Number\Tests;
 
-use Tester\TestCase;
+use h4kuna\Number\Exceptions\InvalidMask;
+use h4kuna\Number\NumberFormatState;
+use h4kuna\Number\UnitFormatState;
+use h4kuna\Number\Tests\TestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-class UnitFormatStateTest extends TestCase
+/**
+ * @testCase
+ */
+final class UnitFormatStateTest extends TestCase
 {
 
 	public function testDefault(): void
