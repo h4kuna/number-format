@@ -2,11 +2,13 @@
 
 namespace h4kuna\Number\Utils;
 
+use h4kuna\DataType\Immutable\Messenger;
+
 /**
  * @property-read float $value
  * @property-read string $unit
  */
-final class UnitValue extends \h4kuna\DataType\Immutable\Messenger
+final class UnitValue extends Messenger
 {
 
 	public function __toString()
