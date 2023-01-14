@@ -9,7 +9,7 @@ class Parameters
 	/**
 	 * @var array<string, \ReflectionParameter>
 	 */
-	private static $parameters = [];
+	private static array $parameters = [];
 
 
 	/**

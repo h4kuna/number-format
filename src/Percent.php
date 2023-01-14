@@ -5,11 +5,9 @@ namespace h4kuna\Number;
 final class Percent
 {
 
-	/** @var float */
-	private $ratio;
+	private float $ratio;
 
-	/** @var float */
-	private $percent;
+	private float $percent;
 
 
 	public function __construct(float $percent)

@@ -9,6 +9,16 @@ Number Format
 Wrapper above number_format, api is very easy.
 
 # Changelog
+## v4.0
+- removed dependency on h4kuna/data-type
+- support php 7.4+
+- removed interface NumberFormat
+- renamed class NumberFormat -> NumberFormat
+- removed class UnitFormatState, replace by `(new NumberFormat)->enableExtendFormat()`
+- removed class UnitPersistentFormatState, replace by `(new NumberFormat)->enableExtendFormat('1 MY_PERSISTENT_UNIT')`
+- method format has second parameter like decimals and third is dynamic defined unit
+- char for unit in mask changed to `⎵`
+
 ## v3.0
 This version is same like v2.0 but support php7.1+.
 
@@ -24,7 +34,7 @@ Install via composer
 composer require h4kuna/number-format
 ```
 
-### NumberFormatState
+### NumberFormat
 
 Class has many parameters and all paremetes has default value. You can add parameters normaly by position or name of keys in array like first parameter.
 
@@ -32,10 +42,9 @@ Class has many parameters and all paremetes has default value. You can add param
 use h4kuna\Number;
 
 // set decimals as 3
-$numberFormat = new Number\NumberFormatState(3);
+$numberFormat = new Number\NumberFormat(3);
 // or
-$numberFormat = new Number\NumberFormatState(['decimals' => 3]);
-
+$numberFormat = new Number\NumberFormat(['decimals' => 3]);
 
 echo $numberFormat->format(1000); // 1 000,000
 ```
@@ -48,26 +57,41 @@ echo $numberFormat->format(1000); // 1 000,000
 - emptyValue: string [NULL] has two options dependecy on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero tranform to emtpy string if is not defined other string
 - zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
 - intOnly: [-1] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
-- round: [0] change round function, let's use `NumberFormatState::ROUND_BY_CEIL` or `NumberFormatState::ROUND_BY_FLOOR` 
+- round: [0] change round function, let's use `NumberFormat::ROUND_BY_CEIL` or `NumberFormat::ROUND_BY_FLOOR` 
 
-Here is test for [more use cases](tests/src/NumberFormatStateTest.php).
+Here is test for [more use cases](tests/src/NumberFormatTest.php).
 
-### UnitFormatState
-Use this class for number with unit like Kb, Mb, Gb. Unit symbol is second parameter in [method **format**](src/UnitFormatState.php). Visit [tests](tests/src/UnitFormatStateTest.php).
+### Format expect unit
+```php
+use h4kuna\Number;
 
-#### Parameters
+// set decimals as 3
+$numberFormat = new Number\NumberFormat();
+$numberFormat->enableExtendFormat('⎵ 1');
+
+echo $numberFormat->format(1000, 3, '€'); // € 1 000,000
+```
+
+#### Parameters for NumberFormat::enableExtendFormat()
 - mask: ['1 U'] mean 1 pattern for number and U is pattern for unit
 - showUnit: [TRUE] mean show unit if number is empty 
 - nbsp: [TRUE] mean replace white space in mask by \&nbsp
 
-### UnitPersistentFormatState
+### Format persistent unit
 This class is same like previous, but unit is persistent like currencies or temperature. 
 
-#### Parameters
-- unit: has'nt default value
+```php
+use h4kuna\Number;
+
+// set decimals as 3
+$numberFormat = new Number\NumberFormat();
+$numberFormat->enableExtendFormat('€ 1');
+
+echo $numberFormat->format(1000); // € 1 000,00
+```
 
 ### NumberFormatFactory
-For all previous classes is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.php)
+For all previous cases is prepared [factory class](src/NumberFormatFactory.php). This class help you create new instance and support named parameters in constructor. [Visit test](tests/src/NumberFormatFactoryTest.php)
 
 ### Tax
 
@@ -92,7 +116,7 @@ echo $percent->diff(120); // 24.0
 In your neon file
 ```neon
 services:
-	number: h4kuna\Number\NumberFormatState(decimalPoint: '.', intOnly: 1, decimals: 1) #support named parameters by nette
+	number: h4kuna\Number\NumberFormat(decimalPoint: '.', intOnly: 1, decimals: 1) #support named parameters by nette
 
 	latte.latteFactory:
 		setup:

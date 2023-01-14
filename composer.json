@@ -12,30 +12,32 @@
     }
   ],
   "require": {
-    "php": ">=7.1",
-    "h4kuna/data-type": "^2.1.0"
+    "php": ">=7.4"
   },
   "require-dev": {
     "nette/utils": "^3.0",
-    "salamium/testinium": "^0.1",
-    "phpstan/phpstan": "^0.12"
+    "nette/tester": "^2.0",
+    "tracy/tracy": "^2.0",
+    "phpstan/phpstan": "^1.0"
   },
   "autoload": {
     "psr-4": {
-      "h4kuna\\Number\\": "src\\"
-    }
+      "h4kuna\\Number\\": "src"
+    },
+    "files": [
+      "src/compatibility.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
-      "h4kuna\\Number\\Tests\\": "tests\\"
+      "h4kuna\\Number\\Tests\\": "tests/src"
     }
   },
   "config": {
     "sort-packages": true
   },
   "scripts": {
-    "phpstan": [
-      "vendor/bin/phpstan analyse -c tests/config/phpstan.neon --level max src tests"
-    ]
+    "phpstan": "vendor/bin/phpstan analyse -c tests/config/phpstan.neon --level max src tests",
+    "tests": "vendor/bin/tester -s -j 4 -C --colors 1 tests/src"
   }
 }

@@ -10,24 +10,24 @@ class NumberFormatFactory
 	 */
 	public function createUnitPersistent(
 		string $unit,
-		$mask = '1 U',
+		$mask = '1 ⎵',
 		bool $showUnit = true,
 		bool $nbsp = true,
 		int $decimals = 2,
 		string $decimalPoint = ',',
-		?string $thousandsSeparator = null,
+		string $thousandsSeparator = ' ',
 		bool $zeroIsEmpty = false,
 		?string $emptyValue = null,
 		bool $zeroClear = false,
-		int $intOnly = NumberFormatState::DISABLE_INT_ONLY,
-		int $round = NumberFormatState::ROUND_DEFAULT
-	): UnitPersistentFormatState
+		int $intOnly = NumberFormat::DISABLE_INT_ONLY,
+		int $round = NumberFormat::ROUND_DEFAULT
+	): NumberFormat
 	{
 		if (Utils\Parameters::canExtract($mask, __METHOD__, 1)) {
 			extract($mask);
 		}
-		$uf = $this->createUnit($mask, $showUnit, $nbsp, $decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
-		return new UnitPersistentFormatState($uf, $unit);
+
+		return $this->createUnit(str_replace('⎵', $unit, $mask), $showUnit, $nbsp, $decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
 	}
 
 
@@ -35,24 +35,26 @@ class NumberFormatFactory
 	 * @param array<string, bool|int|string|null>|string $mask - can be array like named parameters ['decimalPoint' => '.']
 	 */
 	public function createUnit(
-		$mask = '1 U',
+		$mask = '1 ⎵',
 		bool $showUnit = true,
 		bool $nbsp = true,
 		int $decimals = 2,
 		string $decimalPoint = ',',
-		?string $thousandsSeparator = null,
+		string $thousandsSeparator = ' ',
 		bool $zeroIsEmpty = false,
 		?string $emptyValue = null,
 		bool $zeroClear = false,
-		int $intOnly = NumberFormatState::DISABLE_INT_ONLY,
-		int $round = NumberFormatState::ROUND_DEFAULT
-	): UnitFormatState
+		int $intOnly = NumberFormat::DISABLE_INT_ONLY,
+		int $round = NumberFormat::ROUND_DEFAULT
+	): NumberFormat
 	{
-		if (Utils\Parameters::canExtract($mask, __METHOD__, 0)) {
+		if (Utils\Parameters::canExtract($mask, __METHOD__)) {
 			extract($mask);
 		}
-		$nf = $this->createNumber($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
-		return new UnitFormatState($nf, $mask, $showUnit, $nbsp);
+		$nf = $this->createNumber($decimals, $decimalPoint, $thousandsSeparator, $nbsp, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
+		$nf->enableExtendFormat($mask, $showUnit);
+
+		return $nf;
 	}
 
 
@@ -62,15 +64,16 @@ class NumberFormatFactory
 	public function createNumber(
 		$decimals = 2,
 		string $decimalPoint = ',',
-		?string $thousandsSeparator = null,
+		string $thousandsSeparator = ' ',
+		bool $nbsp = true,
 		bool $zeroIsEmpty = false,
 		?string $emptyValue = null,
 		bool $zeroClear = false,
-		int $intOnly = NumberFormatState::DISABLE_INT_ONLY,
-		int $round = NumberFormatState::ROUND_DEFAULT
-	): NumberFormatState
+		int $intOnly = NumberFormat::DISABLE_INT_ONLY,
+		int $round = NumberFormat::ROUND_DEFAULT
+	): NumberFormat
 	{
-		return new NumberFormatState($decimals, $decimalPoint, $thousandsSeparator, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
+		return new NumberFormat($decimals, $decimalPoint, $thousandsSeparator, $nbsp, $zeroIsEmpty, $emptyValue, $zeroClear, $intOnly, $round);
 	}
 
 }

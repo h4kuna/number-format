@@ -17,11 +17,11 @@ final class NumberFormatFactoryTest extends TestCase
 	public function testUnit(): void
 	{
 		$nff = new NumberFormatFactory();
-		$uf = $nff->createUnit('1U');
-		Assert::same('1,00kg', $uf->format(1, 'kg'));
+		$uf = $nff->createUnit('1⎵');
+		Assert::same('1,00kg', $uf->format(1, null, 'kg'));
 
-		$uf = $nff->createUnit(['mask' => '1U', 'decimalPoint' => '.']);
-		Assert::same('1.00kg', $uf->format(1, 'kg'));
+		$uf = $nff->createUnit(['mask' => '1⎵', 'decimalPoint' => '.']);
+		Assert::same('1.00kg', $uf->format(1, null, 'kg'));
 	}
 
 
@@ -39,6 +39,7 @@ final class NumberFormatFactoryTest extends TestCase
 		$cf = $nff->createUnitPersistent('CZK', ['decimalPoint' => '.', 'nbsp' => false, 'decimals' => 1]);
 		Assert::same('1.0 CZK', $cf->format(1));
 	}
+
 }
 
 (new NumberFormatFactoryTest())->run();

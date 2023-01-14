@@ -7,7 +7,6 @@ use h4kuna\Number\Utils;
 
 class Unit
 {
-
 	public const PETA = 'P';
 	public const TERA = 'T';
 	public const GIGA = 'G';
@@ -40,10 +39,9 @@ class Unit
 	 * These values must be sort ascending! See self::UNITS
 	 * @var array<string,int>
 	 */
-	protected $allowedUnits;
+	protected array $allowedUnits;
 
-	/** @var string */
-	private $from;
+	private string $from;
 
 
 	/**
@@ -80,10 +78,8 @@ class Unit
 
 
 	/**
-	 * @param float $number
 	 * @param string|null $unitFrom - NULL mean defined in constructor
 	 * @param string|null $unitTo - NULL mean automatic
-	 * @return Utils\UnitValue
 	 */
 	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): Utils\UnitValue
 	{
@@ -160,10 +156,10 @@ class Unit
 
 	public static function createUnitValue(float $value, string $unit): Utils\UnitValue
 	{
-		return new Utils\UnitValue([
-			'value' => $value,
-			'unit' => $unit,
-		]);
+		return new Utils\UnitValue(
+			 $value,
+			 $unit
+		);
 	}
 
 

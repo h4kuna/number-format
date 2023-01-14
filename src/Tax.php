@@ -4,8 +4,7 @@ namespace h4kuna\Number;
 
 class Tax
 {
-	/** @var Percent */
-	private $vat;
+	private Percent $vat;
 
 
 	/**
