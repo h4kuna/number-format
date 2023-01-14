@@ -13,20 +13,12 @@ Wrapper above number_format, api is very easy.
 - removed dependency on h4kuna/data-type
 - support php 7.4+
 - removed interface NumberFormat
-- renamed class NumberFormat -> NumberFormat
-- removed class UnitFormatState, replace by `(new NumberFormat)->enableExtendFormat()`
-- removed class UnitPersistentFormatState, replace by `(new NumberFormat)->enableExtendFormat('1 MY_PERSISTENT_UNIT')`
+- renamed class NumberFormatState -> NumberFormat
+- removed class UnitFormatState, replace by `NumberFormat` like `$nf = new NumberFormat(); $nf->enableExtendFormat();`
+- removed class UnitPersistentFormatState, replace by `NumberFormat` like `$nf = new NumberFormat(); $nf->enableExtendFormat('1 MY_PERSISTENT_UNIT');`
 - method format has second parameter like decimals and third is dynamic defined unit
 - char for unit in mask changed to `⎵`
-
-## v3.0
-This version is same like v2.0 but support php7.1+.
-
-## v2.0
-
-New behavior is representing by one class is one type of format. Onetime create class and you can'nt change by life of object. Added new classes for number, unit and currency. Working with percent and taxes are better too.
-
-Here is [manual](//github.com/h4kuna/number-format/tree/v1.3.0) for older version 1.3.0.
+- added parameter nbsp to NumberFormat::__construct()
 
 Install via composer
 -------------------
@@ -52,9 +44,10 @@ echo $numberFormat->format(1000); // 1 000,000
 #### Parameters
 - decimals: [2]
 - decimalPoint: string [',']
-- thousandsSeparator: string [NULL] mean \&nbsp;
+- thousandsSeparator: string [' ']
+- nbsp: bool [true] - replace space by \&nbsp;
 - zeroIsEmpty: bool [FALSE] - transform 0 to empty value
-- emptyValue: string [NULL] has two options dependecy on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero tranform to emtpy string if is not defined other string
+- emptyValue: string [NULL] has two options dependency on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero transform to empty string if is not defined other string
 - zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
 - intOnly: [-1] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
 - round: [0] change round function, let's use `NumberFormat::ROUND_BY_CEIL` or `NumberFormat::ROUND_BY_FLOOR` 
@@ -65,7 +58,6 @@ Here is test for [more use cases](tests/src/NumberFormatTest.php).
 ```php
 use h4kuna\Number;
 
-// set decimals as 3
 $numberFormat = new Number\NumberFormat();
 $numberFormat->enableExtendFormat('⎵ 1');
 
@@ -83,7 +75,6 @@ This class is same like previous, but unit is persistent like currencies or temp
 ```php
 use h4kuna\Number;
 
-// set decimals as 3
 $numberFormat = new Number\NumberFormat();
 $numberFormat->enableExtendFormat('€ 1');
 
