@@ -65,7 +65,7 @@ echo $numberFormat->format(1000, 3, '€'); // € 1 000,000
 ```
 
 #### Parameters for NumberFormat::enableExtendFormat()
-- mask: ['1 U'] mean 1 pattern for number and U is pattern for unit
+- mask: ['1 ⎵'] mean 1 pattern for number and ⎵ is pattern for unit
 - showUnit: [TRUE] mean show unit if number is empty 
 - nbsp: [TRUE] mean replace white space in mask by \&nbsp
 
