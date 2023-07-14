@@ -2,180 +2,105 @@
 
 namespace h4kuna\Number;
 
-use h4kuna\Number\Exceptions\InvalidStateException;
+use h4kuna\Number\Utils\Round;
 
 class NumberFormat
 {
-	public const DISABLE_INT_ONLY = -1;
+	private ?\Closure $roundCallback;
 
-	public const ZERO_CLEAR = 1;
-	public const ZERO_IS_EMPTY = 2;
-
-	public const ROUND_DEFAULT = 0;
-	public const ROUND_BY_CEIL = 1;
-	public const ROUND_BY_FLOOR = 2;
-
-	/** @var string utf-8 &nbsp; */
-	public const NBSP = "\xc2\xa0";
-
-	private string $thousandsSeparator;
-
-	private int $decimals;
-
-	private string $decimalPoint;
-
-	private ?string $emptyValue = null;
-
-	private int $flag = 0;
-
-	private int $intOnly = 0;
-
-	private \Closure $roundCallback;
-
-	private ?string $mask = null;
-
-	private bool $showUnit = true;
-
-	private bool $nbsp;
-
-	/** @var array{from: array<string>, to: array<string>} */
-	private array $replace = [
-		'from' => ['1', '⎵'],
-		'to' => ['', ''],
-	];
+	private string $maskReplaced = '';
 
 
 	/**
-	 * @param array<string, bool|int|string|null>|int $decimals
+	 * @param string $mask - Mask must contains number 1 and character ⎵ for dynamic unit.
 	 */
 	public function __construct(
-		$decimals = 2,
-		string $decimalPoint = ',',
-		string $thousandsSeparator = ' ',
-		bool $nbsp = true,
-		bool $zeroIsEmpty = false,
-		?string $emptyValue = null,
-		bool $zeroClear = false,
-		int $intOnly = self::DISABLE_INT_ONLY,
-		int $round = self::ROUND_DEFAULT
+		private int $decimals = 2,
+		private string $decimalPoint = ',',
+		private string $thousandsSeparator = ' ',
+		private bool $nbsp = true,
+		private bool $zeroClear = false,
+		private string $emptyValue = Format::AS_NULL,
+		private bool $zeroIsEmpty = false,
+		private string $unit = '',
+		private bool $showUnitIfEmpty = true,
+		private string $mask = '1 ⎵',
+		null|int|\Closure $round = null,
 	)
 	{
-		if (Utils\Parameters::canExtract($decimals, __METHOD__)) {
-			extract($decimals);
-		}
-		$this->decimals = $decimals;
-		$this->decimalPoint = $decimalPoint;
-		$this->thousandsSeparator = $thousandsSeparator;
-		$this->nbsp = $nbsp;
-
-		if ($emptyValue !== null) {
-			$this->emptyValue = $emptyValue;
-		}
-
-		if ($zeroClear) {
-			$this->flag |= self::ZERO_CLEAR;
-		}
-
-		if ($zeroIsEmpty) {
-			$this->flag |= self::ZERO_IS_EMPTY;
-			if ($this->emptyValue === null) {
-				$this->emptyValue = '';
-			}
-		}
-
-		if ($intOnly > self::DISABLE_INT_ONLY) {
-			$this->intOnly = 10 ** $intOnly;
-		}
-
-		$this->roundCallback = self::createRound($round);
+		$this->roundCallback = $this->makeRoundCallback($round);
+		$this->initMaskReplaced();
 	}
 
 
-	/**
-	 * @param string $mask - Mask must contains number 1 and unit (€, kg, km) or letter upper U for dynamic unit for active third parameter in method format().
-	 */
-	public function enableExtendFormat(
-		string $mask = '1 ⎵',
-		bool $showUnit = true
-	): void
+	public function modify(
+		?int $decimals = null,
+		?string $decimalPoint = null,
+		?string $thousandsSeparator = null,
+		?bool $nbsp = null,
+		?bool $zeroClear = null,
+		?string $emptyValue = null,
+		?bool $zeroIsEmpty = null,
+		?string $unit = null,
+		?bool $showUnitIfEmpty = null,
+		?string $mask = null,
+		null|int|\Closure $round = null,
+	): self
 	{
-		if ($this->mask !== null) {
-			throw new InvalidStateException('Only onetime is allowed setup.');
-		}
-		$this->mask = $mask;
-		$this->showUnit = $showUnit;
+		$that = clone $this;
+		$that->decimals = $decimals ?? $this->decimals;
+		$that->decimalPoint = $decimalPoint ?? $that->decimalPoint;
+		$that->thousandsSeparator = $thousandsSeparator ?? $that->thousandsSeparator;
+		$that->nbsp = $nbsp ?? $that->nbsp;
+		$that->zeroClear = $zeroClear ?? $that->zeroClear;
+		$that->emptyValue = $emptyValue ?? $that->emptyValue;
+		$that->zeroIsEmpty = $zeroIsEmpty ?? $that->zeroIsEmpty;
+		$that->showUnitIfEmpty = $showUnitIfEmpty ?? $that->showUnitIfEmpty;
+		$that->roundCallback = $round === null ? $that->roundCallback : $this->makeRoundCallback($round);
 
-		if ($this->nbsp) {
-			$this->replace['from'][] = ' ';
-			$this->replace['to'][] = self::NBSP;
+		if ($mask !== null || $unit !== null) {
+			$that->mask = $mask ?? $that->mask;
+			$that->unit = $unit ?? $that->unit;
+			$that->initMaskReplaced();
 		}
+
+		return $that;
 	}
 
 
-	/**
-	 * @param string|int|float|null $number
-	 */
-	public function format($number, ?int $decimals = null, ?string $unit = null): string
+	public function format(string|int|float|null $number): string
 	{
-		if (((float) $number) === 0.0) {
-			if ($this->emptyValue === null) {
-				$number = 0.0;
-			} elseif ($this->flag & self::ZERO_IS_EMPTY || !is_numeric($number)) {
-				return $this->stringFormat($this->emptyValue, $unit);
-			}
-		} elseif ($this->intOnly !== 0) {
-			$number = intval($number) / $this->intOnly;
-		}
-
-		$decimals ??= $this->decimals;
-		$formatted = number_format(($this->roundCallback)((float) $number, $decimals), max(0, $decimals), $this->decimalPoint, $this->thousandsSeparator);
-
-		if ($this->flag & self::ZERO_CLEAR && $decimals > 0) {
-			$formatted = rtrim(rtrim($formatted, '0'), $this->decimalPoint);
-		}
-
-		return $this->stringFormat($formatted, $unit);
+		return Format::unit(
+			$number,
+			$this->decimals,
+			$this->decimalPoint,
+			$this->thousandsSeparator,
+			$this->nbsp,
+			$this->emptyValue,
+			$this->zeroIsEmpty,
+			$this->zeroClear,
+			$this->maskReplaced,
+			$this->showUnitIfEmpty,
+			$this->roundCallback,
+		);
 	}
 
 
-	private static function createRound(int $round): \Closure
+	private function makeRoundCallback(null|int|\Closure $round): ?\Closure
 	{
-		if ($round === self::ROUND_BY_FLOOR) {
-			return static function (float $number, int $precision): float {
-				$move = 10 ** $precision;
-
-				return floor($number * $move) / $move;
-			};
-		} elseif ($round === self::ROUND_BY_CEIL) {
-			return static function (float $number, int $precision): float {
-				$move = 10 ** $precision;
-
-				return ceil($number * $move) / $move;
-			};
+		if ($round === null) {
+			return null;
+		} elseif (is_int($round)) {
+			return Round::create($round);
 		}
 
-		return static function (float $number, int $precision): float {
-			return round($number, $precision);
-		};
+		return $round;
 	}
 
 
-	private function stringFormat(string $formatted, ?string $unit = null): string
+	private function initMaskReplaced(): void
 	{
-		if ($this->mask === null || ($this->showUnit === false && $this->emptyValue === $formatted || $unit === '')) {
-			return $this->replaceNbsp($formatted);
-		}
-
-		$this->replace['to'][0] = $formatted;
-		$this->replace['to'][1] = $unit;
-
-		return str_replace($this->replace['from'], $this->replace['to'], $this->mask);
-	}
-
-
-	private function replaceNbsp(string $formatted): string
-	{
-		return $this->nbsp === true ? str_replace(' ', self::NBSP, $formatted) : $formatted;
+		$this->maskReplaced = $this->unit === '' || $this->mask === '' ? '' : str_replace('⎵', $this->unit, $this->mask);
 	}
 
 }

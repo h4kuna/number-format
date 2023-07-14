@@ -7,18 +7,18 @@ use h4kuna\Number;
 class UnitFormat
 {
 
-	private string $symbol;
+	/**
+	 * @var array<string, Number\NumberFormat>
+	 */
+	private array $formats = [];
 
-	private Unit $unit;
 
-	private Number\NumberFormat $unitFormatState;
-
-
-	public function __construct(string $symbol, Unit $unit, Number\NumberFormat $unitFormatState)
+	public function __construct(
+		private string $symbol,
+		private Unit $unit,
+		private Number\NumberFormat $numberFormat,
+	)
 	{
-		$this->symbol = $symbol;
-		$this->unit = $unit;
-		$this->unitFormatState = $unitFormatState;
 	}
 
 
@@ -29,8 +29,8 @@ class UnitFormat
 
 
 	/**
-	 * @param string|null $unitFrom - NULL mean defined in constructor
-	 * @param string|null $unitTo - NULL mean automatic
+	 * @param string|null $unitFrom - null mean defined in constructor
+	 * @param string|null $unitTo - null mean automatic
 	 */
 	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): string
 	{
@@ -50,7 +50,11 @@ class UnitFormat
 
 	private function format(float $value, string $unit): string
 	{
-		return $this->unitFormatState->format($value, null, $unit);
+		if (isset($this->formats[$unit]) === false) {
+			$this->formats[$unit] = $this->numberFormat->modify(unit: $unit);
+		}
+
+		return $this->formats[$unit]->format($value);
 	}
 
 }

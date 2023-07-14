@@ -1,0 +1,8 @@
+parameters:
+	level: max
+	paths:
+		- src
+		- tests/src
+
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon

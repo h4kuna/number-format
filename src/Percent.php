@@ -7,18 +7,14 @@ final class Percent
 
 	private float $ratio;
 
-	private float $percent;
 
-
-	public function __construct(float $percent)
+	public function __construct(private float $percent)
 	{
-		$this->percent = $percent;
 		$this->ratio = ($percent / 100) + 1;
 	}
 
 
 	/**
-	 * @return float
 	 * @example 19.5% = float 19.5
 	 */
 	public function getPercent(): float

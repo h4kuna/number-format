@@ -9,6 +9,18 @@ Number Format
 Wrapper above number_format, api is very easy.
 
 # Changelog
+## v5.0
+- support php 8.0+
+- add new static class [Format](src/Format.php), you can format numbers without instance of class
+- class NumberFormat is immutable
+- **BC break** removed parameters like unit and decimals in method NumberFormat::format()
+  - let's use method modify()
+- class Parameters removed, because php 8.0 has native support
+- **BC break** NumberFormat support for int numbers removed, like a parameter **intOnly**
+- **BC break** NumberFormat removed method enableExtendFormat() all options move to constructor
+- add new class Round
+- class NumberFormatFactory removed 
+
 ## v4.0
 - removed dependency on h4kuna/data-type
 - support php 7.4+
@@ -36,38 +48,35 @@ use h4kuna\Number;
 // set decimals as 3
 $numberFormat = new Number\NumberFormat(3);
 // or
-$numberFormat = new Number\NumberFormat(['decimals' => 3]);
+$numberFormat = new Number\NumberFormat(decimals: 3);
 
 echo $numberFormat->format(1000); // 1 000,000
 ```
 
 #### Parameters
 - decimals: [2]
-- decimalPoint: string [',']
-- thousandsSeparator: string [' ']
-- nbsp: bool [true] - replace space by \&nbsp;
-- zeroIsEmpty: bool [FALSE] - transform 0 to empty value
-- emptyValue: string [NULL] has two options dependency on zeroIsEmpty if is FALSE than empty value transform to zero or TRUE mean zero transform to empty string if is not defined other string
-- zeroClear: [FALSE] mean 1.20 trim zero from right -> 1.2 
-- intOnly: [-1] if we have numbers like integers. This mean set 3 and transform number 1050 -> 1,05
-- round: [0] change round function, let's use `NumberFormat::ROUND_BY_CEIL` or `NumberFormat::ROUND_BY_FLOOR` 
+- decimalPoint: [',']
+- thousandsSeparator: [' ']
+- nbsp: [true] replace space by \&nbsp;
+- zeroClear: [false] mean 1.20 trim zero from right -> 1.2 
+- emptyValue: string [\x00] if number is zero or empty will display some wildcard
+- unit: [''] define unit for formatted number, $, €, kg etc...
+- showUnitIfEmpty: [false] unit must be defined
+- mask: [1 ⎵] if you want to define **1 €** or **$ 1**
+- round: [null] change round function, let's use `Round::BY_CEIL` or `Round::BY_FLOOR`
 
-Here is test for [more use cases](tests/src/NumberFormatTest.php).
+Here are tests for [more use cases](tests/src/NumberFormatTest.php).
 
-### Format expect unit
+### Format expect unit and use modify()
 ```php
 use h4kuna\Number;
 
-$numberFormat = new Number\NumberFormat();
-$numberFormat->enableExtendFormat('⎵ 1');
+$numberFormat = new Number\NumberFormat(mask: '⎵ 1', decimals: 3, unit: '€');
+echo $numberFormat->format(1000, 3, '€'); // € 1 000,000 with nbsp
 
-echo $numberFormat->format(1000, 3, '€'); // € 1 000,000
+$numberFormatDisableNbsp = $numberFormat->modify(nbsp: false); // keep previous setting and disable nbsp
+echo $numberFormatDisableNbsp->format(1000); // € 1 000,000
 ```
-
-#### Parameters for NumberFormat::enableExtendFormat()
-- mask: ['1 ⎵'] mean 1 pattern for number and ⎵ is pattern for unit
-- showUnit: [TRUE] mean show unit if number is empty 
-- nbsp: [TRUE] mean replace white space in mask by \&nbsp
 
 ### Format persistent unit
 This class is same like previous, but unit is persistent like currencies or temperature. 

@@ -7,10 +7,7 @@ class Tax
 	private Percent $vat;
 
 
-	/**
-	 * @param int|float|Percent $vat
-	 */
-	public function __construct($vat)
+	public function __construct(int|float|Percent $vat)
 	{
 		if (!$vat instanceof Percent) {
 			$vat = new Percent($vat);

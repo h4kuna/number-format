@@ -12,21 +12,20 @@
     }
   ],
   "require": {
-    "php": ">=7.4"
+    "php": ">=8.0"
   },
   "require-dev": {
-    "nette/utils": "^3.0",
-    "nette/tester": "^2.0",
-    "tracy/tracy": "^2.0",
-    "phpstan/phpstan": "^1.0"
+    "nette/utils": "^3.0 || ^4.0",
+    "nette/tester": "^2.4",
+    "phpstan/phpstan": "^1.8",
+    "phpstan/phpstan-strict-rules": "^1.4",
+    "phpstan/phpstan-deprecation-rules": "^1.1.3",
+    "tracy/tracy": "^2.9"
   },
   "autoload": {
     "psr-4": {
       "h4kuna\\Number\\": "src"
-    },
-    "files": [
-      "src/compatibility.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
@@ -37,7 +36,7 @@
     "sort-packages": true
   },
   "scripts": {
-    "phpstan": "vendor/bin/phpstan analyse -c tests/config/phpstan.neon --level max src tests",
-    "tests": "vendor/bin/tester -s -j 4 -C --colors 1 tests/src"
+    "phpstan": "vendor/bin/phpstan analyse",
+    "tests": "vendor/bin/tester -s -j 4 --colors 1 -s -C tests/src"
   }
 }

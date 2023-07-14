@@ -2,7 +2,9 @@
 
 namespace h4kuna\Number\Tests;
 
+use h4kuna\Number\Format;
 use h4kuna\Number\NumberFormat;
+use h4kuna\Number\Utils\Round;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -13,89 +15,102 @@ require_once __DIR__ . '/../bootstrap.php';
 final class NumberFormatTest extends TestCase
 {
 
-	public function testDefault(): void
+	/**
+	 * @return array<mixed>
+	 */
+	protected function provideFormat(): array
+	{
+		return [
+			[
+				['decimals' => 3],
+				'1,000',
+				1,
+			],
+			[
+				['decimalPoint' => '.'],
+				self::nbsp('1 000.00'),
+				1000,
+			],
+			[
+				['thousandsSeparator' => '.'],
+				'1.000,00',
+				1000,
+			],
+			[
+				['nbsp' => false],
+				'1 000,00',
+				1000,
+			],
+			[
+				['zeroClear' => true],
+				'1',
+				'1.00',
+			],
+			[
+				['emptyValue' => '-'],
+				'-',
+				null,
+			],
+			[
+				['unit' => 'g'],
+				self::nbsp('1,00 g'),
+				1,
+			],
+			[
+				['unit' => 'g', 'showUnitIfEmpty' => false],
+				self::nbsp('0,00'),
+				0,
+			],
+			[
+				['unit' => '$', 'mask' => '⎵1'],
+				self::nbsp('$1 000,00'),
+				1000,
+			],
+			[
+				['round' => Round::BY_FLOOR],
+				self::nbsp('1,00'),
+				1.005,
+			],
+			[
+				['zeroIsEmpty' => true],
+				'',
+				0,
+			],
+			[
+				['zeroIsEmpty' => false],
+				'0,00',
+				0,
+			],
+		];
+	}
+
+
+	/**
+	 * @dataProvider provideFormat
+	 * @param array{decimals?: int} $parameters
+	 */
+	public function testFormat(array $parameters, string $expected, float|int|null|string $number): void
+	{
+		$numberFormat = new NumberFormat(...$parameters);
+		Assert::same($expected, $numberFormat->format($number));
+	}
+
+
+	/**
+	 * @dataProvider provideFormat
+	 * @param array{decimals?: int} $parameters
+	 */
+	public function testModify(array $parameters, string $expected, float|int|null|string $number): void
 	{
 		$nf = new NumberFormat();
-		$nf->enableExtendFormat();
-		Assert::same('1,00' . NumberFormat::NBSP . 'kg', $nf->format(1, null, 'kg'));
+		$numberFormat = $nf->modify(...$parameters);
+		Assert::same($expected, $numberFormat->format($number));
 	}
 
 
-	public function testMask(): void
+	private static function nbsp(string $value): string
 	{
-		$nf = new NumberFormat();
-		$nf->enableExtendFormat('⎵1');
-		Assert::same('kg1,00', $nf->format(1, null, 'kg'));
-
-		$nf = new NumberFormat();
-		$nf->enableExtendFormat('1-⎵');
-		Assert::same('1,00-g', $nf->format(1, null, 'g'));
-	}
-
-
-	public function testVariableUnitMakeNothing(): void
-	{
-		$nf = new NumberFormat();
-		Assert::same('1,655', $nf->format(1.654987, 3, 'kg'));
-	}
-
-
-	public function testVariableDecimalsUnit(): void
-	{
-		$nf = new NumberFormat(['nbsp' => false]);
-		$nf->enableExtendFormat();
-		Assert::same('1,655 kg', $nf->format(1.654987, 3, 'kg'));
-	}
-
-
-	public function testVariableDecimalsCUD(): void
-	{
-		$nf = new NumberFormat(['nbsp' => false]);
-		$nf->enableExtendFormat('1 CUD');
-		Assert::same('1,655 CUD', $nf->format(1.654987, 3));
-	}
-
-
-	public function testVariableDecimalsThirdParameterIsDisabled(): void
-	{
-		$nf = new NumberFormat(['nbsp' => false]);
-		$nf->enableExtendFormat('1 CUD');
-		Assert::same('1,655 CUD', $nf->format(1.654987, 3, 'be'));
-	}
-
-
-	public function testVariableDecimals(): void
-	{
-		$nf = new NumberFormat();
-		Assert::same('1,655', $nf->format(1.654987, 3));
-	}
-
-
-	public function testNbsp(): void
-	{
-		$nf = new NumberFormat(['nbsp' => false]);
-		$nf->enableExtendFormat();
-		Assert::same('1,00 kg', $nf->format(1, null, 'kg'));
-	}
-
-
-	public function testNbspEveryWhere(): void
-	{
-		$nf = new NumberFormat(['thousandsSeparator' => ' ']);
-		$nf->enableExtendFormat('1 ⎵ Foo');
-		Assert::same(str_replace('%s', NumberFormat::NBSP, '1%s000,00%skg%sFoo'), $nf->format(1000, null, 'kg'));
-	}
-
-
-	public function testEmptyValue(): void
-	{
-		$nf = new NumberFormat(2, ',', ' ', true, false, '-');
-		$nf->enableExtendFormat('1⎵');
-		Assert::same('-kg', $nf->format(null, null, 'kg'));
-
-		$nf = new NumberFormat(2, ',', ' ', true, false, '-');
-		$nf->enableExtendFormat('1⎵', false);
-		Assert::same('-', $nf->format(null, null, 'kg'));
+		return str_replace(' ', Format::NBSP, $value);
 	}
 
 }
