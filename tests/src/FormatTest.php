@@ -14,7 +14,9 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class FormatTest extends TestCase
 {
-
+	/**
+	 * @return array<int, array<mixed>>
+	 */
 	protected function provideNumber(): array
 	{
 		return [
@@ -80,6 +82,7 @@ final class FormatTest extends TestCase
 
 	/**
 	 * @dataProvider provideNumber
+	 * @param array<float> $input
 	 */
 	public function testNumber(string $expected, array $input): void
 	{
@@ -87,6 +90,9 @@ final class FormatTest extends TestCase
 	}
 
 
+	/**
+	 * @return array<int, array<int, array<int|string, bool|float|int|string|null>|string>>
+	 */
 	protected static function provideUnit(): array
 	{
 		return [
@@ -241,6 +247,7 @@ final class FormatTest extends TestCase
 
 	/**
 	 * @dataProvider provideUnit
+	 * @param array<float|int|string|null> $input
 	 */
 	public function testUnit(string $expected, array $input): void
 	{

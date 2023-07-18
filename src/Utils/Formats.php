@@ -10,7 +10,7 @@ class Formats
 	private ?NumberFormat $default = null;
 
 
-	/** @var array<string, NumberFormat> */
+	/** @param array<string, NumberFormat> $formats */
 	public function __construct(
 		private array $formats = [],
 	)

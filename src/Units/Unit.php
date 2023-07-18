@@ -108,7 +108,8 @@ class Unit
 
 	public function fromString(string $value, string $unitTo = self::BASE): Utils\UnitValue
 	{
-		if (!preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find) || !$find['number']) {
+		$result = preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find);
+		if ($result === false || isset($find['number']) === false || $find['number'] === '') {
 			throw new Number\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
 		}
 		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
