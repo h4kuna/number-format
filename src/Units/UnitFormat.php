@@ -6,17 +6,10 @@ use h4kuna\Number;
 
 class UnitFormat
 {
-
-	/**
-	 * @var array<string, Number\NumberFormat>
-	 */
-	private array $formats = [];
-
-
 	public function __construct(
 		private string $symbol,
 		private Unit $unit,
-		private Number\NumberFormat $numberFormat,
+		private Number\Utils\Formats $formats,
 	)
 	{
 	}
@@ -50,11 +43,7 @@ class UnitFormat
 
 	private function format(float $value, string $unit): string
 	{
-		if (isset($this->formats[$unit]) === false) {
-			$this->formats[$unit] = $this->numberFormat->modify(unit: $unit);
-		}
-
-		return $this->formats[$unit]->format($value);
+		return $this->formats->get($unit)->format($value);
 	}
 
 }

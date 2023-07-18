@@ -7,8 +7,7 @@ use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
 
-$nf = new Number\NumberFormat();
-$uf = new Number\Units\UnitFormat('B', new Number\Units\Byte(), $nf);
+$uf = new Number\Units\UnitFormat('B', new Number\Units\Byte(), new Number\Utils\Formats());
 
 Assert::same('924,00 MB', $uf->convert(968884224));
 Assert::same('1,00 kB', $uf->convert(1024));
