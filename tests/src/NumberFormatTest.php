@@ -53,8 +53,8 @@ final class NumberFormatTest extends TestCase
 			],
 			[
 				['unit' => 'g'],
-				self::nbsp('1,00 g'),
-				1,
+				self::nbsp('1 000,00 g'),
+				1000,
 			],
 			[
 				['unit' => 'g', 'showUnitIfEmpty' => false],

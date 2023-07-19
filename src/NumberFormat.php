@@ -30,6 +30,7 @@ class NumberFormat
 	{
 		$this->roundCallback = $this->makeRoundCallback($round);
 		$this->initMaskReplaced();
+		$this->initThousandsSeparator();
 	}
 
 
@@ -63,6 +64,7 @@ class NumberFormat
 			$that->unit = $unit ?? $that->unit;
 			$that->initMaskReplaced();
 		}
+		$that->initThousandsSeparator();
 
 		return $that;
 	}
@@ -75,7 +77,7 @@ class NumberFormat
 			$this->decimals,
 			$this->decimalPoint,
 			$this->thousandsSeparator,
-			$this->nbsp,
+			false,
 			$this->emptyValue,
 			$this->zeroIsEmpty,
 			$this->zeroClear,
@@ -100,7 +102,26 @@ class NumberFormat
 
 	private function initMaskReplaced(): void
 	{
-		$this->maskReplaced = $this->unit === '' || $this->mask === '' ? '' : str_replace('⎵', $this->unit, $this->mask);
+		if ($this->unit !== '' && $this->mask !== '') {
+			$replace = ['⎵' => $this->unit];
+			if ($this->nbsp) {
+				$replace[' '] = Format::NBSP;
+			}
+
+			$this->maskReplaced = strtr($this->mask, $replace);
+		} else {
+			$this->maskReplaced = '';
+		}
+	}
+
+
+	private function initThousandsSeparator(): void
+	{
+		if ($this->nbsp && str_contains($this->thousandsSeparator, ' ')) {
+			$this->thousandsSeparator = strtr($this->thousandsSeparator, [' ' => Format::NBSP]);
+		} elseif ($this->nbsp === false && str_contains($this->thousandsSeparator, Format::NBSP)) {
+			$this->thousandsSeparator = strtr($this->thousandsSeparator, [Format::NBSP => ' ']);
+		}
 	}
 
 }
