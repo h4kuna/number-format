@@ -62,8 +62,8 @@ class NumberFormat
 		if ($mask !== null || $unit !== null) {
 			$that->mask = $mask ?? $that->mask;
 			$that->unit = $unit ?? $that->unit;
-			$that->initMaskReplaced();
 		}
+		$that->initMaskReplaced();
 		$that->initThousandsSeparator();
 
 		return $that;
