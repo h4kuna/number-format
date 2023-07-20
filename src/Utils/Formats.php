@@ -47,7 +47,7 @@ class Formats
 
 	public function has(string $key): bool
 	{
-		return isset($this->formats[$key]);
+		return isset($this->formats[$key]) || isset($this->factories[$key]);
 	}
 
 
@@ -68,7 +68,7 @@ class Formats
 	}
 
 
-	protected function getDefault(): NumberFormat
+	public function getDefault(): NumberFormat
 	{
 		if ($this->default === null) {
 			$this->default = new NumberFormat();
