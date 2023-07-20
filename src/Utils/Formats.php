@@ -9,10 +9,17 @@ class Formats
 {
 	private ?NumberFormat $default = null;
 
+	/**
+	 * @var array<string, NumberFormat>
+	 */
+	private array $formats = [];
 
-	/** @param array<string, NumberFormat> $formats */
+
+	/**
+	 * @param array<string, NumberFormat|\Closure(self): NumberFormat> $factories
+	 */
 	public function __construct(
-		private array $formats = [],
+		private array $factories = [],
 	)
 	{
 	}
@@ -28,9 +35,13 @@ class Formats
 	}
 
 
-	public function add(string $key, NumberFormat $setup): void
+	public function add(string $key, NumberFormat|\Closure $setup): void
 	{
-		$this->formats[$key] = $setup;
+		if ($setup instanceof \Closure) {
+			$this->factories[$key] = $setup;
+		} else {
+			$this->formats[$key] = $setup;
+		}
 	}
 
 
@@ -43,7 +54,14 @@ class Formats
 	public function get(string $key): NumberFormat
 	{
 		if (isset($this->formats[$key]) === false) {
-			$this->formats[$key] = $this->getDefault()->modify(unit: $key);
+			if (isset($this->factories[$key])) {
+				$service = $this->factories[$key];
+				$format = $service instanceof \Closure ? $service($this) : $service;
+			} else {
+				$format = $this->getDefault()->modify(unit: $key);
+			}
+			$this->formats[$key] = $format;
+			unset($this->factories[$key]);
 		}
 
 		return $this->formats[$key];
