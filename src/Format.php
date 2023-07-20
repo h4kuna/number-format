@@ -30,11 +30,11 @@ final class Format
 		?Closure $roundCallback = null
 	): string
 	{
-		$isNumeric = is_numeric($number) && $zeroIsEmpty === false;
+		$isNumeric = is_numeric($number);
 		$castNumber = $isNumeric ? (float) $number : 0.0;
 		$isZero = $castNumber === 0.0;
 
-		if ($isZero && $isNumeric === false) {
+		if ($isZero && ($isNumeric === false || $zeroIsEmpty === true)) {
 			$formatted = $emptyValue === self::AS_NULL ? '' : $emptyValue;
 		} else {
 			$formatted = self::number($castNumber, $decimals, $decimalPoint, $thousandsSeparator, $roundCallback);

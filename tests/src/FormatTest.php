@@ -159,6 +159,13 @@ final class FormatTest extends TestCase
 				],
 			],
 			[
+				'1,00',
+				[
+					'number' => 1,
+					'zeroIsEmpty' => true,
+				],
+			],
+			[
 				'-',
 				[
 					'number' => 0,
