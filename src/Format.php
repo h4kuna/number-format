@@ -3,6 +3,7 @@
 namespace h4kuna\Number;
 
 use Closure;
+use h4kuna\Number\Parameters\Format\ZeroClear;
 use h4kuna\Number\Utils\Round;
 
 final class Format
@@ -24,7 +25,7 @@ final class Format
 		bool $nbsp = true,
 		string $emptyValue = self::AS_NULL, // must be a string, for immutable behavior of NumberFormat
 		bool $zeroIsEmpty = false,
-		bool $zeroClear = false,
+		int $zeroClear = ZeroClear::NO,
 		string $mask = '',
 		bool $showUnitIfEmpty = true,
 		?Closure $roundCallback = null
@@ -37,9 +38,13 @@ final class Format
 		if ($isZero && ($isNumeric === false || $zeroIsEmpty === true)) {
 			$formatted = $emptyValue === self::AS_NULL ? '' : $emptyValue;
 		} else {
+			if ($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && ((int) $castNumber) == $castNumber) {
+				$decimals = 0;
+			}
+
 			$formatted = self::number($castNumber, $decimals, $decimalPoint, $thousandsSeparator, $roundCallback);
 
-			if ($zeroClear && $decimals > 0) {
+			if ($zeroClear === ZeroClear::DECIMALS && $decimals > 0) {
 				$formatted = self::zeroClear($formatted, $decimalPoint);
 			}
 		}

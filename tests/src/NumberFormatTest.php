@@ -4,6 +4,7 @@ namespace h4kuna\Number\Tests;
 
 use h4kuna\Number\Format;
 use h4kuna\Number\NumberFormat;
+use h4kuna\Number\Parameters\Format\ZeroClear;
 use h4kuna\Number\Utils\Round;
 use Tester\Assert;
 
@@ -42,7 +43,7 @@ final class NumberFormatTest extends TestCase
 				1000,
 			],
 			[
-				['zeroClear' => true],
+				['zeroClear' => ZeroClear::DECIMALS],
 				'1',
 				'1.00',
 			],
@@ -80,6 +81,16 @@ final class NumberFormatTest extends TestCase
 				['zeroIsEmpty' => false],
 				'0,00',
 				0,
+			],
+			[
+				['zeroClear' => ZeroClear::DECIMALS_EMPTY],
+				'0',
+				0,
+			],
+			[
+				['zeroClear' => ZeroClear::DECIMALS_EMPTY],
+				'0,10',
+				0.1,
 			],
 		];
 	}

@@ -2,6 +2,7 @@
 
 namespace h4kuna\Number;
 
+use h4kuna\Number\Parameters\Format\ZeroClear;
 use h4kuna\Number\Utils\Round;
 
 class NumberFormat
@@ -19,7 +20,7 @@ class NumberFormat
 		private string $decimalPoint = ',',
 		private string $thousandsSeparator = ' ',
 		private bool $nbsp = true,
-		private bool $zeroClear = false,
+		private int $zeroClear = ZeroClear::NO,
 		private string $emptyValue = Format::AS_NULL,
 		private bool $zeroIsEmpty = false,
 		private string $unit = '',
@@ -39,7 +40,7 @@ class NumberFormat
 		?string $decimalPoint = null,
 		?string $thousandsSeparator = null,
 		?bool $nbsp = null,
-		?bool $zeroClear = null,
+		?int $zeroClear = null,
 		?string $emptyValue = null,
 		?bool $zeroIsEmpty = null,
 		?string $unit = null,

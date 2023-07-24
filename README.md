@@ -19,7 +19,8 @@ Wrapper above number_format, api is very easy.
 - **BC break** NumberFormat support for int numbers removed, like a parameter **intOnly**
 - **BC break** NumberFormat removed method enableExtendFormat() all options move to constructor
 - add new class Round
-- class NumberFormatFactory removed 
+- class NumberFormatFactory removed
+- parameter zeroClear is integer instead of bool
 
 ## v4.0
 - removed dependency on h4kuna/data-type
@@ -57,11 +58,15 @@ echo $numberFormat->format(1000); // 1 000,000
 - decimals: [2]
 - decimalPoint: [',']
 - thousandsSeparator: [' ']
-- nbsp: [true] replace space by \&nbsp;
-- zeroClear: [false] mean 1.20 trim zero from right -> 1.2 
-- emptyValue: string [\x00] if number is zero or empty will display some wildcard
-- unit: [''] define unit for formatted number, $, €, kg etc...
-- showUnitIfEmpty: [false] unit must be defined
+- nbsp: [true] replace space by \&nbsp; like utf-8 char
+- zeroClear: 
+  - [ZeroClear::NO] disabled
+  - [ZeroClear::DECIMALS_EMPTY] 1.0 -> `1`, 1.50 -> `1,50`
+  - [ZeroClear::DECIMALS] 1.0 -> `1`; 1.50 -> `1,5`
+- emptyValue: [\x00] disabled, if value is empty (by default `null` or empty string `''`) will display some wildcard
+- zeroIsEmpty: [false] disabled, only `null` and empty string `''` are replaced by `emptyValue`, but by this option is zero empty value too
+- unit: [''] disabled, define unit for formatted number, $, €, kg etc...
+- showUnitIfEmpty: [false] unit must be defined, show unit if is empty value
 - mask: [1 ⎵] if you want to define **1 €** or **$ 1**
 - round: [null] change round function, let's use `Round::BY_CEIL` or `Round::BY_FLOOR`
 

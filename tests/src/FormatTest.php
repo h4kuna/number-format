@@ -3,6 +3,7 @@
 namespace h4kuna\Number\Tests;
 
 use h4kuna\Number\Format;
+use h4kuna\Number\Parameters\Format\ZeroClear;
 use h4kuna\Number\Utils\Round;
 use Tester\Assert;
 use Tester\TestCase;
@@ -226,7 +227,7 @@ final class FormatTest extends TestCase
 					'number' => 1.005,
 					'decimals' => 3,
 					'nbsp' => false,
-					'zeroClear' => true,
+					'zeroClear' => ZeroClear::DECIMALS,
 				],
 			],
 			[
@@ -235,7 +236,7 @@ final class FormatTest extends TestCase
 					'number' => 1.05,
 					'decimals' => 3,
 					'nbsp' => false,
-					'zeroClear' => true,
+					'zeroClear' => ZeroClear::DECIMALS,
 				],
 			],
 			[
@@ -245,7 +246,53 @@ final class FormatTest extends TestCase
 					'decimals' => 3,
 					'mask' => '1 kg',
 					'nbsp' => false,
-					'zeroClear' => true,
+					'zeroClear' => ZeroClear::DECIMALS,
+				],
+			],
+			[
+				'0',
+				[
+					'number' => 0.0,
+					'decimals' => 3,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
+				],
+			],
+			[
+				'1',
+				[
+					'number' => 1.0,
+					'decimals' => 3,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
+				],
+			],
+			[
+				'1,010',
+				[
+					'number' => 1.01,
+					'decimals' => 3,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
+				],
+			],
+			[
+				'1',
+				[
+					'number' => 1.0,
+					'decimals' => 0,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
+				],
+			],
+			[
+				'1,50',
+				[
+					'number' => 1.5,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
+				],
+			],
+			[
+				'1,40',
+				[
+					'number' => 1.4,
+					'zeroClear' => ZeroClear::DECIMALS_EMPTY,
 				],
 			],
 		];
