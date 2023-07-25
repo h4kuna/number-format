@@ -9,7 +9,6 @@ use h4kuna\Number\Utils\Round;
 final class Format
 {
 	/**
-	 * @internal
 	 * @var string utf-8 &nbsp;
 	 */
 	public const NBSP = "\xc2\xa0";
@@ -42,7 +41,7 @@ final class Format
 				$decimals = 0;
 			}
 
-			$formatted = self::number($castNumber, $decimals, $decimalPoint, $thousandsSeparator, $roundCallback);
+			$formatted = self::base($castNumber, $decimals, $decimalPoint, $thousandsSeparator, $roundCallback);
 
 			if ($zeroClear === ZeroClear::DECIMALS && $decimals > 0) {
 				$formatted = self::zeroClear($formatted, $decimalPoint);
@@ -57,7 +56,7 @@ final class Format
 	}
 
 
-	public static function number(
+	public static function base(
 		float $number,
 		int $decimals = 2,
 		string $decimalPoint = ',',

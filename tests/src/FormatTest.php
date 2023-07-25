@@ -87,7 +87,7 @@ final class FormatTest extends TestCase
 	 */
 	public function testNumber(string $expected, array $input): void
 	{
-		Assert::same($expected, Format::number(...$input));
+		Assert::same($expected, Format::base(...$input));
 	}
 
 
