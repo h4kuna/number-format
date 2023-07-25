@@ -9,18 +9,22 @@ use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-$formats = new Formats();
+$formats = new Formats([
+	'EUR' => fn (Formats $formats): NumberFormat => $formats->getDefault()->modify(decimals: 0, unit: '€'),
+	'GBP' => new NumberFormat(nbsp: false, unit: '£', mask: '⎵ 1'),
+]);
 
 $formats->add('CZK', new NumberFormat(decimals: 3, nbsp: false, unit: 'CZK'));
-$formats->add('USD', new NumberFormat(decimals: 2, nbsp: false, unit: '$'));
+$formats->add('USD', fn (Formats $formats): NumberFormat => $formats->getDefault()->modify(unit: '$'));
 $formats->setDefault(new NumberFormat(decimals: 0, nbsp: false));
 
 Assert::exception(function () use ($formats) {
-	$formats->setDefault(new NumberFormat());
+	$formats->setDefault(new NumberFormat(nbsp: false));
 }, InvalidStateException::class);
 
-Assert::same('100 EUR', $formats->get('EUR')->format('100'));
-Assert::same($formats->get('EUR'), $formats->get('EUR'));
-Assert::same('100,00 $', $formats->get('USD')->format('100'));
-Assert::same('100,000 CZK', $formats->get('CZK')->format('100'));
-Assert::same('100 CZK', $formats->get('CZK')->modify(decimals: 0)->format('100'));
+Assert::same('100 UNKNOWN', $formats->get('UNKNOWN')->format(100));
+Assert::same('100 $', $formats->get('USD')->format(100));
+Assert::same('100,000 CZK', $formats->get('CZK')->format(100));
+Assert::same('100 CZK', $formats->get('CZK')->modify(decimals: 0)->format(100));
+Assert::same('5 €', $formats->get('EUR')->format(5));
+Assert::same('£ 5,00', $formats->get('GBP')->format(5));
