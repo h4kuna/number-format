@@ -29,7 +29,7 @@ class NumberFormat
 		null|int|\Closure $round = null,
 	)
 	{
-		$this->roundCallback = self::makeRoundCallback($round);
+		$this->roundCallback = self::makeRoundCallback($round, $this->decimals);
 		$this->initMaskReplaced();
 		$this->initThousandsSeparator();
 	}
@@ -58,7 +58,7 @@ class NumberFormat
 		$that->emptyValue = $emptyValue ?? $that->emptyValue;
 		$that->zeroIsEmpty = $zeroIsEmpty ?? $that->zeroIsEmpty;
 		$that->showUnitIfEmpty = $showUnitIfEmpty ?? $that->showUnitIfEmpty;
-		$that->roundCallback = $round === null ? $that->roundCallback : self::makeRoundCallback($round);
+		$that->roundCallback = $round === null ? $that->roundCallback : self::makeRoundCallback($round, $this->decimals);
 
 		if ($mask !== null || $unit !== null) {
 			$that->mask = $mask ?? $that->mask;
@@ -89,9 +89,11 @@ class NumberFormat
 	}
 
 
-	private static function makeRoundCallback(null|int|\Closure $round): ?\Closure
+	private static function makeRoundCallback(null|int|\Closure $round, int $decimals): ?\Closure
 	{
-		if ($round === null) {
+		if ($decimals < 0 && $round === null) {
+			return Round::create();
+		} elseif ($round === null) {
 			return null;
 		} elseif (is_int($round)) {
 			return Round::create($round);
