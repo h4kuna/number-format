@@ -29,7 +29,7 @@ final class NumberFormatTest extends TestCase
 			],
 			[
 				['decimalPoint' => '.'],
-				self::nbsp('1 000.00'),
+				nbsp('1 000.00'),
 				1000,
 			],
 			[
@@ -54,22 +54,22 @@ final class NumberFormatTest extends TestCase
 			],
 			[
 				['unit' => 'g'],
-				self::nbsp('1 000,00 g'),
+				nbsp('1 000,00 g'),
 				1000,
 			],
 			[
 				['unit' => 'g', 'showUnitIfEmpty' => false],
-				self::nbsp('0,00'),
+				nbsp('0,00'),
 				0,
 			],
 			[
 				['unit' => '$', 'mask' => '⎵1'],
-				self::nbsp('$1 000,00'),
+				nbsp('$1 000,00'),
 				1000,
 			],
 			[
 				['round' => Round::BY_FLOOR],
-				self::nbsp('1,00'),
+				nbsp('1,00'),
 				1.005,
 			],
 			[
@@ -116,12 +116,6 @@ final class NumberFormatTest extends TestCase
 		$nf = new NumberFormat();
 		$numberFormat = $nf->modify(...$parameters);
 		Assert::same($expected, $numberFormat->format($number));
-	}
-
-
-	private static function nbsp(string $value): string
-	{
-		return str_replace(' ', Format::NBSP, $value);
 	}
 
 }

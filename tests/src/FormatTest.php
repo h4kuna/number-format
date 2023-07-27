@@ -126,7 +126,7 @@ final class FormatTest extends TestCase
 				],
 			],
 			[
-				self::nbsp('1 655 kg'),
+				nbsp('1 655 kg'),
 				[
 					'number' => 1655,
 					'mask' => '1 kg',
@@ -143,7 +143,7 @@ final class FormatTest extends TestCase
 				],
 			],
 			[
-				self::nbsp('1 655'),
+				nbsp('1 655'),
 				[
 					'number' => 1655,
 					'decimals' => 0,
@@ -308,11 +308,6 @@ final class FormatTest extends TestCase
 		Assert::same($expected, Format::unit(...$input));
 	}
 
-
-	private static function nbsp(string $value): string
-	{
-		return str_replace(' ', Format::NBSP, $value);
-	}
 }
 
 (new FormatTest())->run();
