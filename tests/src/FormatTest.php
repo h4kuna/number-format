@@ -18,7 +18,7 @@ final class FormatTest extends TestCase
 	/**
 	 * @return array<int, array<mixed>>
 	 */
-	protected function provideNumber(): array
+	protected function provideBase(): array
 	{
 		return [
 			[
@@ -82,7 +82,7 @@ final class FormatTest extends TestCase
 
 
 	/**
-	 * @dataProvider provideNumber
+	 * @dataProvider provideBase
 	 * @param array<float> $input
 	 */
 	public function testNumber(string $expected, array $input): void
