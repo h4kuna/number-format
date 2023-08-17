@@ -10,16 +10,20 @@ use Tester\Assert;
 require_once __DIR__ . '/../../bootstrap.php';
 
 $formats = new Formats([
-	'EUR' => fn (Formats $formats): NumberFormat => $formats->getDefault()->modify(decimals: 0, unit: '€'),
+	'EUR' => fn (Formats $formats): NumberFormat => new NumberFormat(decimals: 0, nbsp: false, unit: '€'),
 	'GBP' => new NumberFormat(nbsp: false, unit: '£', mask: '⎵ 1'),
 ]);
 
 $formats->add('CZK', new NumberFormat(decimals: 3, nbsp: false, unit: 'CZK'));
-$formats->add('USD', fn (Formats $formats): NumberFormat => $formats->getDefault()->modify(unit: '$'));
-$formats->setDefault(new NumberFormat(decimals: 0, nbsp: false));
+$formats->add('USD', fn (Formats $formats): NumberFormat => $formats->getDefault()(['unit' => '$']));
+$formats->setDefault(static function (array $options, ?Formats $formats = null, ?string $key = null){
+	$options['nbsp'] = $options['nbsp'] ?? false;
+	$options['decimals'] = $options['decimals'] ?? 0;
+	return new NumberFormat(...$options);
+});
 
 Assert::exception(function () use ($formats) {
-	$formats->setDefault(new NumberFormat(nbsp: false));
+	$formats->setDefault(fn () => new NumberFormat(nbsp: false));
 }, InvalidStateException::class);
 
 Assert::same('100 UNKNOWN', $formats->get('UNKNOWN')->format(100));

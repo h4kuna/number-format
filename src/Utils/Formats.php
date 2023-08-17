@@ -2,12 +2,14 @@
 
 namespace h4kuna\Number\Utils;
 
+use Closure;
 use h4kuna\Number\Exceptions\InvalidStateException;
 use h4kuna\Number\NumberFormat;
 
 class Formats
 {
-	private ?NumberFormat $default = null;
+	/** @var null|Closure(array<string, mixed>, ?self, ?string): NumberFormat */
+	private ?Closure $default = null;
 
 	/**
 	 * @var array<string, NumberFormat>
@@ -16,7 +18,7 @@ class Formats
 
 
 	/**
-	 * @param array<string, NumberFormat|\Closure(self): NumberFormat> $factories
+	 * @param array<string, NumberFormat|Closure(self): NumberFormat> $factories
 	 */
 	public function __construct(
 		private array $factories = [],
@@ -25,7 +27,7 @@ class Formats
 	}
 
 
-	public function setDefault(NumberFormat $setup): void
+	public function setDefault(Closure $setup): void
 	{
 		if ($this->default !== null) {
 			throw new InvalidStateException('Default format could be setup only onetime.');
@@ -35,9 +37,9 @@ class Formats
 	}
 
 
-	public function add(string $key, NumberFormat|\Closure $setup): void
+	public function add(string $key, NumberFormat|Closure $setup): void
 	{
-		if ($setup instanceof \Closure) {
+		if ($setup instanceof Closure) {
 			$this->factories[$key] = $setup;
 		} else {
 			$this->formats[$key] = $setup;
@@ -56,9 +58,9 @@ class Formats
 		if (isset($this->formats[$key]) === false) {
 			if (isset($this->factories[$key])) {
 				$service = $this->factories[$key];
-				$format = $service instanceof \Closure ? $service($this) : $service;
+				$format = $service instanceof Closure ? $service($this) : $service;
 			} else {
-				$format = $this->getDefault()->modify(unit: $key);
+				$format = $this->getDefault()(['unit' => $key], $this, $key);
 			}
 			$this->formats[$key] = $format;
 			unset($this->factories[$key]);
@@ -68,10 +70,12 @@ class Formats
 	}
 
 
-	public function getDefault(): NumberFormat
+	public function getDefault(): Closure
 	{
 		if ($this->default === null) {
-			$this->default = new NumberFormat();
+			$this->default = static function(array $options = [], ?self $that = null, ?string $key = null): NumberFormat {
+				return new NumberFormat(...$options);
+			};
 		}
 
 		return $this->default;

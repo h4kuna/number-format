@@ -9,5 +9,4 @@ function nbsp(string $value): string
 	return str_replace(' ', Format::NBSP, $value);
 }
 
-
 Tester\Environment::setup();
