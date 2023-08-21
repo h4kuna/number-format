@@ -7,7 +7,10 @@ use h4kuna\Number\Utils\Round;
 
 class NumberFormat
 {
-	private ?\Closure $roundCallback;
+	/**
+	 * @var callable(float, int): float|null
+	 */
+	private $roundCallback;
 
 	private string $maskReplaced = '';
 
@@ -26,7 +29,7 @@ class NumberFormat
 		private string $unit = '',
 		private bool $showUnitIfEmpty = true,
 		private string $mask = '1 ⎵',
-		null|int|\Closure $round = null,
+		null|int|callable $round = null,
 	)
 	{
 		$this->roundCallback = self::makeRoundCallback($round, $this->decimals);
@@ -46,7 +49,7 @@ class NumberFormat
 		?string $unit = null,
 		?bool $showUnitIfEmpty = null,
 		?string $mask = null,
-		null|int|\Closure $round = null,
+		null|int|callable $round = null,
 	): self
 	{
 		$that = clone $this;
@@ -89,7 +92,7 @@ class NumberFormat
 	}
 
 
-	private static function makeRoundCallback(null|int|\Closure $round, int $decimals): ?\Closure
+	private static function makeRoundCallback(null|int|callable $round, int $decimals): ?callable
 	{
 		if ($decimals < 0 && $round === null) {
 			return Round::create();

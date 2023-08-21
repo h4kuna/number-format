@@ -2,7 +2,6 @@
 
 namespace h4kuna\Number;
 
-use Closure;
 use h4kuna\Number\Parameters\Format\ZeroClear;
 use h4kuna\Number\Utils\Round;
 
@@ -16,6 +15,9 @@ final class Format
 	public const AS_NULL = "\x00";
 
 
+	/**
+	 * @param callable(float, int): float|null $roundCallback
+	 */
 	public static function unit(
 		string|int|float|null $number,
 		int $decimals = 2,
@@ -27,7 +29,7 @@ final class Format
 		int $zeroClear = ZeroClear::NO,
 		string $mask = '',
 		bool $showUnitIfEmpty = true,
-		?Closure $roundCallback = null
+		?callable $roundCallback = null
 	): string
 	{
 		$isNumeric = is_numeric($number);
@@ -56,12 +58,15 @@ final class Format
 	}
 
 
+	/**
+	 * @param callable(float, int): float|null $roundCallback
+	 */
 	public static function base(
 		float $number,
 		int $decimals = 2,
 		string $decimalPoint = ',',
 		string $thousandsSeparator = ' ',
-		?Closure $roundCallback = null
+		?callable $roundCallback = null
 	): string
 	{
 		$round = $decimals;
