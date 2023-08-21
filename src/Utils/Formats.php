@@ -2,14 +2,13 @@
 
 namespace h4kuna\Number\Utils;
 
-use Closure;
 use h4kuna\Number\Exceptions\InvalidStateException;
 use h4kuna\Number\NumberFormat;
 
 class Formats
 {
-	/** @var null|Closure(array<string, mixed>, ?self, ?string): NumberFormat */
-	private ?Closure $default = null;
+	/** @var null|callable(array<string, mixed>, ?self, ?string): NumberFormat */
+	private $default = null;
 
 	/**
 	 * @var array<string, NumberFormat>
@@ -18,7 +17,7 @@ class Formats
 
 
 	/**
-	 * @param array<string, NumberFormat|Closure(self): NumberFormat> $factories
+	 * @param array<string, NumberFormat|callable(self): NumberFormat> $factories
 	 */
 	public function __construct(
 		private array $factories = [],
@@ -27,22 +26,24 @@ class Formats
 	}
 
 
-	public function setDefault(Closure $setup): void
+	public function setDefault(callable|NumberFormat $default): void
 	{
 		if ($this->default !== null) {
 			throw new InvalidStateException('Default format could be setup only onetime.');
+		} elseif ($default instanceof NumberFormat) {
+			$default = static fn (array $options): NumberFormat => $default->modify(...$options);
 		}
 
-		$this->default = $setup;
+		$this->default = $default;
 	}
 
 
-	public function add(string $key, NumberFormat|Closure $setup): void
+	public function add(string $key, callable|NumberFormat $setup): void
 	{
-		if ($setup instanceof Closure) {
-			$this->factories[$key] = $setup;
-		} else {
+		if ($setup instanceof NumberFormat) {
 			$this->formats[$key] = $setup;
+		} else {
+			$this->factories[$key] = $setup;
 		}
 	}
 
@@ -58,7 +59,7 @@ class Formats
 		if (isset($this->formats[$key]) === false) {
 			if (isset($this->factories[$key])) {
 				$service = $this->factories[$key];
-				$format = $service instanceof Closure ? $service($this) : $service;
+				$format = is_callable($service) ? $service($this) : $service;
 			} else {
 				$format = $this->getDefault()(['unit' => $key], $this, $key);
 			}
@@ -70,10 +71,14 @@ class Formats
 	}
 
 
-	public function getDefault(): Closure
+	public function getDefault(): callable
 	{
 		if ($this->default === null) {
-			$this->default = static function(array $options = [], ?self $that = null, ?string $key = null): NumberFormat {
+			$this->default = static function (
+				array $options = [],
+				?self $that = null,
+				?string $key = null
+			): NumberFormat {
 				return new NumberFormat(...$options);
 			};
 		}
