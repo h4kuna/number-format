@@ -10,7 +10,7 @@ class NumberFormat
 	/**
 	 * @var callable(float, int): float|null
 	 */
-	private $roundCallback;
+	public /* readonly */ $roundCallback;
 
 	private string $maskReplaced = '';
 
@@ -19,16 +19,16 @@ class NumberFormat
 	 * @param string $mask - Mask must contains number 1 and character ⎵ for dynamic unit.
 	 */
 	public function __construct(
-		private int $decimals = 2,
-		private string $decimalPoint = ',',
-		private string $thousandsSeparator = ' ',
-		private bool $nbsp = true,
-		private int $zeroClear = ZeroClear::NO,
-		private string $emptyValue = Format::AS_NULL,
-		private bool $zeroIsEmpty = false,
-		private string $unit = '',
-		private bool $showUnitIfEmpty = true,
-		private string $mask = '1 ⎵',
+		public /* readonly */ int $decimals = 2,
+		public /* readonly */ string $decimalPoint = ',',
+		public /* readonly */ string $thousandsSeparator = ' ',
+		public /* readonly */ bool $nbsp = true,
+		public /* readonly */ int $zeroClear = ZeroClear::NO,
+		public /* readonly */ string $emptyValue = Format::AS_NULL,
+		public /* readonly */ bool $zeroIsEmpty = false,
+		public /* readonly */ string $unit = '',
+		public /* readonly */ bool $showUnitIfEmpty = true,
+		public /* readonly */ string $mask = '1 ⎵',
 		null|int|callable $round = null,
 	)
 	{
