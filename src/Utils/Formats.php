@@ -5,9 +5,14 @@ namespace h4kuna\Number\Utils;
 use h4kuna\Number\Exceptions\InvalidStateException;
 use h4kuna\Number\NumberFormat;
 
+/**
+ * @phpstan-type constructorNumberFormat array{decimals?: int, decimalPoint?: string, thousandsSeparator?: string, nbsp?: bool, zeroClear?: int, emptyValue?: string, zeroIsEmpty?: bool, unit?: string, showUnitIfEmpty?: bool, mask?: string}
+ * @phpstan-type formatCallback callable(static $self): NumberFormat
+ * @phpstan-type defaultCallback callable(constructorNumberFormat $options, static $self, string $key): NumberFormat
+ */
 class Formats
 {
-	/** @var null|callable(array<string, mixed>, ?self, ?string): NumberFormat */
+	/** @var null|defaultCallback */
 	private $default = null;
 
 	/**
@@ -17,7 +22,7 @@ class Formats
 
 
 	/**
-	 * @param array<string, NumberFormat|callable(self): NumberFormat> $factories
+	 * @param array<string, formatCallback|NumberFormat> $factories
 	 */
 	public function __construct(
 		private array $factories = [],
@@ -26,6 +31,9 @@ class Formats
 	}
 
 
+	/**
+	 * @param defaultCallback|NumberFormat $default
+	 */
 	public function setDefault(callable|NumberFormat $default): void
 	{
 		if ($this->default !== null) {
@@ -38,6 +46,9 @@ class Formats
 	}
 
 
+	/**
+	 * @param formatCallback|NumberFormat $setup
+	 */
 	public function add(string $key, callable|NumberFormat $setup): void
 	{
 		if ($setup instanceof NumberFormat) {
@@ -71,16 +82,13 @@ class Formats
 	}
 
 
+	/**
+	 * @return defaultCallback
+	 */
 	public function getDefault(): callable
 	{
 		if ($this->default === null) {
-			$this->default = static function (
-				array $options = [],
-				?self $that = null,
-				?string $key = null
-			): NumberFormat {
-				return new NumberFormat(...$options);
-			};
+			$this->default = static fn (array $options): NumberFormat => new NumberFormat(...$options);
 		}
 
 		return $this->default;

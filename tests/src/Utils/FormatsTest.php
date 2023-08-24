@@ -15,8 +15,9 @@ $formats = new Formats([
 ]);
 
 $formats->add('CZK', new NumberFormat(decimals: 3, nbsp: false, unit: 'CZK'));
-$formats->add('USD', fn (Formats $formats): NumberFormat => $formats->getDefault()(['unit' => '$']));
-$formats->setDefault(static function (array $options, ?Formats $formats = null, ?string $key = null){
+$formats->add('USD', static fn (Formats $formats
+): NumberFormat => $formats->getDefault()(['unit' => '$'], $formats, 'USD'));
+$formats->setDefault(static function (array $options) {
 	$options['nbsp'] = $options['nbsp'] ?? false;
 	$options['decimals'] = $options['decimals'] ?? 0;
 	return new NumberFormat(...$options);
