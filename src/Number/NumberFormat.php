@@ -1,19 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Format\Number;
 
-use h4kuna\Number\Parameters\Format\ZeroClear;
-use h4kuna\Number\Utils\Round;
+use h4kuna\Format\Number\Parameters\ZeroClear;
+use h4kuna\Format\Utils\Space;
 
-final class Format
+final class NumberFormat
 {
-	/**
-	 * @var string utf-8 &nbsp;
-	 */
-	public const NBSP = "\xc2\xa0";
-
-	public const AS_NULL = "\x00";
-
 
 	/**
 	 * @param callable(float, int): float|null $roundCallback
@@ -24,7 +17,7 @@ final class Format
 		string $decimalPoint = ',',
 		string $thousandsSeparator = ' ',
 		bool $nbsp = true,
-		string $emptyValue = self::AS_NULL, // must be a string, for immutable behavior of NumberFormat
+		string $emptyValue = Space::AS_NULL, // must be a string, for immutable behavior of NumberFormat
 		bool $zeroIsEmpty = false,
 		int $zeroClear = ZeroClear::NO,
 		string $mask = '',
@@ -37,7 +30,7 @@ final class Format
 		$isZero = $castNumber === 0.0;
 
 		if ($isZero && ($isNumeric === false || $zeroIsEmpty === true)) {
-			$formatted = $emptyValue === self::AS_NULL ? '' : $emptyValue;
+			$formatted = $emptyValue === Space::AS_NULL ? '' : $emptyValue;
 		} else {
 			if ($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && ((int) $castNumber) == $castNumber) {
 				$decimals = 0;
@@ -93,12 +86,12 @@ final class Format
 	{
 		if ($mask === '') {
 			return $nbsp === true ?
-				str_replace(' ', self::NBSP, $formattedNumber) :
+				Space::nbsp($formattedNumber) :
 				$formattedNumber;
 		}
 
 		return $nbsp === true ?
-			str_replace(['1', ' '], [$formattedNumber, self::NBSP], $mask) :
+			str_replace(['1', ' '], [$formattedNumber, Space::NBSP], $mask) :
 			str_replace('1', $formattedNumber, $mask);
 	}
 

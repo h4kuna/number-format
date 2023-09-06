@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Tests\Units;
+namespace h4kuna\Format\Tests\Units;
 
-use h4kuna\Number\Units\Byte;
+use h4kuna\Format\Number\Units\Byte;
 use Tester\Assert;
 
-require __DIR__ . '/../../bootstrap.php';
+require __DIR__ . '/../../../bootstrap.php';
 
 $byte = new Byte();
 Assert::equal(1.0, $byte->convert(1024)->value);

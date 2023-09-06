@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Utils;
+namespace h4kuna\Format\Number;
 
 use Closure;
 
@@ -29,19 +29,19 @@ final class Round
 	}
 
 
-	private static function floor(float $number, int $precision): float
-	{
-		$move = 10 ** $precision;
-
-		return floor($number * $move) / $move;
-	}
-
-
 	private static function ceil(float $number, int $precision): float
 	{
 		$move = 10 ** $precision;
 
 		return ceil($number * $move) / $move;
+	}
+
+
+	private static function floor(float $number, int $precision): float
+	{
+		$move = 10 ** $precision;
+
+		return floor($number * $move) / $move;
 	}
 
 

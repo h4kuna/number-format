@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Parameters\Format;
+namespace h4kuna\Format\Number\Parameters;
 
 final class ZeroClear
 {

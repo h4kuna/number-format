@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Tests;
+namespace h4kuna\Format\Tests\Number;
 
-use h4kuna\Number\Percent;
-use h4kuna\Number\Tests\TestCase;
+use h4kuna\Format\Number\Percent;
+use h4kuna\Format\Tests\TestCase;
 use Tester\Assert;
 
-require_once __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../../bootstrap.php';
 
 /**
  * @testCase

@@ -3,8 +3,6 @@ parameters:
 	paths:
 		- src
 		- tests/src
-	scanFiles:
-		- tests/bootstrap.php
 
 includes:
 	- vendor/phpstan/phpstan-strict-rules/rules.neon

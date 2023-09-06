@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Units;
+namespace h4kuna\Format\Number\Units;
 
 class Byte extends Unit
 {

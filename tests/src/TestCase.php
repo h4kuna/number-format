@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Tests;
+namespace h4kuna\Format\Tests;
 
 use Tester;
 use function defined;

@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Exceptions;
+namespace h4kuna\Format\Exceptions;
 
-final class InvalidStateException extends \RuntimeException
+use RuntimeException;
+
+final class InvalidStateException extends RuntimeException
 {
 
 }

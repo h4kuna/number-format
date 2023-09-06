@@ -1,16 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Format\Number\Formatters;
 
-use h4kuna\Number\Parameters\Format\ZeroClear;
-use h4kuna\Number\Utils\Round;
+use h4kuna\Format\Number\Formatter;
+use h4kuna\Format\Number\NumberFormat;
+use h4kuna\Format\Number\Parameters\ZeroClear;
+use h4kuna\Format\Number\Round;
+use h4kuna\Format\Utils\Space;
 
-class NumberFormat
+class NumberFormatter implements Formatter
 {
 	/**
 	 * @var callable(float, int): float|null
 	 */
-	public /* readonly */ $roundCallback;
+	public /* readonly */
+		$roundCallback;
 
 	private string $maskReplaced = '';
 
@@ -24,7 +28,7 @@ class NumberFormat
 		public /* readonly */ string $thousandsSeparator = ' ',
 		public /* readonly */ bool $nbsp = true,
 		public /* readonly */ int $zeroClear = ZeroClear::NO,
-		public /* readonly */ string $emptyValue = Format::AS_NULL,
+		public /* readonly */ string $emptyValue = Space::AS_NULL,
 		public /* readonly */ bool $zeroIsEmpty = false,
 		public /* readonly */ string $unit = '',
 		public /* readonly */ bool $showUnitIfEmpty = true,
@@ -35,6 +39,45 @@ class NumberFormat
 		$this->roundCallback = self::makeRoundCallback($round, $this->decimals);
 		$this->initMaskReplaced();
 		$this->initThousandsSeparator();
+	}
+
+
+	private static function makeRoundCallback(null|int|callable $round, int $decimals): ?callable
+	{
+		if ($decimals < 0 && $round === null) {
+			return Round::create();
+		} elseif ($round === null) {
+			return null;
+		} elseif (is_int($round)) {
+			return Round::create($round);
+		}
+
+		return $round;
+	}
+
+
+	private function initMaskReplaced(): void
+	{
+		if ($this->unit !== '' && $this->mask !== '') {
+			$replace = ['⎵' => $this->unit];
+			if ($this->nbsp) {
+				$replace[' '] = Space::NBSP;
+			}
+
+			$this->maskReplaced = strtr($this->mask, $replace);
+		} else {
+			$this->maskReplaced = '';
+		}
+	}
+
+
+	private function initThousandsSeparator(): void
+	{
+		if ($this->nbsp && str_contains($this->thousandsSeparator, ' ')) {
+			$this->thousandsSeparator = Space::nbsp($this->thousandsSeparator);
+		} elseif ($this->nbsp === false && str_contains($this->thousandsSeparator, Space::NBSP)) {
+			$this->thousandsSeparator = Space::white($this->thousandsSeparator);
+		}
 	}
 
 
@@ -76,7 +119,7 @@ class NumberFormat
 
 	public function format(string|int|float|null $number): string
 	{
-		return Format::unit(
+		return NumberFormat::unit(
 			$number,
 			$this->decimals,
 			$this->decimalPoint,
@@ -89,45 +132,6 @@ class NumberFormat
 			$this->showUnitIfEmpty,
 			$this->roundCallback,
 		);
-	}
-
-
-	private static function makeRoundCallback(null|int|callable $round, int $decimals): ?callable
-	{
-		if ($decimals < 0 && $round === null) {
-			return Round::create();
-		} elseif ($round === null) {
-			return null;
-		} elseif (is_int($round)) {
-			return Round::create($round);
-		}
-
-		return $round;
-	}
-
-
-	private function initMaskReplaced(): void
-	{
-		if ($this->unit !== '' && $this->mask !== '') {
-			$replace = ['⎵' => $this->unit];
-			if ($this->nbsp) {
-				$replace[' '] = Format::NBSP;
-			}
-
-			$this->maskReplaced = strtr($this->mask, $replace);
-		} else {
-			$this->maskReplaced = '';
-		}
-	}
-
-
-	private function initThousandsSeparator(): void
-	{
-		if ($this->nbsp && str_contains($this->thousandsSeparator, ' ')) {
-			$this->thousandsSeparator = strtr($this->thousandsSeparator, [' ' => Format::NBSP]);
-		} elseif ($this->nbsp === false && str_contains($this->thousandsSeparator, Format::NBSP)) {
-			$this->thousandsSeparator = strtr($this->thousandsSeparator, [Format::NBSP => ' ']);
-		}
 	}
 
 }
