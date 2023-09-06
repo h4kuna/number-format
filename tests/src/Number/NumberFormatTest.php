@@ -1,96 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Tests;
+namespace h4kuna\Format\Tests\Number;
 
-use h4kuna\Number\Format;
-use h4kuna\Number\Parameters\Format\ZeroClear;
-use h4kuna\Number\Utils\Round;
+use h4kuna\Format\Number\NumberFormat;
+use h4kuna\Format\Number\Parameters\ZeroClear;
+use h4kuna\Format\Number\Round;
+use h4kuna\Format\Utils\Space;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../../bootstrap.php';
 
 /**
  * @testCase
  */
-final class FormatTest extends TestCase
+final class NumberFormatTest extends TestCase
 {
-	/**
-	 * @return array<int, array<mixed>>
-	 */
-	protected function provideBase(): array
-	{
-		return [
-			[
-				'0,00',
-				[0],
-			],
-			[
-				'0,0',
-				[0, 1],
-			],
-			[
-				'0.0',
-				[0, 1, '.'],
-			],
-			[
-				'1,000.0',
-				[1000, 1, '.', ','],
-			],
-			[
-				'1 230',
-				[1234, -1],
-			],
-			[
-				'1 240',
-				[1234, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
-			],
-			[
-				'1 230',
-				[1234, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
-			],
-			[
-				'1 240',
-				[1235, -1],
-			],
-			[
-				'1 240',
-				[1235, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
-			],
-			[
-				'1 230',
-				[1235, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
-			],
-			[
-				'0,568',
-				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
-			],
-			[
-				'0,567',
-				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
-			],
-			[
-				'0,568',
-				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
-			],
-			[
-				'0,567',
-				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
-			],
-		];
-	}
-
-
-	/**
-	 * @dataProvider provideBase
-	 * @param array<float> $input
-	 */
-	public function testNumber(string $expected, array $input): void
-	{
-		Assert::same($expected, Format::base(...$input));
-	}
-
-
 	/**
 	 * @return array<int, array<int, array<int|string, bool|float|int|string|null>|string>>
 	 */
@@ -126,7 +51,7 @@ final class FormatTest extends TestCase
 				],
 			],
 			[
-				nbsp('1 655 kg'),
+				Space::nbsp('1 655 kg'),
 				[
 					'number' => 1655,
 					'mask' => '1 kg',
@@ -143,7 +68,7 @@ final class FormatTest extends TestCase
 				],
 			],
 			[
-				nbsp('1 655'),
+				Space::nbsp('1 655'),
 				[
 					'number' => 1655,
 					'decimals' => 0,
@@ -300,14 +225,90 @@ final class FormatTest extends TestCase
 
 
 	/**
+	 * @dataProvider provideBase
+	 * @param array<float> $input
+	 */
+	public function testNumber(string $expected, array $input): void
+	{
+		Assert::same($expected, NumberFormat::base(...$input));
+	}
+
+
+	/**
 	 * @dataProvider provideUnit
 	 * @param array<float|int|string|null> $input
 	 */
 	public function testUnit(string $expected, array $input): void
 	{
-		Assert::same($expected, Format::unit(...$input));
+		Assert::same($expected, NumberFormat::unit(...$input));
+	}
+
+
+	/**
+	 * @return array<int, array<mixed>>
+	 */
+	protected function provideBase(): array
+	{
+		return [
+			[
+				'0,00',
+				[0],
+			],
+			[
+				'0,0',
+				[0, 1],
+			],
+			[
+				'0.0',
+				[0, 1, '.'],
+			],
+			[
+				'1,000.0',
+				[1000, 1, '.', ','],
+			],
+			[
+				'1 230',
+				[1234, -1],
+			],
+			[
+				'1 240',
+				[1234, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
+			],
+			[
+				'1 230',
+				[1234, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+			],
+			[
+				'1 240',
+				[1235, -1],
+			],
+			[
+				'1 240',
+				[1235, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
+			],
+			[
+				'1 230',
+				[1235, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+			],
+			[
+				'0,568',
+				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
+			],
+			[
+				'0,567',
+				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+			],
+			[
+				'0,568',
+				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
+			],
+			[
+				'0,567',
+				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+			],
+		];
 	}
 
 }
 
-(new FormatTest())->run();
+(new NumberFormatTest())->run();

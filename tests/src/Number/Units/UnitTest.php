@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Tests\Units;
+namespace h4kuna\Format\Tests\Number\Units;
 
-use h4kuna\Number;
-use h4kuna\Number\Tests\TestCase;
+use h4kuna\Format;
+use h4kuna\Format\Tests\TestCase;
 use Tester\Assert;
 
-require __DIR__ . '/../../bootstrap.php';
+require __DIR__ . '/../../../bootstrap.php';
 
 /**
  * @testCase
@@ -16,7 +16,7 @@ final class UnitTest extends TestCase
 
 	public function testConvert(): void
 	{
-		$unit = new Number\Units\Unit();
+		$unit = new Format\Number\Units\Unit();
 		$unitValue = $unit->convert(1.0, $unit::BASE);
 		Assert::same(1.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
@@ -36,9 +36,34 @@ final class UnitTest extends TestCase
 	}
 
 
+	public function testGetter(): void
+	{
+		$unit = new Format\Number\Units\Unit();
+		$data = $unit->getUnits();
+		Assert::same($unit::UNITS, $unit->getUnits());
+		Assert::same($unit::BASE, $unit->getFrom());
+	}
+
+
+	public function testNotAllowedUnit(): void
+	{
+		$unit = new Format\Number\Units\Unit();
+		Assert::exception(fn () => $unit->convert(0, 'foo'), Format\Exceptions\InvalidArgumentException::class);
+
+		Assert::exception(fn (
+		) => new Format\Number\Units\Unit('foo'), Format\Exceptions\InvalidArgumentException::class);
+		$unit = new Format\Number\Units\Unit();
+
+		Assert::exception(fn (
+		) => $unit->convertFrom(0, null, 'foo'), Format\Exceptions\InvalidArgumentException::class);
+
+		Assert::exception(fn () => $unit->convertFrom(0, 'foo'), Format\Exceptions\InvalidArgumentException::class);
+	}
+
+
 	public function testDiffBase(): void
 	{
-		$unit = new Number\Units\Unit(Number\Units\Unit::KILO);
+		$unit = new Format\Number\Units\Unit(Format\Number\Units\Unit::KILO);
 		$unitValue = $unit->convert(1, $unit::KILO);
 		Assert::same(1.0, $unitValue->value);
 		Assert::same($unit::KILO, $unitValue->unit);
@@ -50,12 +75,13 @@ final class UnitTest extends TestCase
 		$unitValue = $unit->convert(1, $unit::MEGA);
 		Assert::same(0.001, $unitValue->value);
 		Assert::same($unit::MEGA, $unitValue->unit);
+		Assert::same('0.001 M', (string) $unitValue);
 	}
 
 
 	public function testConvertAuto(): void
 	{
-		$unit = new Number\Units\Unit();
+		$unit = new Format\Number\Units\Unit();
 		$unitValue = $unit->convert(10.0);
 		Assert::same(10.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
@@ -76,7 +102,7 @@ final class UnitTest extends TestCase
 
 	public function testFromString(): void
 	{
-		$unit = new Number\Units\Unit();
+		$unit = new Format\Number\Units\Unit();
 		$unitValue = $unit->fromString('128M');
 		Assert::same(128000000.0, $unitValue->value);
 		Assert::same($unit::BASE, $unitValue->unit);
@@ -110,11 +136,11 @@ final class UnitTest extends TestCase
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('M');
-		}, Number\Exceptions\InvalidArgumentException::class);
+		}, Format\Exceptions\InvalidArgumentException::class);
 
 		Assert::exception(function () use ($unit) {
 			$unit->fromString('128');
-		}, Number\Exceptions\InvalidArgumentException::class);
+		}, Format\Exceptions\InvalidArgumentException::class);
 	}
 
 }

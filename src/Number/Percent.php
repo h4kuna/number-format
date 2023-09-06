@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number;
+namespace h4kuna\Format\Number;
 
 final class Percent
 {

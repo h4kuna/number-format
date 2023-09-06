@@ -1,14 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Utils;
+namespace h4kuna\Format\Utils;
 
-use h4kuna\Number\Exceptions\InvalidStateException;
-use h4kuna\Number\NumberFormat;
+use h4kuna\Format\Exceptions\InvalidStateException;
 
 /**
- * @phpstan-type constructorNumberFormat array{decimals?: int, decimalPoint?: string, thousandsSeparator?: string, nbsp?: bool, zeroClear?: int, emptyValue?: string, zeroIsEmpty?: bool, unit?: string, showUnitIfEmpty?: bool, mask?: string}
- * @phpstan-type formatCallback callable(static $self): NumberFormat
- * @phpstan-type defaultCallback callable(constructorNumberFormat $options, static $self, string $key): NumberFormat
+ * @template T
+ * @phpstan-type formatCallback callable(static $self): T
+ * @phpstan-type defaultCallback callable(string|int $key, static $self, mixed $options): T
  */
 class Formats
 {
@@ -16,13 +15,13 @@ class Formats
 	private $default = null;
 
 	/**
-	 * @var array<string, NumberFormat>
+	 * @var array<string|int, T>
 	 */
 	private array $formats = [];
 
 
 	/**
-	 * @param array<string, formatCallback|NumberFormat> $factories
+	 * @param array<string|int, formatCallback|T> $factories
 	 */
 	public function __construct(
 		private array $factories = [],
@@ -32,47 +31,36 @@ class Formats
 
 
 	/**
-	 * @param defaultCallback|NumberFormat $default
+	 * @param formatCallback|T $setup
 	 */
-	public function setDefault(callable|NumberFormat $default): void
+	public function add(string|int $key, $setup): void
 	{
-		if ($this->default !== null) {
-			throw new InvalidStateException('Default format could be setup only onetime.');
-		} elseif ($default instanceof NumberFormat) {
-			$default = static fn (array $options): NumberFormat => $default->modify(...$options);
-		}
-
-		$this->default = $default;
-	}
-
-
-	/**
-	 * @param formatCallback|NumberFormat $setup
-	 */
-	public function add(string $key, callable|NumberFormat $setup): void
-	{
-		if ($setup instanceof NumberFormat) {
-			$this->formats[$key] = $setup;
-		} else {
+		if (is_callable($setup)) {
 			$this->factories[$key] = $setup;
+			unset($this->formats[$key]);
+		} else {
+			$this->formats[$key] = $setup;
 		}
 	}
 
 
-	public function has(string $key): bool
+	public function has(string|int $key): bool
 	{
 		return isset($this->formats[$key]) || isset($this->factories[$key]);
 	}
 
 
-	public function get(string $key): NumberFormat
+	/**
+	 * @return T
+	 */
+	public function get(string|int $key)
 	{
 		if (isset($this->formats[$key]) === false) {
 			if (isset($this->factories[$key])) {
 				$service = $this->factories[$key];
 				$format = is_callable($service) ? $service($this) : $service;
 			} else {
-				$format = $this->getDefault()(['unit' => $key], $this, $key);
+				$format = $this->getDefault()($key, $this, null);
 			}
 			$this->formats[$key] = $format;
 			unset($this->factories[$key]);
@@ -88,10 +76,35 @@ class Formats
 	public function getDefault(): callable
 	{
 		if ($this->default === null) {
-			$this->default = static fn (array $options): NumberFormat => new NumberFormat(...$options);
+			$this->default = $this->createDefaultCallback();
 		}
 
 		return $this->default;
+	}
+
+
+	/**
+	 * @param defaultCallback|T $default
+	 */
+	public function setDefault($default): void
+	{
+		if ($this->default !== null) {
+			throw new InvalidStateException('Default format could be setup only onetime.');
+		} elseif (is_callable($default) === false) {
+			$default = $this->createDefaultCallback($default);
+		}
+
+		$this->default = $default;
+	}
+
+
+	/**
+	 * @param T|null $object
+	 * @return defaultCallback
+	 */
+	protected function createDefaultCallback($object = null): callable
+	{
+		throw new InvalidStateException('Default format is not setup.');
 	}
 
 }

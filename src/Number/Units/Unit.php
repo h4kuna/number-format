@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace h4kuna\Number\Units;
+namespace h4kuna\Format\Number\Units;
 
-use h4kuna\Number;
-use h4kuna\Number\Utils;
+use h4kuna\Format;
 
 class Unit
 {
@@ -37,21 +36,27 @@ class Unit
 
 	/**
 	 * These values must be sort ascending! See self::UNITS
-	 * @var array<string,int>
+	 * @var non-empty-array<string,int>
 	 */
 	protected array $allowedUnits;
-
-	private string $from;
 
 
 	/**
 	 * @param array<string, int> $allowedUnits
 	 */
-	public function __construct(string $from = self::BASE, array $allowedUnits = null)
+	public function __construct(private string $from = self::BASE, array $allowedUnits = [])
 	{
-		$this->from = $from;
-		if ($allowedUnits === null) {
+		if ($allowedUnits === []) {
 			$this->allowedUnits = static::UNITS;
+		}
+		$this->checkUnit($this->from);
+	}
+
+
+	private function checkUnit(string $unit): void
+	{
+		if (!isset($this->allowedUnits[$unit])) {
+			throw new Format\Exceptions\InvalidArgumentException(sprintf('Unit: "%s let\'s set own.', $unit));
 		}
 	}
 
@@ -71,7 +76,7 @@ class Unit
 	}
 
 
-	public function convert(float $number, ?string $unitTo = null): Utils\UnitValue
+	public function convert(float $number, ?string $unitTo = null): Format\Number\UnitValue
 	{
 		return $this->convertFrom($number, null, $unitTo);
 	}
@@ -81,7 +86,7 @@ class Unit
 	 * @param string|null $unitFrom - NULL mean defined in constructor
 	 * @param string|null $unitTo - NULL mean automatic
 	 */
-	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): Utils\UnitValue
+	public function convertFrom(float $number, ?string $unitFrom, ?string $unitTo = null): Format\Number\UnitValue
 	{
 		if ($unitFrom === null) {
 			$unitFrom = $this->from;
@@ -106,28 +111,15 @@ class Unit
 	}
 
 
-	public function fromString(string $value, string $unitTo = self::BASE): Utils\UnitValue
-	{
-		$result = preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find);
-		if ($result === false || isset($find['number']) === false || $find['number'] === '') {
-			throw new Number\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
-		}
-		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
-	}
-
-
 	protected function convertUnit(float $number, int $indexFrom, int $indexTo): float
 	{
 		return $number * pow(10, $indexFrom - $indexTo);
 	}
 
 
-	private function autoConvert(float $number, string $unitFrom): Utils\UnitValue
+	private function autoConvert(float $number, string $unitFrom): Format\Number\UnitValue
 	{
 		$result = [];
-		if ($this->allowedUnits === []) {
-			throw new Number\Exceptions\InvalidArgumentException('Allowed units must exists.');
-		}
 		foreach ($this->allowedUnits as $unit => $index) {
 			if ($this->allowedUnits[$unitFrom] === $index) {
 				$temp = $number;
@@ -147,20 +139,22 @@ class Unit
 	}
 
 
-	private function checkUnit(string $unit): void
+	private static function createUnitValue(float $value, string $unit): Format\Number\UnitValue
 	{
-		if (!isset($this->allowedUnits[$unit])) {
-			throw new Number\Exceptions\InvalidArgumentException(sprintf('Unit: "%s let\'s set own.', $unit));
-		}
+		return new Format\Number\UnitValue(
+			$value,
+			$unit
+		);
 	}
 
 
-	public static function createUnitValue(float $value, string $unit): Utils\UnitValue
+	public function fromString(string $value, string $unitTo = self::BASE): Format\Number\UnitValue
 	{
-		return new Utils\UnitValue(
-			 $value,
-			 $unit
-		);
+		$result = preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find);
+		if ($result === false || isset($find['number']) === false || $find['number'] === '') {
+			throw new Format\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
+		}
+		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
 	}
 
 

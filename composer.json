@@ -15,6 +15,7 @@
     "php": ">=8.0"
   },
   "require-dev": {
+    "ext-intl": "*",
     "nette/utils": "^3.0 || ^4.0",
     "nette/tester": "^2.4",
     "phpstan/phpstan": "^1.8",
@@ -24,19 +25,23 @@
   },
   "autoload": {
     "psr-4": {
-      "h4kuna\\Number\\": "src"
+      "h4kuna\\Format\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "h4kuna\\Number\\Tests\\": "tests/src"
+      "h4kuna\\Format\\Tests\\": "tests/src"
     }
   },
   "config": {
     "sort-packages": true
   },
+  "suggest": {
+    "ext-intl": "If you want to use IntlDateFormatter or NumberFormatter."
+  },
   "scripts": {
     "phpstan": "vendor/bin/phpstan analyse",
-    "tests": "vendor/bin/tester -s -j 4 --colors 1 -s -C tests/src"
+    "tests": "vendor/bin/tester -s --colors 1 -s -C tests/src",
+    "coverage": "vendor/bin/tester -s --coverage coverage.html --coverage-src src/ --colors 1 -s -C tests/src"
   }
 }
