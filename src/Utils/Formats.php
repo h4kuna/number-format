@@ -35,7 +35,7 @@ class Formats
 	 */
 	public function add(string|int $key, $setup): void
 	{
-		if (is_callable($setup)) {
+		if (self::isCallback($setup)) {
 			$this->factories[$key] = $setup;
 			unset($this->formats[$key]);
 		} else {
@@ -58,7 +58,7 @@ class Formats
 		if (isset($this->formats[$key]) === false) {
 			if (isset($this->factories[$key])) {
 				$service = $this->factories[$key];
-				$format = is_callable($service) ? $service($this) : $service;
+				$format = self::isCallback($service) ? $service($this) : $service;
 			} else {
 				$format = $this->getDefault()($key, $this, null);
 			}
@@ -90,11 +90,20 @@ class Formats
 	{
 		if ($this->default !== null) {
 			throw new InvalidStateException('Default format could be setup only onetime.');
-		} elseif (is_callable($default) === false) {
+		} elseif (self::isCallback($default) === false) {
 			$default = $this->createDefaultCallback($default);
 		}
 
 		$this->default = $default;
+	}
+
+
+	/**
+	 * @return ($service is callable ? true : false)
+	 */
+	private static function isCallback(mixed $service): bool
+	{
+		return is_callable($service) && ($service instanceof Service === false);
 	}
 
 

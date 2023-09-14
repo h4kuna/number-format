@@ -46,4 +46,11 @@ final class IntlNumberFormatter implements Formatter
 
 		return $result;
 	}
+
+
+	public function __invoke(float|int|string|null $number): string
+	{
+		return $this->format($number);
+	}
+
 }

@@ -53,4 +53,10 @@ final class IntlDateFormatter implements Formatter
 		return $this->nbsp ? Space::nbsp($result) : $result;
 	}
 
+
+	public function __invoke(?DateTimeInterface $dateTime): string
+	{
+		return $this->format($dateTime);
+	}
+
 }

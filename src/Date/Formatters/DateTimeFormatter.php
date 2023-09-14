@@ -49,4 +49,9 @@ final class DateTimeFormatter implements Formatter
 		return $dateTime === null ? $this->emptyValueSpace : $dateTime->format($this->formatSpace);
 	}
 
+	public function __invoke(?DateTimeInterface $dateTime): string
+	{
+		return $this->format($dateTime);
+	}
+
 }
