@@ -12,7 +12,8 @@
     }
   ],
   "require": {
-    "php": ">=8.0"
+    "php": ">=8.0",
+    "h4kuna/data-type": "^v3.0.5"
   },
   "require-dev": {
     "ext-intl": "*",

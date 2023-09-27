@@ -3,9 +3,8 @@
 namespace h4kuna\Format\Date;
 
 use DateTimeInterface;
-use h4kuna\Format\Utils\Service;
 
-interface Formatter extends Service
+interface Formatter
 {
 	function format(?DateTimeInterface $dateTime): string;
 }

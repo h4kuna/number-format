@@ -2,7 +2,7 @@
 
 namespace h4kuna\Format\Tests\Number;
 
-use h4kuna\Format\Exceptions\InvalidStateException;
+use h4kuna\DataType\Exceptions\InvalidStateException;
 use h4kuna\Format\Number\Formats;
 use h4kuna\Format\Number\Formatters\NumberFormatter;
 use Tester\Assert;

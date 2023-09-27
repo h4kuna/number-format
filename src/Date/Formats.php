@@ -2,13 +2,14 @@
 
 namespace h4kuna\Format\Date;
 
+use Closure;
+use h4kuna\DataType\Collection\LazyBuilder;
 use h4kuna\Format\Date\Formatters\DateTimeFormatter;
-use h4kuna\Format\Utils;
 
 /**
- * @extends Utils\Formats<Formatter>
+ * @extends LazyBuilder<Formatter>
  */
-class Formats extends Utils\Formats implements FormatsAccessor
+class Formats extends LazyBuilder implements FormatsAccessor
 {
 
 	public function get(int|string $key): Formatter
@@ -17,7 +18,7 @@ class Formats extends Utils\Formats implements FormatsAccessor
 	}
 
 
-	protected function createDefaultCallback($object = null): callable
+	protected function createDefaultCallback($object = null): Closure
 	{
 		return static fn (): DateTimeFormatter => new DateTimeFormatter('Y-m-d H:i:s');
 	}

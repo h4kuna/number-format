@@ -2,9 +2,7 @@
 
 namespace h4kuna\Format\Number;
 
-use h4kuna\Format\Utils\Service;
-
-interface Formatter extends Service
+interface Formatter
 {
 	function format(string|int|float|null $number): string;
 }

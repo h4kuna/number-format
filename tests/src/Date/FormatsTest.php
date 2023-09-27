@@ -7,7 +7,6 @@ use DateTimeZone;
 use h4kuna\Format\Date\Formats;
 use h4kuna\Format\Date\Formatters\DateTimeFormatter;
 use h4kuna\Format\Date\Formatters\IntlDateFormatter;
-use h4kuna\Format\Date\Intl\DateFormatterFactory;
 use h4kuna\Format\Utils\Space;
 use IntlGregorianCalendar;
 use Tester\Assert;

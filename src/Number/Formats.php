@@ -2,13 +2,14 @@
 
 namespace h4kuna\Format\Number;
 
+use Closure;
+use h4kuna\DataType\Collection\LazyBuilder;
 use h4kuna\Format\Number\Formatters\NumberFormatter;
-use h4kuna\Format\Utils;
 
 /**
- * @extends Utils\Formats<NumberFormatter>
+ * @extends LazyBuilder<NumberFormatter>
  */
-class Formats extends Utils\Formats implements FormatsAccessor
+class Formats extends LazyBuilder implements FormatsAccessor
 {
 
 	public function get(int|string $key): Formatter
@@ -17,7 +18,7 @@ class Formats extends Utils\Formats implements FormatsAccessor
 	}
 
 
-	protected function createDefaultCallback($object = null): callable
+	protected function createDefaultCallback($object = null): Closure
 	{
 		if ($object === null) {
 			$object = new NumberFormatter();
