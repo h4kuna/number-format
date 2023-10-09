@@ -13,8 +13,7 @@ class NumberFormatter implements Formatter
 	/**
 	 * @var callable(float, int): float|null
 	 */
-	public /* readonly */
-		$roundCallback;
+	public /* readonly */ $roundCallback;
 
 	private string $maskReplaced = '';
 

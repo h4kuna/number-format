@@ -316,21 +316,21 @@ $formats->get('date')->format($date); // 12. 6. 2023 12:30:40
 
 ## Integration to Nette framework
 
-In your neon file
+In your neon file, define service for keep formatting and register to latte
 
 ```neon
 services:
-	number: h4kuna\Format\Number\NumberFormat(decimalPoint: '.', decimals: 4) #support named parameters by nette
+	number: h4kuna\Format\Number\Formatters\NumberFormatter(decimalPoint: '.', decimals: 4) # support named parameters by nette
 
 	latte.latteFactory:
 		setup:
-			- addFilter('number', [@number, 'format'])
+			- addFilter('number', @number)
 ```
 
 We added new filter number, in template use like:
 
 ```html
-{=10000|number} // this render "1 000.0" with &nbps; like white space
+{=10000|number} // this render "1 000.0000" with &nbps; like white space
 ```
 
 # Units
