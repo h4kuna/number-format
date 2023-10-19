@@ -47,7 +47,7 @@ class_alias(h4kuna\Format\Number\Units\UnitFormat::class, 'h4kuna\Number\Units\U
 - add new static class [NumberFormat](src/Number/NumberFormat.php), you can format numbers without instance of class
 - class NumberFormat is immutable
 - **BC break** removed parameters like unit and decimals in method NumberFormat::format()
-    - let's use method modify()
+	- let's use method modify()
 - class Parameters removed, because php 8.0 has native support
 - **BC break** NumberFormat support for int numbers removed, like a parameter **intOnly**
 - **BC break** NumberFormat removed method enableExtendFormat() all options move to constructor
@@ -103,9 +103,9 @@ echo $numberFormat->format(1000); // 1 000,000
 - thousandsSeparator: [' ']
 - nbsp: [true] replace space by \&nbsp; like utf-8 char
 - zeroClear:
-    - [ZeroClear::NO] disabled
-    - [ZeroClear::DECIMALS_EMPTY] 1.0 -> `1`, 1.50 -> `1,50`
-    - [ZeroClear::DECIMALS] 1.0 -> `1`; 1.50 -> `1,5`
+	- [ZeroClear::NO] disabled
+	- [ZeroClear::DECIMALS_EMPTY] 1.0 -> `1`, 1.50 -> `1,50`
+	- [ZeroClear::DECIMALS] 1.0 -> `1`; 1.50 -> `1,5`
 - emptyValue: [\x00] disabled, if value is empty (by default `null` or empty string `''`) will display some wildcard
 - zeroIsEmpty: [false] disabled, only `null` and empty string `''` are replaced by `emptyValue`, but by this option is
   zero empty value too
@@ -264,9 +264,9 @@ Define own formats for date and time. Both classes [IntlDateFormatter](src/Date/
 use h4kuna\Format\Date;
 
 $formats = new Date\Formats([
-    'date' => new Date\Formatters\DateTimeFormatter('j. n. Y'),
-    'time' => static fn () => new Date\Formatters\DateTimeFormatter('H:i'), // callback like factory if is needed
-    'dateTime' => static fn () => new Date\Formatters\DateTimeFormatter('j. n. Y H:i'),
+	'date' => new Date\Formatters\DateTimeFormatter('j. n. Y'),
+	'time' => static fn () => new Date\Formatters\DateTimeFormatter('H:i'), // callback like factory if is needed
+	'dateTime' => static fn () => new Date\Formatters\DateTimeFormatter('j. n. Y H:i'),
 ]);
 
 $dateObject = new \DateTime('2023-06-13 12:30:40');
@@ -282,14 +282,14 @@ use h4kuna\Format\Date;
 
 class MyFormats extends Date\Formats 
 {
-    public function date(?\DateTimeInterface $data): string 
-    {
-        return $this->get('date')->format($data);
-    }
+	public function date(?\DateTimeInterface $data): string 
+	{
+		return $this->get('date')->format($data);
+	}
 }
 
 $formats = new MyFormats([
-    'date' => new Date\Formatters\DateTimeFormatter('j. n. Y'),
+	'date' => new Date\Formatters\DateTimeFormatter('j. n. Y'),
 ]);
 
 $dateObject = new \DateTime('2023-06-13 12:30:40');
@@ -307,7 +307,7 @@ use IntlDateFormatter;
 $intlFormatter = new IntlDateFormatter('cs_CZ', IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM,)
 
 $formats = new Date\Formats([
-    'date' => new Date\Formatters\IntlDateFormatter($intlFormatter),
+	'date' => new Date\Formatters\IntlDateFormatter($intlFormatter),
 ]);
 
 $date = new \DateTime('2023-06-13 12:30:40');
@@ -321,14 +321,44 @@ In your neon file, define service for keep formatting and register to latte
 ```neon
 services:
 	number: h4kuna\Format\Number\Formatters\NumberFormatter(decimalPoint: '.', decimals: 4) # support named parameters by nette
-
+	percent: h4kuna\Format\Number\Formatters\NumberFormatter(decimalPoint: '.', decimals: 2, unit: '%')
+	currency.czk: h4kuna\Format\Number\Formatters\NumberFormatter(decimalPoint: ',', decimals: 2, unit: 'Kč')
+	currency.eur: h4kuna\Format\Number\Formatters\NumberFormatter(decimalPoint: '.', decimals: 2, unit: '€', mask: '⎵ 1')
+	
+	currencies:
+		implement: h4kuna\Format\Number\FormatsAccessor(
+			czk: @currency.czk
+			eur: @currency.eur
+		)
+		
 	latte.latteFactory:
 		setup:
 			- addFilter('number', @number)
+			- addFilter('percent', @percent)
+			- addFilter('czk', @currency.czk)
+			- addFilter('eur', @currency.eur)
 ```
 
-We added new filter number, in template use like:
+We added new filters for formatting and service for currencies:
 
+Formatting 
+```php
+use h4kuna\Format\Number\FormatsAccessor;
+
+class Invoice {
+    public function __construct(private FormatsAccessor $formats) {
+    }
+    
+    public function generate(): void 
+    {
+        $number = 987.356;
+        $currency = 'eur';
+        var_dump($this->formats->get($currency)->format($number));
+    }
+}
+```
+
+Latte template
 ```html
 {=10000|number} // this render "1 000.0000" with &nbps; like white space
 ```
