@@ -85,9 +85,9 @@ final class NumberFormat
 	private static function replace(bool $nbsp, string $formattedNumber, string $mask): string
 	{
 		if ($mask === '') {
-			return $nbsp === true ?
-				Space::nbsp($formattedNumber) :
-				$formattedNumber;
+			return $nbsp === true
+				? Space::nbsp($formattedNumber)
+				: $formattedNumber;
 		}
 
 		return $nbsp === true ?
