@@ -8,59 +8,31 @@
 The library can format numbers like percent, currencies or number with unit, next are dates and convert between order of
 units.
 
-# Changelog
-
-## v6.0
-
-- global namespace `h4kuna\Number` renamed to `h4kuna\Format`
-- add new namespace `h4kuna\Format\Date`, other files move to namespace `h4kuna\Format\Number`
-- behavior is same like v5.0 but namespaces are different
-- add support for php native [NumberFormatter](https://www.php.net/manual/en/class.numberformatter.php)
-- I don't keep back compatibility, because v5.0 is not widespread, but here are aliases. You can add to your project and
-  will work.
-
-```php
-back compatibility with v5
-use h4kuna;
-class_alias(h4kuna\Format\Number\Formats::class, 'h4kuna\Number\Utils\Formats');
-class_alias(h4kuna\Format\Number\NumberFormat::class, 'h4kuna\Number\Format');
-class_alias(h4kuna\Format\Number\Percent::class, 'h4kuna\Number\Percent');
-class_alias(h4kuna\Format\Number\Round::class, 'h4kuna\Number\Utils\Round');
-class_alias(h4kuna\Format\Number\Tax::class, 'h4kuna\Number\Tax');
-class_alias(h4kuna\Format\Number\UnitValue::class, 'h4kuna\Number\Utils\UnitValue');
-
-// parameters
-class_alias(h4kuna\Format\Number\Parameters\ZeroClear::class, 'h4kuna\Number\Parameters\Format\ZeroClear');
-
-// formatters
-class_alias(h4kuna\Format\Number\Formatters\NumberFormatter::class, 'h4kuna\Number\NumberFormat');
-
-// namespace Unit
-class_alias(h4kuna\Format\Number\Units\Byte::class, 'h4kuna\Number\Units\Byte');
-class_alias(h4kuna\Format\Number\Units\Unit::class, 'h4kuna\Number\Units\Unit');
-class_alias(h4kuna\Format\Number\Units\UnitFormat::class, 'h4kuna\Number\Units\UnitFormat');
-```
-
-## v5.0
-
-- support php 8.0+
-- add new static class [NumberFormat](src/Number/NumberFormat.php), you can format numbers without instance of class
-- class NumberFormat is immutable
-- **BC break** removed parameters like unit and decimals in method NumberFormat::format()
-	- let's use method modify()
-- class Parameters removed, because php 8.0 has native support
-- **BC break** NumberFormat support for int numbers removed, like a parameter **intOnly**
-- **BC break** NumberFormat removed method enableExtendFormat() all options move to constructor
-- add new class Round
-- class NumberFormatFactory removed
-- parameter zeroClear is integer instead of bool
-
-Install via composer
--------------------
-
-```sh
+```bash
 composer require h4kuna/number-format
 ```
+
+# Changelog
+
+Details is moved to [file](./changelog.md).
+
+By statistic the version 3 is most used. I describe upgrade from v3.0 to v6.0.
+
+- removed interface NumberFormat, now this is static class like wrap on [number_format()](https://www.php.net/manual/en/function.number-format.php).
+- all classes `NumberFormatState`, `UnitFormatState`, `UnitPersistentFormatState` are joined to one [NumberFormatter](./src/Number/Formatters/NumberFormatter.php)
+- change namespace from `h4kuna\Number` to `h4kuna\Format\Number` or `h4kuna\Format\Number\Formatters`
+- removed support, defined parameters by array, from php8 is native by named parameters
+
+### NumberFormatter changes
+
+- class `NumberFormatter` is immutable
+- is callable by `__invoke()` method
+- method format() has only one parameter, `$number`
+- mask has new char for unit, old `U` replaced by `⎵`, `NumberFormatter(mask: '⎵ 1')`
+- parameter `intOnly` was removed
+- parameter `round` is callback, see [Round.php](./src/Number/Round.php)
+- add `nbsp` parameter
+- parameter `zeroClear` is integer instead of bool, see [ZeroClear.php](./src/Number/Parameters/ZeroClear.php)
 
 ## Number
 
