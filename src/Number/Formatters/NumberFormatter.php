@@ -13,9 +13,11 @@ class NumberFormatter implements Formatter
 	/**
 	 * @var callable(float, int): float|null
 	 */
-	public /* readonly */ $roundCallback;
+	public /* readonly ?callable */ $roundCallback;
 
-	private string $maskReplaced = '';
+	public /* readonly */ string $thousandsSeparator;
+
+	private /* readonly */ string $maskReplaced;
 
 
 	/**
@@ -24,7 +26,7 @@ class NumberFormatter implements Formatter
 	public function __construct(
 		public /* readonly */ int $decimals = 2,
 		public /* readonly */ string $decimalPoint = ',',
-		public /* readonly */ string $thousandsSeparator = ' ',
+		string $thousandsSeparator = ' ',
 		public /* readonly */ bool $nbsp = true,
 		public /* readonly */ int $zeroClear = ZeroClear::NO,
 		public /* readonly */ string $emptyValue = Space::AS_NULL,
@@ -35,17 +37,17 @@ class NumberFormatter implements Formatter
 		null|int|callable $round = null,
 	)
 	{
-		$this->roundCallback = self::makeRoundCallback($round, $this->decimals);
-		$this->initMaskReplaced();
-		$this->initThousandsSeparator();
+		$this->roundCallback = $this->initRoundCallback($round);
+		$this->maskReplaced = $this->initMaskReplaced();
+		$this->thousandsSeparator = $this->initThousandsSeparator($thousandsSeparator);
 	}
 
 
-	private static function makeRoundCallback(null|int|callable $round, int $decimals): ?callable
+	private function initRoundCallback(null|int|callable $round): ?callable
 	{
-		if ($decimals < 0 && $round === null) {
+		if ($this->decimals < 0 && $round === null) {
 			return Round::create();
-		} elseif ($round === null) {
+		} elseif ($round === null || $round === Round::RESET) {
 			return null;
 		} elseif (is_int($round)) {
 			return Round::create($round);
@@ -55,7 +57,7 @@ class NumberFormatter implements Formatter
 	}
 
 
-	private function initMaskReplaced(): void
+	private function initMaskReplaced(): string
 	{
 		if ($this->unit !== '' && $this->mask !== '') {
 			$replace = ['⎵' => $this->unit];
@@ -63,20 +65,21 @@ class NumberFormatter implements Formatter
 				$replace[' '] = Space::NBSP;
 			}
 
-			$this->maskReplaced = strtr($this->mask, $replace);
-		} else {
-			$this->maskReplaced = '';
+			return strtr($this->mask, $replace);
 		}
+		return '';
 	}
 
 
-	private function initThousandsSeparator(): void
+	private function initThousandsSeparator(string $thousandsSeparator): string
 	{
-		if ($this->nbsp && str_contains($this->thousandsSeparator, ' ')) {
-			$this->thousandsSeparator = Space::nbsp($this->thousandsSeparator);
-		} elseif ($this->nbsp === false && str_contains($this->thousandsSeparator, Space::NBSP)) {
-			$this->thousandsSeparator = Space::white($this->thousandsSeparator);
+		if ($this->nbsp && str_contains($thousandsSeparator, ' ')) {
+			return Space::nbsp($thousandsSeparator);
+		} elseif ($this->nbsp === false && str_contains($thousandsSeparator, Space::NBSP)) {
+			return Space::white($thousandsSeparator);
 		}
+
+		return $thousandsSeparator;
 	}
 
 
@@ -94,25 +97,19 @@ class NumberFormatter implements Formatter
 		null|int|callable $round = null,
 	): self
 	{
-		$that = clone $this;
-		$that->decimals = $decimals ?? $this->decimals;
-		$that->decimalPoint = $decimalPoint ?? $that->decimalPoint;
-		$that->thousandsSeparator = $thousandsSeparator ?? $that->thousandsSeparator;
-		$that->nbsp = $nbsp ?? $that->nbsp;
-		$that->zeroClear = $zeroClear ?? $that->zeroClear;
-		$that->emptyValue = $emptyValue ?? $that->emptyValue;
-		$that->zeroIsEmpty = $zeroIsEmpty ?? $that->zeroIsEmpty;
-		$that->showUnitIfEmpty = $showUnitIfEmpty ?? $that->showUnitIfEmpty;
-		$that->roundCallback = $round === null ? $that->roundCallback : self::makeRoundCallback($round, $this->decimals);
-
-		if ($mask !== null || $unit !== null) {
-			$that->mask = $mask ?? $that->mask;
-			$that->unit = $unit ?? $that->unit;
-		}
-		$that->initMaskReplaced();
-		$that->initThousandsSeparator();
-
-		return $that;
+		return new self(
+			$decimals ?? $this->decimals,
+			$decimalPoint ?? $this->decimalPoint,
+			$thousandsSeparator ?? $this->thousandsSeparator,
+			$nbsp ?? $this->nbsp,
+			$zeroClear ?? $this->zeroClear,
+			$emptyValue ?? $this->emptyValue,
+			$zeroIsEmpty ?? $this->zeroIsEmpty,
+			$unit ?? $this->unit,
+			$showUnitIfEmpty ?? $this->showUnitIfEmpty,
+			$mask ?? $this->mask,
+			$round ?? $this->roundCallback,
+		);
 	}
 
 

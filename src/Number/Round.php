@@ -6,6 +6,7 @@ use Closure;
 
 final class Round
 {
+	public const RESET = -1;
 	public const DEFAULT = 0;
 	public const BY_CEIL = 1;
 
