@@ -12,9 +12,9 @@ back compatibility with v5
 use h4kuna;
 class_alias(h4kuna\Format\Number\Formats::class, 'h4kuna\Number\Utils\Formats');
 class_alias(h4kuna\Format\Number\NumberFormat::class, 'h4kuna\Number\Format');
-class_alias(h4kuna\Format\Number\Percent::class, 'h4kuna\Number\Percent');
+class_alias(h4kuna\Format\Number\Discount::class, 'h4kuna\Number\Percent');
 class_alias(h4kuna\Format\Number\Round::class, 'h4kuna\Number\Utils\Round');
-class_alias(h4kuna\Format\Number\Tax::class, 'h4kuna\Number\Tax');
+class_alias(h4kuna\Format\Number\Vat::class, 'h4kuna\Number\Tax');
 class_alias(h4kuna\Format\Number\UnitValue::class, 'h4kuna\Number\Utils\UnitValue');
 
 // parameters

@@ -127,24 +127,24 @@ $formats->get('decimal')->format(1000.1235); // 1 000,124
 $formats->get('currency')->format(1000.1235); // 1 000,12 Kč
 ```
 
-## Tax
+## Vat
 
 ```php
 use h4kuna\Format\Number;
 
-$tax = new Number\Tax(20);
-echo $tax->add(100); // 120
-echo $tax->deduct(120); // 100.0
+$tax = new Number\Vat(20);
+echo $tax->with(100); // 120
+echo $tax->without(120); // 100.0
 echo $tax->diff(120); // 20.0
 ```
 
-## Percent
+## Discount
 
 ```php
 use h4kuna\Format\Number;
 
-$percent = new Number\Percent(20);
-echo $percent->add(100); // 120.0
+$percent = new Number\Discount(20);
+echo $percent->with(100); // 120.0
 echo $percent->deduct(120); // 96.0
 echo $percent->diff(120); // 24.0
 ```
