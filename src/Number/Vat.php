@@ -18,7 +18,7 @@ class Vat extends Percentage
 
 	public function without(float $number): float
 	{
-		return Utils\Percentage::without($this->ratio, $number);
+		return Utils\Percentage::without($number, $this->ratio);
 	}
 
 }

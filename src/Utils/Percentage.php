@@ -25,6 +25,18 @@ final class Percentage
 	}
 
 
+	public static function calculate(float $part, float $total): float
+	{
+		return self::without($part, $total) * 100;
+	}
+
+
+	public static function calculateRemainder(float $part, float $total): float
+	{
+		return 100 - self::calculate($part, $total);
+	}
+
+
 	/**
 	 * N + 17.5% -> N * 1.175
 	 */
@@ -44,11 +56,15 @@ final class Percentage
 
 
 	/**
+	 * Safe division
 	 * If you have price with percentage, and you need price without percentage.
 	 * N / 1.175
 	 */
-	public static function without(float $ratio, float $number): float
+	public static function without(float $number, float $ratio): float
 	{
+		if ($ratio === 0.0) {
+			return 0.0;
+		}
 		return $number / $ratio;
 	}
 
@@ -58,7 +74,7 @@ final class Percentage
 	 */
 	public static function diffWithout(float $ratio, float $number): float
 	{
-		return $number - self::without($ratio, $number);
+		return $number - self::without($number, $ratio);
 	}
 
 
@@ -76,6 +92,6 @@ final class Percentage
 	 */
 	public static function diffDeduct(float $percentage, float $number): float
 	{
-		return self::smallRatio($number * $percentage);
+		return self::with(self::smallRatio($percentage), $number);
 	}
 }
