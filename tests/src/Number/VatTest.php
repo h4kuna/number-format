@@ -27,6 +27,7 @@ final class VatTest extends TestCase
 		Assert::same('20', (string) $vat);
 
 		$vat->setFormatter(new NumberFormatter(nbsp: false, unit: '%'));
+		Assert::same('21,00 %', (string) $vat->modify(21));
 		Assert::same('20,00 %', (string) $vat);
 	}
 

@@ -20,6 +20,15 @@ abstract class Percentage
 	}
 
 
+	public function modify(float $percentage): static
+	{
+		$self = new static($percentage);
+		$self->format = $this->format;
+
+		return $self;
+	}
+
+
 	public function setFormatter(Formatter $formatter): void
 	{
 		$this->format = $formatter;
