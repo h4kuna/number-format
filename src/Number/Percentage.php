@@ -10,11 +10,19 @@ abstract class Percentage
 
 	public float $smallRatio;
 
+	private ?Formatter $format = null;
+
 
 	public function __construct(public float $percentage)
 	{
 		$this->smallRatio = Utils\Percentage::smallRatio($this->percentage);
 		$this->ratio = Utils\Percentage::ratio($this->smallRatio);
+	}
+
+
+	public function setFormatter(Formatter $formatter): void
+	{
+		$this->format = $formatter;
 	}
 
 
@@ -29,7 +37,11 @@ abstract class Percentage
 
 	public function __toString()
 	{
-		return (string) $this->percentage;
+		if ($this->format === null) {
+			return (string) $this->percentage;
+		}
+
+		return $this->format->format($this->percentage);
 	}
 
 }

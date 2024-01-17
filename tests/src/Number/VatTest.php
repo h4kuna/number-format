@@ -2,6 +2,7 @@
 
 namespace h4kuna\Format\Tests\Number;
 
+use h4kuna\Format\Number\Formatters\NumberFormatter;
 use h4kuna\Format\Number\Vat;
 use h4kuna\Format\Tests\TestCase;
 use Tester\Assert;
@@ -24,6 +25,9 @@ final class VatTest extends TestCase
 		Assert::same(1.20, $vat->ratio);
 		Assert::same(0.20, $vat->smallRatio);
 		Assert::same('20', (string) $vat);
+
+		$vat->setFormatter(new NumberFormatter(nbsp: false, unit: '%'));
+		Assert::same('20,00 %', (string) $vat);
 	}
 
 }
