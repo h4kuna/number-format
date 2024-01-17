@@ -35,6 +35,7 @@ final class PercentageTest extends TestCase
 		];
 	}
 
+
 	/**
 	 * @dataProvider provideCalculateRemainder
 	 */
@@ -105,28 +106,6 @@ final class PercentageTest extends TestCase
 
 
 	/**
-	 * @dataProvider provideDiffDeduct
-	 */
-	public function testDiffDeduct(float $expected, float $percentage, float $number): void
-	{
-		Assert::same($expected, Percentage::diffDeduct($percentage, $number));
-	}
-
-
-	/**
-	 * @return array<mixed>
-	 */
-	protected function provideDiffDeduct(): array
-	{
-		return [
-			[20, 20, 100],
-			[24, 20, 120],
-			[0, 20, 0],
-		];
-	}
-
-
-	/**
 	 * @dataProvider provideDeduct
 	 */
 	public function testDeduct(float $expected, float $percentage, float $number): void
@@ -141,9 +120,9 @@ final class PercentageTest extends TestCase
 	protected function provideDeduct(): array
 	{
 		return [
-			[80, 20, 100],
-			[96, 20, 120],
-			[0, 20, 0],
+			[80, 0.2, 100],
+			[96, 0.2, 120],
+			[0, 0.2, 0],
 		];
 	}
 

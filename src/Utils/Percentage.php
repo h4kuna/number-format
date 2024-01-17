@@ -49,7 +49,7 @@ final class Percentage
 	/**
 	 * N * 1.175 - N
 	 */
-	public static function diffWith(float $ratio, float $number): float
+	public static function witchDiff(float $ratio, float $number): float
 	{
 		return self::with($ratio, $number) - $number;
 	}
@@ -72,7 +72,7 @@ final class Percentage
 	/**
 	 * N - (N / 1.175)
 	 */
-	public static function diffWithout(float $ratio, float $number): float
+	public static function withoutDiff(float $ratio, float $number): float
 	{
 		return $number - self::without($number, $ratio);
 	}
@@ -81,17 +81,9 @@ final class Percentage
 	/**
 	 *  N - ((N * 17.5) / 100)
 	 */
-	public static function deduct(float $percentage, float $number): float
+	public static function deduct(float $smallRatio, float $number): float
 	{
-		return $number - self::diffDeduct($percentage, $number);
+		return $number - self::with($smallRatio, $number);
 	}
 
-
-	/**
-	 * (N * 17.5) / 100
-	 */
-	public static function diffDeduct(float $percentage, float $number): float
-	{
-		return self::with(self::smallRatio($percentage), $number);
-	}
 }
