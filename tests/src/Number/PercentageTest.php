@@ -24,6 +24,7 @@ final class PercentageTest extends TestCase
 		Assert::same(20.0, $percentage->withoutDiff(120));
 		Assert::same(96.0, $percentage->deduct(120));
 		Assert::same(24.0, $percentage->diff(120));
+		Assert::same(20.0, $percentage->diff(100));
 		Assert::same(20.0, $percentage->percentage);
 		Assert::same(1.20, $percentage->ratio);
 		Assert::same(0.20, $percentage->smallRatio);

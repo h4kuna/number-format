@@ -110,7 +110,7 @@ final class PercentageTest extends TestCase
 	 */
 	public function testDeduct(float $expected, float $percentage, float $number): void
 	{
-		Assert::same($expected, Percentage::deduct($percentage, $number));
+		Assert::same($expected, Percentage::deduct($number, $percentage));
 	}
 
 

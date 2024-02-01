@@ -8,7 +8,7 @@ namespace h4kuna\Format\Utils;
 final class Percentage
 {
 	/**
-	 * 17.5% -> 0.175
+	 * S = 17.5% -> 0.175
 	 */
 	public static function smallRatio(float $percentage): float
 	{
@@ -17,7 +17,7 @@ final class Percentage
 
 
 	/**
-	 * 17.5% -> 1.175
+	 * R = 17.5% -> 1.175
 	 */
 	public static function ratio(float $smallRatio): float
 	{
@@ -25,12 +25,22 @@ final class Percentage
 	}
 
 
+	/**
+	 * total: 100
+	 * part: 70
+	 * result: 70%
+	 */
 	public static function calculate(float $part, float $total): float
 	{
 		return self::without($part, $total) * 100;
 	}
 
 
+	/**
+	 * total: 100
+	 * part: 70
+	 * result: 30%
+	 */
 	public static function calculateRemainder(float $part, float $total): float
 	{
 		return 100 - self::calculate($part, $total);
@@ -38,27 +48,18 @@ final class Percentage
 
 
 	/**
-	 * N + 17.5% -> N * 1.175
+	 * N + 17.5% -> N * R
+	 * 17.5% from N -> N * S
 	 */
-	public static function with(float $ratio, float $number): float
+	public static function with(float $number, float $ratio): float
 	{
 		return $number * $ratio;
 	}
 
 
 	/**
-	 * N * 1.175 - N
-	 */
-	public static function witchDiff(float $ratio, float $number): float
-	{
-		return self::with($ratio, $number) - $number;
-	}
-
-
-	/**
 	 * Safe division
-	 * If you have price with percentage, and you need price without percentage.
-	 * N / 1.175
+	 * N / R
 	 */
 	public static function without(float $number, float $ratio): float
 	{
@@ -70,20 +71,20 @@ final class Percentage
 
 
 	/**
-	 * N - (N / 1.175)
+	 * N - (N / R)
 	 */
-	public static function withoutDiff(float $ratio, float $number): float
+	public static function withoutDiff(float $number, float $ratio): float
 	{
 		return $number - self::without($number, $ratio);
 	}
 
 
 	/**
-	 *  N - ((N * 17.5) / 100)
+	 *  N - (S * N)
 	 */
-	public static function deduct(float $smallRatio, float $number): float
+	public static function deduct(float $number, float $smallRatio): float
 	{
-		return $number - self::with($smallRatio, $number);
+		return $number - self::with($number, $smallRatio);
 	}
 
 }

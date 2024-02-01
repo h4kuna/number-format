@@ -29,13 +29,16 @@ class Percentage implements \Stringable
 
 	public function with(float $number): float
 	{
-		return Utils\Percentage::with($this->ratio, $number);
+		return Utils\Percentage::with($number, $this->ratio);
 	}
 
 
+	/**
+	 * @deprecated use diff()
+	 */
 	public function withDiff(float $number): float
 	{
-		return Utils\Percentage::witchDiff($this->ratio, $number);
+		return Utils\Percentage::with($number, $this->smallRatio);
 	}
 
 
@@ -47,19 +50,19 @@ class Percentage implements \Stringable
 
 	public function withoutDiff(float $number): float
 	{
-		return Utils\Percentage::withoutDiff($this->ratio, $number);
+		return Utils\Percentage::withoutDiff($number, $this->ratio);
 	}
 
 
 	public function diff(float $number): float
 	{
-		return Utils\Percentage::with($this->smallRatio, $number);
+		return Utils\Percentage::with($number, $this->smallRatio);
 	}
 
 
 	public function deduct(float $number): float
 	{
-		return Utils\Percentage::deduct($this->smallRatio, $number);
+		return Utils\Percentage::deduct($number, $this->smallRatio);
 	}
 
 
