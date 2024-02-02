@@ -13,9 +13,12 @@ class Percentage implements \Stringable
 
 	public float $smallRatio;
 
+	public float $percentage;
 
-	final public function __construct(public float $percentage, public ?Formatter $format = null)
+
+	final public function __construct(float|int $percentage, public ?Formatter $format = null)
 	{
+		$this->percentage = (float) $percentage;
 		$this->smallRatio = Utils\Percentage::smallRatio($this->percentage);
 		$this->ratio = Utils\Percentage::ratio($this->smallRatio);
 	}
