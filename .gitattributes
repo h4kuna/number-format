@@ -4,3 +4,4 @@
 changelog.md export-ignore
 phpstan.neon export-ignore
 tests export-ignore
+doc export-ignore
