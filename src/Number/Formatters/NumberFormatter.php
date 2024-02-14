@@ -11,7 +11,7 @@ use h4kuna\Format\Utils\Space;
 class NumberFormatter implements Formatter
 {
 	/**
-	 * @var callable(float, int): float|null
+	 * @var callable(float, int): float
 	 */
 	public /* readonly ?callable */ $roundCallback;
 
