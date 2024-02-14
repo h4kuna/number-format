@@ -32,11 +32,12 @@ final class NumberFormat
 		if ($isZero && ($isNumeric === false || $zeroIsEmpty === true)) {
 			$formatted = $emptyValue === Space::AS_NULL ? '' : $emptyValue;
 		} else {
-			if ($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && ((int) $castNumber) == $castNumber) {
+			$castNumber = ($roundCallback ?? Round::create())($castNumber, $decimals);
+			if (($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && ((int) $castNumber) == $castNumber) || $decimals < 0) {
 				$decimals = 0;
 			}
 
-			$formatted = self::base($castNumber, $decimals, $decimalPoint, $thousandsSeparator, $roundCallback);
+			$formatted = self::base($castNumber, $decimals, $decimalPoint, $thousandsSeparator);
 
 			if ($zeroClear === ZeroClear::DECIMALS && $decimals > 0) {
 				$formatted = self::zeroClear($formatted, $decimalPoint);

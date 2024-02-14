@@ -43,12 +43,10 @@ class NumberFormatter implements Formatter
 	}
 
 
-	private function initRoundCallback(null|int|callable $round): ?callable
+	private function initRoundCallback(null|int|callable $round): callable
 	{
-		if ($this->decimals < 0 && $round === null) {
+		if ($round === null || $round === Round::RESET) {
 			return Round::create();
-		} elseif ($round === null || $round === Round::RESET) {
-			return null;
 		} elseif (is_int($round)) {
 			return Round::create($round);
 		}

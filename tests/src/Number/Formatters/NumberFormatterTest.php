@@ -128,6 +128,11 @@ final class NumberFormatterTest extends TestCase
 				'0,10',
 				0.1,
 			],
+			[
+				['zeroClear' => ZeroClear::DECIMALS_EMPTY, 'decimals' => 1],
+				'1',
+				0.99,
+			],
 		];
 	}
 
