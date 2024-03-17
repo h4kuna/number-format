@@ -3,6 +3,7 @@
 namespace h4kuna\Format\Tests\Number\Formatters;
 
 use h4kuna\Format\Number\Formatters\IntlNumberFormatter;
+use h4kuna\Format\Number\NativePhp\NumberFormatterFactory;
 use h4kuna\Format\Tests\TestCase;
 use h4kuna\Format\Utils\Space;
 use NumberFormatter;
@@ -23,7 +24,7 @@ final class IntlNumberFormatterTest extends TestCase
 	 */
 	public function testFormat(array $parameters, string $expected, $number): void
 	{
-		$numberFormatter = new NumberFormatter('cs_CZ', NumberFormatter::DECIMAL);
+		$numberFormatter = self::createNumberFormatter();
 		$numberFormat = new IntlNumberFormatter($numberFormatter, ...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
 	}
@@ -36,9 +37,15 @@ final class IntlNumberFormatterTest extends TestCase
 	 */
 	public function testModify(array $parameters, string $expected, $number): void
 	{
-		$numberFormatter = new NumberFormatter('cs_CZ', NumberFormatter::DECIMAL);
+		$numberFormatter = self::createNumberFormatter();
 		$numberFormat = (new IntlNumberFormatter($numberFormatter))->modify(...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
+	}
+
+
+	private static function createNumberFormatter(): NumberFormatter
+	{
+		return (new NumberFormatterFactory('cs_CZ'))->create();
 	}
 
 

@@ -13,10 +13,10 @@
   ],
   "require": {
     "php": ">=8.0",
+    "ext-intl": "*",
     "h4kuna/data-type": "^v3.0.5"
   },
   "require-dev": {
-    "ext-intl": "*",
     "nette/utils": "^3.0 || ^4.0",
     "nette/tester": "^2.4",
     "phpstan/phpstan": "^1.8",

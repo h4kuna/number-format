@@ -4,6 +4,7 @@ namespace h4kuna\Format\Number\Formatters;
 
 use h4kuna\Format\Number\Formatter;
 use h4kuna\Format\Utils\Space;
+use NumberFormatter;
 
 /**
  * NumberFormatter default settings:
@@ -13,7 +14,7 @@ use h4kuna\Format\Utils\Space;
 final class IntlNumberFormatter implements Formatter
 {
 	public function __construct(
-		private \NumberFormatter $formatter,
+		private NumberFormatter $formatter,
 		public string $emptyValue = '',
 		public bool $zeroIsEmpty = false,
 	)
@@ -27,11 +28,11 @@ final class IntlNumberFormatter implements Formatter
 		?bool $zeroIsEmpty = null,
 	): self
 	{
-		$that = clone $this;
-		$that->zeroIsEmpty = $zeroIsEmpty ?? $that->zeroIsEmpty;
-		$that->emptyValue = $emptyValue === null ? $this->emptyValue : Space::nbsp($emptyValue);
-
-		return $that;
+		return new static(
+			$this->formatter,
+			$emptyValue ?? $this->emptyValue,
+			$zeroIsEmpty ?? $this->zeroIsEmpty,
+		);
 	}
 
 
