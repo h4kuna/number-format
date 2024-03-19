@@ -9,6 +9,8 @@ The class wraps a php function `number_format` and extends the behavior.
 
 > The parameters are same for methods __construct() and modify(). 
 
+> The class NumberFormatter is Immutable when you use modify().
+
 [NumberFormatter](../src/Number/Formatters/NumberFormatter.php)
 
 - decimals [2]: Sets the number of decimal digits.
