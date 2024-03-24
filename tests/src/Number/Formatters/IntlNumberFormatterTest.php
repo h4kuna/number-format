@@ -6,7 +6,6 @@ use h4kuna\Format\Number\Formatters\IntlNumberFormatter;
 use h4kuna\Format\Number\NativePhp\NumberFormatterFactory;
 use h4kuna\Format\Tests\TestCase;
 use h4kuna\Format\Utils\Space;
-use NumberFormatter;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -24,9 +23,23 @@ final class IntlNumberFormatterTest extends TestCase
 	 */
 	public function testFormat(array $parameters, string $expected, $number): void
 	{
-		$numberFormatter = self::createNumberFormatter();
+		$numberFormatter = self::createNumberFormatter()->create();
 		$numberFormat = new IntlNumberFormatter($numberFormatter, ...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
+	}
+
+
+	public function testCurrency(): void
+	{
+		$numberFormatterFactory = self::createNumberFormatter();
+
+		$numberFormatter = $numberFormatterFactory->currency('cs_CZ');
+		$numberFormat = new IntlNumberFormatter($numberFormatter);
+		Assert::same(Space::nbsp('1 000,46 Kč'), $numberFormat->format(1000.456));
+
+		$numberFormatter = $numberFormatterFactory->currency('en_GB');
+		$numberFormat = new IntlNumberFormatter($numberFormatter);
+		Assert::same(Space::nbsp('£1,000.46'), $numberFormat->format(1000.456));
 	}
 
 
@@ -37,15 +50,15 @@ final class IntlNumberFormatterTest extends TestCase
 	 */
 	public function testModify(array $parameters, string $expected, $number): void
 	{
-		$numberFormatter = self::createNumberFormatter();
+		$numberFormatter = self::createNumberFormatter()->create();
 		$numberFormat = (new IntlNumberFormatter($numberFormatter))->modify(...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
 	}
 
 
-	private static function createNumberFormatter(): NumberFormatter
+	private static function createNumberFormatter(): NumberFormatterFactory
 	{
-		return (new NumberFormatterFactory('cs_CZ'))->create();
+		return new NumberFormatterFactory('cs_CZ');
 	}
 
 
