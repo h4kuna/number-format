@@ -119,9 +119,20 @@ echo $format->modify(decimals: 0, round: Round::BY_FLOOR)->format($number); // 1
 
 Support php native [NumberFormatter](https://www.php.net/manual/en/class.numberformatter.php) and extends by two parameters `$emptyValue` and `$zeroIsEmpty`.
 ```php
-$numberFormatter = new \NumberFormatter('cs_CZ', \NumberFormatter::DECIMAL);
+use NumberFormatter;
+use h4kuna\Format\Number\NativePhp\NumberFormatterFactory;
+
+$numberFormatter = new NumberFormatter('cs_CZ', NumberFormatter::CURRENCY);
+// or use prepared factory
+$numberFormatterFactory = new NumberFormatterFactory('cs_CZ');
+$numberFormatter = $numberFormatterFactory->currency();
+
 $format = new IntlNumberFormatter($numberFormatter);
-echo $format->format($number); // 1 234,456
+echo $format->format($number); // 1 234,46 Kč
+
+$numberFormatter = $numberFormatterFactory->currency('en_GB');
+$format = new IntlNumberFormatter($numberFormatter);
+echo $format->format($number); // £1,234.46
 ```
 
 

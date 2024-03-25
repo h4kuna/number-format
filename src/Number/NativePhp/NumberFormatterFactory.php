@@ -18,7 +18,7 @@ final class NumberFormatterFactory
 	/**
 	 * @template T of NumberFormatter
 	 * @param int|class-string<T> $style
-	 * @return T
+	 * @return ($style is int ? NumberFormatter : T)
 	 */
 	public function create(
 		?int $decimals = null,
