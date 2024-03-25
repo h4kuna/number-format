@@ -32,12 +32,7 @@ final class IntlDateFormatter implements Formatter
 		?string $emptyValue = null,
 	): self
 	{
-		$that = clone $this;
-		$that->nbsp = $nbsp ?? $that->nbsp;
-		$that->emptyValue = $emptyValue ?? $that->emptyValue;
-		$that->initSpace();
-
-		return $that;
+		return new static($this->formatter, $nbsp ?? $this->nbsp, $emptyValue ?? $this->emptyValue);
 	}
 
 
