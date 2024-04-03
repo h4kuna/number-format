@@ -95,11 +95,11 @@ echo $format->modify(emptyValue: '-', zeroIsEmpty: true)->format(0); // -
 echo $format->modify(unit: 'Kg')->format($number); // 1 234,46 Kg
 echo $format->modify(unit: '%')->format($number); // 1 234,46 %
 echo $format->modify(unit: '€')->format($number); // 1 234,46 €
-echo $format->modify(unit: 'Kg')->format(0); // 0,00 Kg
 ```
 
 ##### showUnitIfEmpty
 ```php
+echo $format->modify(unit: 'Kg')->format(0); // 0,00 Kg
 echo $format->modify(unit: 'Kg', showUnitIfEmpty: false)->format(0); // 0,00
 ```
 
