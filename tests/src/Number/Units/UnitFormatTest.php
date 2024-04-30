@@ -8,9 +8,9 @@ use Tester\Assert;
 
 require __DIR__ . '/../../../bootstrap.php';
 
-$uf = new Format\Number\Units\UnitFormat('B', new Format\Number\Units\Byte(), new Format\Number\Formats());
+$uf = new Format\Number\Units\UnitFormat('g', new Format\Number\Units\Unit());
 
-Assert::same(Space::nbsp('924,00 MB'), $uf->convert(968884224));
-Assert::same(Space::nbsp('1,00 kB'), $uf->convert(1024));
+Assert::same(Space::nbsp('968,88 Mg'), $uf->convert(968884224));
+Assert::same(Space::nbsp('1,02 kg'), $uf->convert(1024));
 
-Assert::same(Space::nbsp('31 457 280,00'), $uf->fromString('30M'));
+Assert::same(Space::nbsp('30 000 000,00'), $uf->fromString('30M'));

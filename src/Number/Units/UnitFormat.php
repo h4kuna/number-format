@@ -6,12 +6,23 @@ use h4kuna\Format;
 
 class UnitFormat
 {
+	private Format\Number\Formats $formats;
+
+
 	public function __construct(
 		private string $symbol,
 		private Unit $unit,
-		private Format\Number\Formats $formats,
+		Format\Number\Formats|Format\Number\Formatter|null $formats = null,
 	)
 	{
+		if ($formats === null) {
+			$formats = self::createFormats();
+		} elseif ($formats instanceof Format\Number\Formatter) {
+			$formatter = $formats;
+			$formats = self::createFormats();
+			$formats->setDefault($formatter); // @phpstan-ignore-line
+		}
+		$this->formats = $formats;
 	}
 
 
@@ -44,6 +55,12 @@ class UnitFormat
 		$unitValue = $this->unit->fromString($value, $unitTo);
 
 		return $this->format($unitValue->value, $unitValue->unit);
+	}
+
+
+	private static function createFormats(): Format\Number\Formats
+	{
+		return new Format\Number\Formats();
 	}
 
 }
