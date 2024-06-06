@@ -74,6 +74,8 @@ use h4kuna\Format\Number;
 
 $nff = new Number\Formats();
 $unitFormat = new Number\Units\UnitFormat('B', new Byte, $nff);
+// or
+$unitFormat = new Number\Units\ByteFormat($nff);
 
 $unitFormat->convert(968884224); // '924,00 MB'
 $unitFormat->convert(1024); // '1,00 kB'
