@@ -120,6 +120,7 @@ echo $format->modify(decimals: 0, round: Round::BY_FLOOR)->format($number); // 1
 Support php native [NumberFormatter](https://www.php.net/manual/en/class.numberformatter.php) and extends by two parameters `$emptyValue` and `$zeroIsEmpty`.
 ```php
 use NumberFormatter;
+use h4kuna\Format\Number\Formatters\IntlNumberFormatter;
 use h4kuna\Format\Number\NativePhp\NumberFormatterFactory;
 
 $numberFormatter = new NumberFormatter('cs_CZ', NumberFormatter::CURRENCY);
