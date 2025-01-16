@@ -5,11 +5,14 @@ namespace h4kuna\Format\Number;
 use h4kuna\Format\Number\Parameters\ZeroClear;
 use h4kuna\Format\Utils\Space;
 
+/**
+ * @phpstan-type TRoundCallback callable(float, int): float
+ */
 final class NumberFormat
 {
 
 	/**
-	 * @param callable(float, int): float|null $roundCallback
+	 * @param null|TRoundCallback $roundCallback
 	 */
 	public static function unit(
 		string|int|float|null $number,
@@ -33,7 +36,7 @@ final class NumberFormat
 			$formatted = $emptyValue === Space::AS_NULL ? '' : $emptyValue;
 		} else {
 			$castNumber = ($roundCallback ?? Round::create())($castNumber, $decimals);
-			if (($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && ((int) $castNumber) == $castNumber) || $decimals < 0) {
+			if (($zeroClear === ZeroClear::DECIMALS_EMPTY && $decimals > 0 && floor($castNumber) === $castNumber) || $decimals < 0) {
 				$decimals = 0;
 			}
 
@@ -53,7 +56,7 @@ final class NumberFormat
 
 
 	/**
-	 * @param callable(float, int): float|null $roundCallback
+	 * @param null|TRoundCallback $roundCallback
 	 */
 	public static function base(
 		float $number,

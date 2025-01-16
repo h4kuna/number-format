@@ -6,19 +6,35 @@ use h4kuna\Format;
 
 class Unit
 {
+	/** @var array<string, string> */
+	private const REPLACE = [' ' => '', ',' => '.', '+' => ''];
+
+	/** @var string */
 	public const PETA = 'P';
+	/** @var string */
 	public const TERA = 'T';
+	/** @var string */
 	public const GIGA = 'G';
+	/** @var string */
 	public const MEGA = 'M';
+	/** @var string */
 	public const KILO = 'k';
+	/** @var string */
 	public const BASE = '';
+	/** @var string */
 	public const DECI = 'd';
+	/** @var string */
 	public const CENTI = 'c';
+	/** @var string */
 	public const MILI = 'm';
+	/** @var string */
 	public const MICRO = 'µ';
+	/** @var string */
 	public const NANO = 'n';
+	/** @var string */
 	public const PICO = 'p';
 
+	/** @var non-empty-array<string, int> */
 	public const UNITS = [
 		self::PICO => -12,
 		self::NANO => -9,
@@ -36,7 +52,7 @@ class Unit
 
 	/**
 	 * These values must be sort ascending! See self::UNITS
-	 * @var non-empty-array<string,int>
+	 * @var non-empty-array<string, int>
 	 */
 	protected array $allowedUnits;
 
@@ -150,18 +166,17 @@ class Unit
 
 	public function fromString(string $value, string $unitTo = self::BASE): Format\Number\UnitValue
 	{
-		$result = preg_match('/^(?P<number>(?:-)?\d*(?:(?:\.)(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find);
+		$result = preg_match('/^(?P<number>-?\d*(?:\.(?:\d*)?)?)(?P<unit>[a-z]+)$/i', self::prepareNumber($value), $find);
 		if ($result === false || isset($find['number']) === false || $find['number'] === '') {
 			throw new Format\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
 		}
-		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
+		return $this->convertFrom((float) $find['number'], $find['unit'] ?? null, $unitTo);
 	}
 
 
 	private static function prepareNumber(string $value): string
 	{
-		static $replace = [' ' => '', ',' => '.', '+' => ''];
-		return strtr($value, $replace);
+		return strtr($value, self::REPLACE);
 	}
 
 }

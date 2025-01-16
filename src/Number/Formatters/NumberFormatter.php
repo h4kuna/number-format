@@ -8,12 +8,15 @@ use h4kuna\Format\Number\Parameters\ZeroClear;
 use h4kuna\Format\Number\Round;
 use h4kuna\Format\Utils\Space;
 
+/**
+ * @phpstan-import-type TRoundCallback from NumberFormat
+ */
 class NumberFormatter implements Formatter
 {
 	/**
-	 * @var callable(float, int): float
+	 * @var TRoundCallback
 	 */
-	public /* readonly ?callable */ $roundCallback;
+	public /* readonly callable */ $roundCallback;
 
 	public /* readonly */ string $thousandsSeparator;
 
@@ -22,6 +25,7 @@ class NumberFormatter implements Formatter
 
 	/**
 	 * @param string $mask - Mask must contains number 1 and character ⎵ for dynamic unit.
+	 * @param int|null|TRoundCallback $round
 	 */
 	public function __construct(
 		public /* readonly */ int $decimals = 2,
@@ -43,6 +47,11 @@ class NumberFormatter implements Formatter
 	}
 
 
+	/**
+	 * @param null|int|TRoundCallback $round
+	 *
+	 * @return TRoundCallback
+	 */
 	private function initRoundCallback(null|int|callable $round): callable
 	{
 		if ($round === null || $round === Round::RESET) {
