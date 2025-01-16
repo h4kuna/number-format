@@ -2,8 +2,9 @@
 
 namespace h4kuna\Format\Number;
 
-use Closure;
-
+/**
+ * @phpstan-import-type TRoundCallback from NumberFormat
+ */
 final class Round
 {
 	public const RESET = -1;
@@ -13,7 +14,10 @@ final class Round
 	public const BY_FLOOR = 2;
 
 
-	public static function create(int $round = self::DEFAULT): Closure
+	/**
+	 * @return TRoundCallback
+	 */
+	public static function create(int $round = self::DEFAULT): callable
 	{
 		return match ($round) {
 			// self::ceil(...)

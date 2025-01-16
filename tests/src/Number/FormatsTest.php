@@ -19,11 +19,12 @@ $formats->add('USD', static fn (Formats $formats
 ): NumberFormatter => $formats->getDefault()('USD', $formats, ['unit' => '$']));
 
 $formats->setDefault(static function (string|int $key, Formats $self, mixed $options) {
+	/** @var array{unit?: string, nbsp?: bool, decimals?: int}|null $options */
 	$options ??= [];
-	assert(is_array($options));
-	$options['unit'] = $options['unit'] ?? $key;
+	$options['unit'] = (string) ($options['unit'] ?? $key);
 	$options['nbsp'] = $options['nbsp'] ?? false;
 	$options['decimals'] = $options['decimals'] ?? 0;
+
 	return new NumberFormatter(...$options);
 });
 
