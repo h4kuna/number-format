@@ -4,6 +4,8 @@
 [![Downloads this Month](https://img.shields.io/packagist/dm/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
 [![Coverage Status](https://coveralls.io/repos/github/h4kuna/number-format/badge.svg?branch=main)](https://coveralls.io/github/h4kuna/number-format?branch=main)
 
+Part of the [h4kuna PHP libraries](https://github.com/h4kuna/library), see the overview of all packages.
+
 ```bash
 composer require h4kuna/number-format
 ```
