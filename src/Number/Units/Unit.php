@@ -170,7 +170,7 @@ class Unit
 		if ($result === false || isset($find['number']) === false || $find['number'] === '') {
 			throw new Format\Exceptions\InvalidArgumentException('Bad string, must be number and unit. Example "128M". Your: ' . $value);
 		}
-		return $this->convertFrom((float) $find['number'], $find['unit'] ?? null, $unitTo);
+		return $this->convertFrom((float) $find['number'], $find['unit'], $unitTo);
 	}
 
 

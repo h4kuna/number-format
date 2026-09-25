@@ -29,7 +29,7 @@ final class NumberFormatterFactory
 		$locale ??= $this->locale;
 		$formatter = is_int($style)
 			? new NumberFormatter($locale, $style)
-			: new $style($locale);
+			: new $style($locale); // @phpstan-ignore arguments.count (subclasses like NumberFormatterPercent take only locale)
 
 		if ($decimals !== null) {
 			$formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $decimals);
