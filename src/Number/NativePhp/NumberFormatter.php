@@ -1,11 +1,18 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number\NativePhp;
 
-class NumberFormatter extends \NumberFormatter
+use NumberFormatter as PhpNumberFormatter;
+
+class NumberFormatter extends PhpNumberFormatter
 {
-	public function format(float|int $num, int $type = 0): string
+
+	public function format(
+		float|int $num,
+		int $type = 0,
+	): string
 	{
 		return (string) parent::format($num, $type);
 	}
+
 }

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Date;
 
@@ -8,9 +8,12 @@ use h4kuna\Format\Date\Formats;
 use h4kuna\Format\Date\Formatters\DateTimeFormatter;
 use h4kuna\Format\Date\Formatters\IntlDateFormatter;
 use h4kuna\Format\Utils\Space;
+use IntlDateFormatter as PhpIntlDateFormatter;
 use IntlGregorianCalendar;
 use Tester\Assert;
 use Tester\TestCase;
+use function setlocale;
+use const LC_TIME;
 
 require __DIR__ . '/../../bootstrap.php';
 
@@ -23,11 +26,10 @@ final class FormatsTest extends TestCase
 	public function testFormat(): void
 	{
 		$formats = new Formats();
-		$formats->setDefault(fn () => new DateTimeFormatter('j. n. Y'));
+		$formats->setDefault(static fn () => new DateTimeFormatter('j. n. Y'));
 
 		Assert::same(Space::nbsp('2. 1. 1986'), $formats->get('date')->format(new DateTime('1986-01-02')));
 	}
-
 
 	public function testUnknownFormat(): void
 	{
@@ -36,19 +38,17 @@ final class FormatsTest extends TestCase
 		Assert::same(Space::nbsp('1986-01-02 01:02:03'), $formats->get('date')->format(new DateTime('1986-01-02 01:02:03')));
 	}
 
-
 	public function testIntlFormatter(): void
 	{
 		$formats = new Formats();
 		$timezone = new DateTimeZone('Europe/Prague');
 		$locale = 'cs_CZ';
-		$formats->add('date', new IntlDateFormatter(new \IntlDateFormatter($locale, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM, $timezone, IntlGregorianCalendar::createInstance($timezone, $locale))));
+		$formats->add('date', new IntlDateFormatter(new PhpIntlDateFormatter($locale, PhpIntlDateFormatter::MEDIUM, PhpIntlDateFormatter::MEDIUM, $timezone, IntlGregorianCalendar::createInstance($timezone, $locale))));
 
 		Assert::same(Space::nbsp('2. 1. 1986 0:00:00'), $formats->get('date')->format(new DateTime('1986-01-02', $timezone)));
 	}
 
-
-	protected function setUp()
+	protected function setUp(): void
 	{
 		setlocale(LC_TIME, 'cs_CZ.utf8');
 	}

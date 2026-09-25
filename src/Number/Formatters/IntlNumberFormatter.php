@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number\Formatters;
 
 use h4kuna\Format\Number\Formatter;
 use h4kuna\Format\Utils\Space;
 use NumberFormatter;
+use function assert;
+use function is_numeric;
+use function is_string;
 
 /**
  * NumberFormatter default settings:
@@ -13,6 +16,7 @@ use NumberFormatter;
  */
 final class IntlNumberFormatter implements Formatter
 {
+
 	public function __construct(
 		private NumberFormatter $formatter,
 		public string $emptyValue = '',
@@ -22,6 +26,10 @@ final class IntlNumberFormatter implements Formatter
 		$this->emptyValue = Space::nbsp($this->emptyValue);
 	}
 
+	public function __invoke(float|int|string|null $number): string
+	{
+		return $this->format($number);
+	}
 
 	public function modify(
 		?string $emptyValue = null,
@@ -35,7 +43,6 @@ final class IntlNumberFormatter implements Formatter
 		);
 	}
 
-
 	public function format(string|int|float|null $number): string
 	{
 		if (is_numeric($number) === false || ($this->zeroIsEmpty && (int) $number === 0)) {
@@ -46,12 +53,6 @@ final class IntlNumberFormatter implements Formatter
 		assert(is_string($result));
 
 		return $result;
-	}
-
-
-	public function __invoke(float|int|string|null $number): string
-	{
-		return $this->format($number);
 	}
 
 }

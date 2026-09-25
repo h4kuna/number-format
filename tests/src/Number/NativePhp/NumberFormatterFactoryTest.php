@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Number\NativePhp;
 
@@ -15,6 +13,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 final class NumberFormatterFactoryTest extends TestCase
 {
+
 	/**
 	 * @return array<string|int, array{0: Closure(static):void}>
 	 */
@@ -22,7 +21,7 @@ final class NumberFormatterFactoryTest extends TestCase
 	{
 		return [
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->create(),
 						'1 000,345',
@@ -30,7 +29,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->create(0),
 						'1 000',
@@ -38,7 +37,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->create(1),
 						'1 000,3',
@@ -46,7 +45,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->create(4),
 						'1 000,3450',
@@ -54,7 +53,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->create(2, 'en_GB'),
 						'1,000.34',
@@ -62,7 +61,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->currency('en_GB'),
 						'£1,000.34',
@@ -70,7 +69,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->currency(),
 						'1 000,34 Kč',
@@ -78,7 +77,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->ordinal(),
 						'1 000.',
@@ -86,7 +85,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNumber(
 						self::factory()->spell(),
 						'jedna tisíc čárka tři čtyři pět',
@@ -94,7 +93,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->percent(),
 						'1 000 %',
@@ -102,7 +101,7 @@ final class NumberFormatterFactoryTest extends TestCase
 				},
 			],
 			[
-				function (self $self) {
+				static function (self $self): void {
 					$self->assertNbsp(
 						self::factory()->percent(1),
 						'1 000,3 %',
@@ -112,16 +111,15 @@ final class NumberFormatterFactoryTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @param Closure(static):void $assert
+	 *
 	 * @dataProvider dataNumber
 	 */
 	public function testNumber(Closure $assert): void
 	{
 		$assert($this);
 	}
-
 
 	public function assertNbsp(
 		NumberFormatter $formatter,
@@ -131,7 +129,6 @@ final class NumberFormatterFactoryTest extends TestCase
 		Assert::same(Space::nbsp($expected), $formatter->format(1000.345));
 	}
 
-
 	public function assertNumber(
 		NumberFormatter $formatter,
 		string $expected,
@@ -140,12 +137,11 @@ final class NumberFormatterFactoryTest extends TestCase
 		Assert::same($expected, $formatter->format(1000.345));
 	}
 
-
 	private static function factory(): NumberFormatterFactory
 	{
 		return new NumberFormatterFactory('cs_CZ');
 	}
+
 }
 
 (new NumberFormatterFactoryTest())->run();
-

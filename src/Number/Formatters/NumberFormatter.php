@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number\Formatters;
 
@@ -7,12 +7,16 @@ use h4kuna\Format\Number\NumberFormat;
 use h4kuna\Format\Number\Parameters\ZeroClear;
 use h4kuna\Format\Number\Round;
 use h4kuna\Format\Utils\Space;
+use function is_int;
+use function str_contains;
+use function strtr;
 
 /**
  * @phpstan-import-type TRoundCallback from NumberFormat
  */
 class NumberFormatter implements Formatter
 {
+
 	/**
 	 * @var TRoundCallback
 	 */
@@ -25,7 +29,7 @@ class NumberFormatter implements Formatter
 
 	/**
 	 * @param string $mask - Mask must contains number 1 and character ⎵ for dynamic unit.
-	 * @param int|null|TRoundCallback $round
+	 * @param int|TRoundCallback|null $round
 	 */
 	public function __construct(
 		public /* readonly */ int $decimals = 2,
@@ -38,7 +42,7 @@ class NumberFormatter implements Formatter
 		public /* readonly */ string $unit = '',
 		public /* readonly */ bool $showUnitIfEmpty = true,
 		public /* readonly */ string $mask = '1 ⎵',
-		null|int|callable $round = null,
+		int|callable|null $round = null,
 	)
 	{
 		$this->roundCallback = $this->initRoundCallback($round);
@@ -46,13 +50,16 @@ class NumberFormatter implements Formatter
 		$this->thousandsSeparator = $this->initThousandsSeparator($thousandsSeparator);
 	}
 
+	public function __invoke(float|int|string|null $number): string
+	{
+		return $this->format($number);
+	}
 
 	/**
-	 * @param null|int|TRoundCallback $round
-	 *
+	 * @param int|TRoundCallback|null $round
 	 * @return TRoundCallback
 	 */
-	private function initRoundCallback(null|int|callable $round): callable
+	private function initRoundCallback(int|callable|null $round): callable
 	{
 		if ($round === null || $round === Round::RESET) {
 			return Round::create();
@@ -62,7 +69,6 @@ class NumberFormatter implements Formatter
 
 		return $round;
 	}
-
 
 	private function initMaskReplaced(): string
 	{
@@ -77,7 +83,6 @@ class NumberFormatter implements Formatter
 		return '';
 	}
 
-
 	private function initThousandsSeparator(string $thousandsSeparator): string
 	{
 		if ($this->nbsp && str_contains($thousandsSeparator, ' ')) {
@@ -88,7 +93,6 @@ class NumberFormatter implements Formatter
 
 		return $thousandsSeparator;
 	}
-
 
 	public function modify(
 		?int $decimals = null,
@@ -101,7 +105,7 @@ class NumberFormatter implements Formatter
 		?string $unit = null,
 		?bool $showUnitIfEmpty = null,
 		?string $mask = null,
-		null|int|callable $round = null,
+		int|callable|null $round = null,
 	): self
 	{
 		return new self(
@@ -119,7 +123,6 @@ class NumberFormatter implements Formatter
 		);
 	}
 
-
 	public function format(string|int|float|null $number): string
 	{
 		return NumberFormat::unit(
@@ -135,12 +138,6 @@ class NumberFormatter implements Formatter
 			$this->showUnitIfEmpty,
 			$this->roundCallback,
 		);
-	}
-
-
-	public function __invoke(float|int|string|null $number): string
-	{
-		return $this->format($number);
 	}
 
 }

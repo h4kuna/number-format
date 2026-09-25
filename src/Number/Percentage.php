@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number;
 
-use h4kuna\Format\Utils;
+use h4kuna\Format\Utils\Percentage as UtilsPercentage;
+use Stringable;
 
 /**
  * properties become readonly
  */
-class Percentage implements \Stringable
+class Percentage implements Stringable
 {
+
 	public float $ratio;
 
 	public float $smallRatio;
@@ -16,58 +18,56 @@ class Percentage implements \Stringable
 	public float $percentage;
 
 
-	final public function __construct(float|int $percentage, public ?Formatter $format = null)
+	final public function __construct(
+		float|int $percentage,
+		public ?Formatter $format = null,
+	)
 	{
 		$this->percentage = (float) $percentage;
-		$this->smallRatio = Utils\Percentage::smallRatio($this->percentage);
-		$this->ratio = Utils\Percentage::ratio($this->smallRatio);
+		$this->smallRatio = UtilsPercentage::smallRatio($this->percentage);
+		$this->ratio = UtilsPercentage::ratio($this->smallRatio);
 	}
 
-
-	public function modify(float $percentage, ?Formatter $format = null): static
+	public function modify(
+		float $percentage,
+		?Formatter $format = null,
+	): static
 	{
 		return new static($percentage, $format ?? $this->format);
 	}
 
-
 	public function with(float $number): float
 	{
-		return Utils\Percentage::with($number, $this->ratio);
+		return UtilsPercentage::with($number, $this->ratio);
 	}
-
 
 	/**
 	 * @deprecated use diff()
 	 */
 	public function withDiff(float $number): float
 	{
-		return Utils\Percentage::with($number, $this->smallRatio);
+		return UtilsPercentage::with($number, $this->smallRatio);
 	}
-
 
 	public function without(float $number): float
 	{
-		return Utils\Percentage::without($number, $this->ratio);
+		return UtilsPercentage::without($number, $this->ratio);
 	}
-
 
 	public function withoutDiff(float $number): float
 	{
-		return Utils\Percentage::withoutDiff($number, $this->ratio);
+		return UtilsPercentage::withoutDiff($number, $this->ratio);
 	}
-
 
 	public function diff(float $number): float
 	{
-		return Utils\Percentage::with($number, $this->smallRatio);
+		return UtilsPercentage::with($number, $this->smallRatio);
 	}
-
 
 	public function deduct(float $number): float
 	{
-		return Utils\Percentage::deduct($number, $this->smallRatio);
+		return UtilsPercentage::deduct($number, $this->smallRatio);
 	}
-
 
 	public function toString(): string
 	{
@@ -77,7 +77,6 @@ class Percentage implements \Stringable
 
 		return $this->format->format($this->percentage);
 	}
-
 
 	public function __toString(): string
 	{

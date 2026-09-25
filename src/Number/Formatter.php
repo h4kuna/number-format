@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number;
 
@@ -7,8 +7,9 @@ namespace h4kuna\Format\Number;
  */
 interface Formatter
 {
-	function format(string|int|float|null $number): string;
 
+	public function __invoke(string|int|float|null $number): string;
 
-	function __invoke(string|int|float|null $number): string;
+	public function format(string|int|float|null $number): string;
+
 }

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number;
 
@@ -17,7 +17,9 @@ class Formats extends LazyBuilder implements FormatsAccessor
 		return parent::get($key);
 	}
 
-
+	/**
+	 * @param NumberFormatter|null $object
+	 */
 	protected function createDefaultCallback($object = null): Closure
 	{
 		if ($object === null) {
@@ -27,4 +29,5 @@ class Formats extends LazyBuilder implements FormatsAccessor
 			return $object->modify(unit: (string) $key);
 		};
 	}
+
 }

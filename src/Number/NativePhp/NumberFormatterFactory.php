@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number\NativePhp;
 
 use Locale;
+use function is_int;
 
 final class NumberFormatterFactory
 {
+
 	private string $locale;
 
 
@@ -14,16 +16,16 @@ final class NumberFormatterFactory
 		$this->locale = $locale ?? Locale::getDefault();
 	}
 
-
 	/**
-	 * @template T of NumberFormatter
 	 * @param int|class-string<T> $style
 	 * @return ($style is int ? NumberFormatter : T)
+	 *
+	 * @template T of NumberFormatter
 	 */
 	public function create(
 		?int $decimals = null,
 		?string $locale = null,
-		int|string $style = NumberFormatter::DECIMAL
+		int|string $style = NumberFormatter::DECIMAL,
 	): NumberFormatter
 	{
 		$locale ??= $this->locale;
@@ -38,27 +40,27 @@ final class NumberFormatterFactory
 		return $formatter;
 	}
 
-
 	public function currency(?string $locale = null): NumberFormatter
 	{
 		return $this->create(null, $locale, NumberFormatter::CURRENCY);
 	}
-
 
 	public function ordinal(?string $locale = null): NumberFormatter
 	{
 		return $this->create(null, $locale, NumberFormatter::ORDINAL);
 	}
 
-
-	public function percent(?int $decimals = 0, ?string $locale = null): NumberFormatterPercent
+	public function percent(
+		?int $decimals = 0,
+		?string $locale = null,
+	): NumberFormatterPercent
 	{
 		return $this->create($decimals, $locale, NumberFormatterPercent::class);
 	}
-
 
 	public function spell(?string $locale = null): NumberFormatter
 	{
 		return $this->create(null, $locale, NumberFormatter::SPELLOUT);
 	}
+
 }

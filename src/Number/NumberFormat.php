@@ -1,9 +1,14 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number;
 
 use h4kuna\Format\Number\Parameters\ZeroClear;
 use h4kuna\Format\Utils\Space;
+use function floor;
+use function is_numeric;
+use function number_format;
+use function rtrim;
+use function str_replace;
 
 /**
  * @phpstan-type TRoundCallback callable(float, int): float
@@ -12,7 +17,7 @@ final class NumberFormat
 {
 
 	/**
-	 * @param null|TRoundCallback $roundCallback
+	 * @param TRoundCallback|null $roundCallback
 	 */
 	public static function unit(
 		string|int|float|null $number,
@@ -25,7 +30,7 @@ final class NumberFormat
 		int $zeroClear = ZeroClear::NO,
 		string $mask = '',
 		bool $showUnitIfEmpty = true,
-		?callable $roundCallback = null
+		?callable $roundCallback = null,
 	): string
 	{
 		$isNumeric = is_numeric($number);
@@ -50,20 +55,19 @@ final class NumberFormat
 		return self::replace(
 			$nbsp,
 			$formatted,
-			$isZero && $showUnitIfEmpty === false ? '' : $mask
+			$isZero && $showUnitIfEmpty === false ? '' : $mask,
 		);
 	}
 
-
 	/**
-	 * @param null|TRoundCallback $roundCallback
+	 * @param TRoundCallback|null $roundCallback
 	 */
 	public static function base(
 		float $number,
 		int $decimals = 2,
 		string $decimalPoint = ',',
 		string $thousandsSeparator = ' ',
-		?callable $roundCallback = null
+		?callable $roundCallback = null,
 	): string
 	{
 		$round = $decimals;
@@ -79,14 +83,19 @@ final class NumberFormat
 		return number_format($number, $decimals, $decimalPoint, $thousandsSeparator);
 	}
 
-
-	private static function zeroClear(string $formattedNumber, string $decimalPoint): string
+	private static function zeroClear(
+		string $formattedNumber,
+		string $decimalPoint,
+	): string
 	{
 		return rtrim(rtrim($formattedNumber, '0'), $decimalPoint);
 	}
 
-
-	private static function replace(bool $nbsp, string $formattedNumber, string $mask): string
+	private static function replace(
+		bool $nbsp,
+		string $formattedNumber,
+		string $mask,
+	): string
 	{
 		if ($mask === '') {
 			return $nbsp === true
@@ -94,9 +103,9 @@ final class NumberFormat
 				: $formattedNumber;
 		}
 
-		return $nbsp === true ?
-			str_replace(['1', ' '], [$formattedNumber, Space::NBSP], $mask) :
-			str_replace('1', $formattedNumber, $mask);
+		return $nbsp === true
+			? str_replace(['1', ' '], [$formattedNumber, Space::NBSP], $mask)
+			: str_replace('1', $formattedNumber, $mask);
 	}
 
 }

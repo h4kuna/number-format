@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -47,7 +47,7 @@ echo $format->modify(decimals: 0, round: Round::BY_CEIL)->format($number); // 1 
 echo $format->modify(decimals: 0, round: Round::BY_FLOOR)->format($number); // 1 234
 
 echo '-------' . PHP_EOL;
-$numberFormatter = new \NumberFormatter('cs_CZ', \NumberFormatter::DECIMAL);
+$numberFormatter = new NumberFormatter('cs_CZ', NumberFormatter::DECIMAL);
 $format = new IntlNumberFormatter($numberFormatter);
 echo $format->format($number); // 1 234,456
 

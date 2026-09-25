@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Number\Formatters;
 
@@ -8,6 +8,7 @@ use h4kuna\Format\Number\Round;
 use h4kuna\Format\Tests\TestCase;
 use h4kuna\Format\Utils\Space;
 use Tester\Assert;
+use function round;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
@@ -18,34 +19,41 @@ final class NumberFormatterTest extends TestCase
 {
 
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{decimals?: int} $parameters
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testFormat(array $parameters, string $expected, float|int|null|string $number): void
+	public function testFormat(
+		array $parameters,
+		string $expected,
+		float|int|string|null $number,
+	): void
 	{
 		$numberFormat = new NumberFormatter(...$parameters);
 		Assert::same($expected, $numberFormat->format($number));
 	}
 
-
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{decimals?: int} $parameters
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testModify(array $parameters, string $expected, float|int|null|string $number): void
+	public function testModify(
+		array $parameters,
+		string $expected,
+		float|int|string|null $number,
+	): void
 	{
 		$nf = new NumberFormatter();
 		$numberFormat = $nf->modify(...$parameters);
 		Assert::same($expected, $numberFormat->format($number));
 	}
 
-
 	public function testRoundCallback(): void
 	{
-		$numberFormat = new NumberFormatter(round: fn (float $number, int $precision) => round($number, $precision));
+		$numberFormat = new NumberFormatter(round: static fn (float $number, int $precision) => round($number, $precision));
 		Assert::same('1,01', $numberFormat->format('1.005'));
 	}
-
 
 	/**
 	 * @return array<mixed>

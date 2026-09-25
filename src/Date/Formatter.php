@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Date;
 
@@ -9,8 +9,9 @@ use DateTimeInterface;
  */
 interface Formatter
 {
-	function format(?DateTimeInterface $dateTime): string;
 
+	public function __invoke(?DateTimeInterface $dateTime): string;
 
-	function __invoke(?DateTimeInterface $dateTime): string;
+	public function format(?DateTimeInterface $dateTime): string;
+
 }

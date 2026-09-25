@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Utils;
 
@@ -14,11 +14,14 @@ final class PercentageTest extends TestCase
 	/**
 	 * @dataProvider providePercentage
 	 */
-	public function testPercentage(float $result, float $part, float $total): void
+	public function testPercentage(
+		float $result,
+		float $part,
+		float $total,
+	): void
 	{
 		Assert::same($result, Percentage::calculate($part, $total));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -35,15 +38,17 @@ final class PercentageTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @dataProvider provideCalculateRemainder
 	 */
-	public function testCalculateRemainder(float $result, float $part, float $total): void
+	public function testCalculateRemainder(
+		float $result,
+		float $part,
+		float $total,
+	): void
 	{
 		Assert::same($result, Percentage::calculateRemainder($part, $total));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -60,15 +65,16 @@ final class PercentageTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @dataProvider provideSmallRatio
 	 */
-	public function testSmallRatio(float $expected, float $percentage): void
+	public function testSmallRatio(
+		float $expected,
+		float $percentage,
+	): void
 	{
 		Assert::same($expected, Percentage::smallRatio($percentage));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -82,15 +88,16 @@ final class PercentageTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @dataProvider provideRatio
 	 */
-	public function testRatio(float $expected, float $percentage): void
+	public function testRatio(
+		float $expected,
+		float $percentage,
+	): void
 	{
 		Assert::same($expected, Percentage::ratio($percentage));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -104,15 +111,17 @@ final class PercentageTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @dataProvider provideDeduct
 	 */
-	public function testDeduct(float $expected, float $percentage, float $number): void
+	public function testDeduct(
+		float $expected,
+		float $percentage,
+		float $number,
+	): void
 	{
 		Assert::same($expected, Percentage::deduct($number, $percentage));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -126,15 +135,17 @@ final class PercentageTest extends TestCase
 		];
 	}
 
-
 	/**
 	 * @dataProvider provideWithout
 	 */
-	public function testWithout(float $expected, float $ratio, float $number): void
+	public function testWithout(
+		float $expected,
+		float $ratio,
+		float $number,
+	): void
 	{
 		Assert::same($expected, Percentage::without($number, $ratio));
 	}
-
 
 	/**
 	 * @return array<mixed>
@@ -146,6 +157,7 @@ final class PercentageTest extends TestCase
 			[0, 1.2, 0],
 		];
 	}
+
 }
 
 (new PercentageTest())->run();

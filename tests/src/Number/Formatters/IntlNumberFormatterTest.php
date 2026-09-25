@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Number\Formatters;
 
@@ -17,17 +17,21 @@ final class IntlNumberFormatterTest extends TestCase
 {
 
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{emptyValue: string, zeroIsEmpty: bool} $parameters
 	 * @param string|int|float|null $number
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testFormat(array $parameters, string $expected, $number): void
+	public function testFormat(
+		array $parameters,
+		string $expected,
+		$number,
+	): void
 	{
 		$numberFormatter = self::createNumberFormatter()->create();
 		$numberFormat = new IntlNumberFormatter($numberFormatter, ...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
 	}
-
 
 	public function testCurrency(): void
 	{
@@ -42,25 +46,27 @@ final class IntlNumberFormatterTest extends TestCase
 		Assert::same(Space::nbsp('£1,000.46'), $numberFormat->format(1000.456));
 	}
 
-
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{emptyValue: string, zeroIsEmpty: bool} $parameters
 	 * @param string|int|float|null $number
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testModify(array $parameters, string $expected, $number): void
+	public function testModify(
+		array $parameters,
+		string $expected,
+		$number,
+	): void
 	{
 		$numberFormatter = self::createNumberFormatter()->create();
 		$numberFormat = (new IntlNumberFormatter($numberFormatter))->modify(...$parameters);
 		Assert::same(Space::nbsp($expected), $numberFormat->format($number));
 	}
 
-
 	private static function createNumberFormatter(): NumberFormatterFactory
 	{
 		return new NumberFormatterFactory('cs_CZ');
 	}
-
 
 	/**
 	 * @return array<mixed>

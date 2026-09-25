@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests;
 
-use Tester;
+use Tester\TestCase as TesterTestCase;
 use function defined;
 
-abstract class TestCase extends Tester\TestCase
+abstract class TestCase extends TesterTestCase
 {
 
 	public function run(): void

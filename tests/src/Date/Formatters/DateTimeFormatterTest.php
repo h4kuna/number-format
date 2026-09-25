@@ -1,11 +1,10 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Date\Formatters;
 
 use DateTime;
 use DateTimeInterface;
 use h4kuna\Format\Date\Formatters\DateTimeFormatter;
-use h4kuna\Format\Date\Intl\DateFormatterFactory;
 use h4kuna\Format\Tests\TestCase;
 use h4kuna\Format\Utils\Space;
 use Tester\Assert;
@@ -19,26 +18,34 @@ final class DateTimeFormatterTest extends TestCase
 {
 
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{nbsp: bool, emptyValue: string} $parameters
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testFormat(array $parameters, string $expected, ?DateTimeInterface $date): void
+	public function testFormat(
+		array $parameters,
+		string $expected,
+		?DateTimeInterface $date,
+	): void
 	{
 		$intlDateFormatter = new DateTimeFormatter('j. n. Y H:i:s', ...$parameters);
 		Assert::same($expected, $intlDateFormatter->format($date));
 	}
 
-
 	/**
-	 * @dataProvider provideFormat
 	 * @param array{nbsp: bool, emptyValue: string} $parameters
+	 *
+	 * @dataProvider provideFormat
 	 */
-	public function testModify(array $parameters, string $expected, ?DateTimeInterface $date): void
+	public function testModify(
+		array $parameters,
+		string $expected,
+		?DateTimeInterface $date,
+	): void
 	{
 		$dateFormatter = (new DateTimeFormatter('j. n. Y H:i:s'))->modify(...$parameters);
 		Assert::same($expected, $dateFormatter->format($date));
 	}
-
 
 	/**
 	 * @return array<mixed>

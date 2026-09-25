@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Number;
 
@@ -16,6 +16,7 @@ require __DIR__ . '/../../bootstrap.php';
  */
 final class NumberFormatTest extends TestCase
 {
+
 	/**
 	 * @return array<int, array<int, array<int|string, bool|float|int|string|null>|string>>
 	 */
@@ -223,26 +224,31 @@ final class NumberFormatTest extends TestCase
 		];
 	}
 
-
 	/**
-	 * @dataProvider provideBase
 	 * @param array<float> $input
+	 *
+	 * @dataProvider provideBase
 	 */
-	public function testNumber(string $expected, array $input): void
+	public function testNumber(
+		string $expected,
+		array $input,
+	): void
 	{
 		Assert::same($expected, NumberFormat::base(...$input));
 	}
 
-
 	/**
-	 * @dataProvider provideUnit
 	 * @param array<float|int|string|null> $input
+	 *
+	 * @dataProvider provideUnit
 	 */
-	public function testUnit(string $expected, array $input): void
+	public function testUnit(
+		string $expected,
+		array $input,
+	): void
 	{
 		Assert::same($expected, NumberFormat::unit(...$input));
 	}
-
 
 	/**
 	 * @return array<int, array<mixed>>

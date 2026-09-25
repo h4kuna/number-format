@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Date\Formatters;
 
@@ -8,6 +8,7 @@ use h4kuna\Format\Utils\Space;
 
 final class DateTimeFormatter implements Formatter
 {
+
 	private string $emptyValueSpace;
 
 	private string $formatSpace;
@@ -22,13 +23,16 @@ final class DateTimeFormatter implements Formatter
 		$this->initSpace();
 	}
 
+	public function __invoke(?DateTimeInterface $dateTime): string
+	{
+		return $this->format($dateTime);
+	}
 
 	private function initSpace(): void
 	{
 		$this->emptyValueSpace = $this->nbsp ? Space::nbsp($this->emptyValue) : $this->emptyValue;
 		$this->formatSpace = $this->nbsp ? Space::nbsp($this->format) : $this->format;
 	}
-
 
 	public function modify(
 		?bool $nbsp = null,
@@ -43,15 +47,9 @@ final class DateTimeFormatter implements Formatter
 		return $that;
 	}
 
-
 	public function format(?DateTimeInterface $dateTime): string
 	{
 		return $dateTime === null ? $this->emptyValueSpace : $dateTime->format($this->formatSpace);
-	}
-
-	public function __invoke(?DateTimeInterface $dateTime): string
-	{
-		return $this->format($dateTime);
 	}
 
 }

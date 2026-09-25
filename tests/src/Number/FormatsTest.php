@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Tests\Number;
 
@@ -10,26 +10,26 @@ use Tester\Assert;
 require_once __DIR__ . '/../../bootstrap.php';
 
 $formats = new Formats([ // @phpstan-ignore-line
-	'EUR' => fn (Formats $formats): NumberFormatter => new NumberFormatter(decimals: 0, nbsp: false, unit: '€'),
+	'EUR' => static fn (Formats $formats): NumberFormatter => new NumberFormatter(decimals: 0, nbsp: false, unit: '€'),
 	'GBP' => new NumberFormatter(nbsp: false, unit: '£', mask: '⎵ 1'),
 ]);
 
 $formats->add('CZK', new NumberFormatter(decimals: 3, nbsp: false, unit: 'CZK'));
-$formats->add('USD', static fn (Formats $formats
+$formats->add('USD', static fn (Formats $formats,
 ): NumberFormatter => $formats->getDefault()('USD', $formats, ['unit' => '$']));
 
 $formats->setDefault(static function (string|int $key, Formats $self, mixed $options) {
 	/** @var array{unit?: string, nbsp?: bool, decimals?: int}|null $options */
 	$options ??= [];
 	$options['unit'] = (string) ($options['unit'] ?? $key);
-	$options['nbsp'] = $options['nbsp'] ?? false;
-	$options['decimals'] = $options['decimals'] ?? 0;
+	$options['nbsp'] ??= false;
+	$options['decimals'] ??= 0;
 
 	return new NumberFormatter(...$options);
 });
 
-Assert::exception(function () use ($formats) {
-	$formats->setDefault(fn () => new NumberFormatter(nbsp: false));
+Assert::exception(static function () use ($formats): void {
+	$formats->setDefault(static fn () => new NumberFormatter(nbsp: false));
 }, InvalidStateException::class);
 
 Assert::same('100 UNKNOWN', $formats->get('UNKNOWN')->format(100));

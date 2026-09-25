@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Date;
 
@@ -17,7 +17,9 @@ class Formats extends LazyBuilder implements FormatsAccessor
 		return parent::get($key);
 	}
 
-
+	/**
+	 * @param Formatter|null $object
+	 */
 	protected function createDefaultCallback($object = null): Closure
 	{
 		return static fn (): DateTimeFormatter => new DateTimeFormatter('Y-m-d H:i:s');

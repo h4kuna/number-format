@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Exceptions;
 
-final class InvalidArgumentException extends \InvalidArgumentException
+use InvalidArgumentException as PhpInvalidArgumentException;
+
+final class InvalidArgumentException extends PhpInvalidArgumentException
 {
 
 }

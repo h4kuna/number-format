@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number\Units;
 
+use function pow;
+
 class Byte extends Unit
 {
+
 	public const UNITS = [
 		Unit::BASE => 0,
 		Unit::KILO => 3,
@@ -14,7 +17,11 @@ class Byte extends Unit
 	];
 
 
-	protected function convertUnit(float $number, int $indexFrom, int $indexTo): float
+	protected function convertUnit(
+		float $number,
+		int $indexFrom,
+		int $indexTo,
+	): float
 	{
 		return $number * pow(1024, ($indexFrom - $indexTo) / 3);
 	}

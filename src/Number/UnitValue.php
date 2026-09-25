@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Number;
 
@@ -10,12 +10,14 @@ use Stringable;
 final class UnitValue implements Stringable
 {
 
-	public function __construct(public /* readonly */ float $value, public /* readonly */ string $unit)
+	public function __construct(
+		public /* readonly */ float $value,
+		public /* readonly */ string $unit,
+	)
 	{
 	}
 
-
-	public function __toString()
+	public function __toString(): string
 	{
 		return $this->value . ' ' . $this->unit;
 	}

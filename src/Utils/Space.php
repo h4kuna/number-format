@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace h4kuna\Format\Utils;
 
+use function strtr;
+
 final class Space
 {
+
 	/**
 	 * @var string utf-8 &nbsp;
 	 */
@@ -16,7 +19,6 @@ final class Space
 	{
 		return strtr($value, [' ' => self::NBSP]);
 	}
-
 
 	public static function white(string $value): string
 	{
