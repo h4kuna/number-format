@@ -14,7 +14,7 @@
   "require": {
     "php": ">=8.0",
     "ext-intl": "*",
-    "h4kuna/data-type": "^v3.0.5"
+    "h4kuna/data-type": "^3.0.5 || ^4.0"
   },
   "require-dev": {
     "nette/tester": "^2.4",

@@ -2,10 +2,10 @@
 
 namespace h4kuna\Format\Tests\Number;
 
-use h4kuna\DataType\Exceptions\InvalidStateException;
 use h4kuna\Format\Number\Formats;
 use h4kuna\Format\Number\Formatters\NumberFormatter;
 use Tester\Assert;
+use Throwable;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
@@ -30,7 +30,7 @@ $formats->setDefault(static function (string|int $key, Formats $self, mixed $opt
 
 Assert::exception(static function () use ($formats): void {
 	$formats->setDefault(static fn () => new NumberFormatter(nbsp: false));
-}, InvalidStateException::class);
+}, Throwable::class); // data-type v3 InvalidStateException, v4 LogicException
 
 Assert::same('100 UNKNOWN', $formats->get('UNKNOWN')->format(100));
 Assert::same('100 $', $formats->get('USD')->format(100));
