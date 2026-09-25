@@ -272,11 +272,11 @@ final class NumberFormatTest extends TestCase
 			],
 			[
 				'1 240',
-				[1234, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
+				[1234, -1, ',', ' ', Round::create(Round::BY_CEIL)],
 			],
 			[
 				'1 230',
-				[1234, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+				[1234, -1, ',', ' ', Round::create(Round::BY_FLOOR)],
 			],
 			[
 				'1 240',
@@ -284,27 +284,27 @@ final class NumberFormatTest extends TestCase
 			],
 			[
 				'1 240',
-				[1235, -1, 'roundCallback' => Round::create(Round::BY_CEIL)],
+				[1235, -1, ',', ' ', Round::create(Round::BY_CEIL)],
 			],
 			[
 				'1 230',
-				[1235, -1, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+				[1235, -1, ',', ' ', Round::create(Round::BY_FLOOR)],
 			],
 			[
 				'0,568',
-				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
+				[0.5678, 3, ',', ' ', Round::create(Round::BY_CEIL)],
 			],
 			[
 				'0,567',
-				[0.5678, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+				[0.5678, 3, ',', ' ', Round::create(Round::BY_FLOOR)],
 			],
 			[
 				'0,568',
-				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_CEIL)],
+				[0.5671, 3, ',', ' ', Round::create(Round::BY_CEIL)],
 			],
 			[
 				'0,567',
-				[0.5671, 3, 'roundCallback' => Round::create(Round::BY_FLOOR)],
+				[0.5671, 3, ',', ' ', Round::create(Round::BY_FLOOR)],
 			],
 		];
 	}
