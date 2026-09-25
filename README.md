@@ -2,7 +2,7 @@
 
 [![Latest stable](https://img.shields.io/packagist/v/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
 [![Downloads this Month](https://img.shields.io/packagist/dm/h4kuna/number-format.svg)](https://packagist.org/packages/h4kuna/number-format)
-[![Coverage Status](https://coveralls.io/repos/github/h4kuna/number-format/badge.svg?branch=master)](https://coveralls.io/github/h4kuna/number-format?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/h4kuna/number-format/badge.svg?branch=main)](https://coveralls.io/github/h4kuna/number-format?branch=main)
 
 ```bash
 composer require h4kuna/number-format
