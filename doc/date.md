@@ -1,6 +1,6 @@
 # Date
 
-Define own formats for date and time. Both classes [IntlDateFormatter](../src/Date/Formatters/IntlDateFormatter.php) and [DateTimeFormatter](../src/Date/Formatters/DateTimeFormatter.php) has implemented interface [Formatter](../src/Date/Formatter.php).
+Define your own formats for date and time. Both classes [IntlDateFormatter](../src/Date/Formatters/IntlDateFormatter.php) and [DateTimeFormatter](../src/Date/Formatters/DateTimeFormatter.php) implement the interface [Formatter](../src/Date/Formatter.php). Spaces are replaced by `&nbsp;` by default, disable it by the parameter `nbsp: false`. An unknown key in `Formats` falls back to the format `Y-m-d H:i:s`.
 
 #### Collection of dates
 
@@ -9,24 +9,24 @@ use h4kuna\Format\Date;
 
 $formats = new Date\Formats([
 	'date' => new Date\Formatters\DateTimeFormatter('j. n. Y'),
-	'time' => static fn () => new Date\Formatters\DateTimeFormatter('H:i'), // callback like factory if is needed
+	'time' => static fn () => new Date\Formatters\DateTimeFormatter('H:i'), // a callback works as a lazy factory
 	'dateTime' => static fn () => new Date\Formatters\DateTimeFormatter('j. n. Y H:i'),
 ]);
 
 $dateObject = new \DateTime('2023-06-13 12:30:40');
-$formats->get('date')->format($dateObject); // 13. 6. 2023 
-$formats->get('time')->format($dateObject); // 12:30 
-$formats->get('dateTime')->format($dateObject); // 13. 6. 2023 12:30 
+$formats->get('date')->format($dateObject); // 13. 6. 2023
+$formats->get('time')->format($dateObject); // 12:30
+$formats->get('dateTime')->format($dateObject); // 13. 6. 2023 12:30
 ```
 
-For better use, you can extends class Formats and add your own methods.
+For better use, you can extend the class Formats and add your own methods.
 
 ```php
 use h4kuna\Format\Date;
 
-class MyFormats extends Date\Formats 
+class MyFormats extends Date\Formats
 {
-	public function date(?\DateTimeInterface $data): string 
+	public function date(?\DateTimeInterface $data): string
 	{
 		return $this->get('date')->format($data);
 	}
@@ -37,10 +37,10 @@ $formats = new MyFormats([
 ]);
 
 $dateObject = new \DateTime('2023-06-13 12:30:40');
-$formats->date($dateObject); // 13. 6. 2023 
+$formats->date($dateObject); // 13. 6. 2023
 ```
 
-### Support IntlDateFormatter
+### IntlDateFormatter
 
 Format by locale.
 
@@ -48,14 +48,14 @@ Format by locale.
 use h4kuna\Format\Date;
 use IntlDateFormatter;
 
-$intlFormatter = new IntlDateFormatter('cs_CZ', IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM,)
+$intlFormatter = new IntlDateFormatter('cs_CZ', IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM);
 
 $formats = new Date\Formats([
 	'date' => new Date\Formatters\IntlDateFormatter($intlFormatter),
 ]);
 
 $date = new \DateTime('2023-06-13 12:30:40');
-$formats->get('date')->format($date); // 12. 6. 2023 12:30:40
+$formats->get('date')->format($date); // 13. 6. 2023 12:30:40
 ```
 
 ## Nette integration
@@ -71,7 +71,7 @@ services:
 		autowired: false
 
 	# Accessor with all formats
-	number.formats: h4kuna\Format\Date\FormatsAccessor(
+	date.formats: h4kuna\Format\Date\FormatsAccessor(
 		date: @format.date
 		time: @format.time
 	)

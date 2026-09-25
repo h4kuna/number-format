@@ -10,9 +10,11 @@ Part of the [h4kuna PHP libraries](https://github.com/h4kuna/library), see the o
 composer require h4kuna/number-format
 ```
 
-The library can format numbers like percent, currencies or number with unit. Format dates and convert between order of units. 
+Requires PHP 8.0 and the `intl` extension.
 
-Details about changelog is moved to [file](./doc/changelog.md). Upgrade from [lower versions](./doc/upgrade.md).
+The library formats numbers as percents, currencies or numbers with a unit, formats dates and converts values between unit prefixes (kilo, mega, ...).
+
+The changelog is in a [separate file](./doc/changelog.md). See how to upgrade from [lower versions](./doc/upgrade.md).
 
 - [Number](./doc/numbers.md)
 - [Date](./doc/date.md)
